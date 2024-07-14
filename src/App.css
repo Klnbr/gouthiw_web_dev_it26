@@ -3,20 +3,36 @@
   padding: 0;
   box-sizing: border-box;
 }
-.App {
+.web {
   font-family: sans-serif;
   text-align: center;
 }
 
 .menu-block {
   display: flex;
-  width: 80%;
+  width: 90%;
   align-items: center;
+  margin: 20vh 8vh;
+  justify-content: space-between;
+}
+
+.add-menu-card {
+  width: 24%;
+  background-color: lightgrey;
+  height: 40vh;
 }
 
 .menu-card {
-  width: 30%;
+  width: 24%;
+  height: 40vh;
   padding: 13px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+.menu-card h1 {
+  text-align: left;
+  font-size: 1.2rem;
 }
 
 .menu-pic {
@@ -24,9 +40,65 @@
 }
 
 .layout {
-  flex-direction: column;
+  display: flex;
+  padding: 10px 0;
   justify-content: space-between;
-  border: 1px solid black;
 }
 
+.purine {
+  text-align: left;
+  background-color: #FFA13F;
+  padding: 5px;
+  color: white;
+}
+
+.uric {
+  background-color: #7F1BFF;
+  padding: 5px;
+  color: white;
+}
+
+.banner-text {
+  text-align:center;
+  justify-self: center;
+}
+
+.trivia-block {
+  width: 90%;
+  align-items: center;
+  flex-direction: column;
+  margin: 20vh 8vh
+}
+
+.trivia-card {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 13px;
+  justify-content: space-between;
+  border: 1px solid #FFA13F;
+  border-radius: 15px;
+  margin-bottom: 15px;
+}
+
+.trivia-pic {
+  width: 25%;
+}
+
+.trivia-des {
+  width: 70%;
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  /* -webkit-line-clamp: 2; Number of lines to show */
+  -webkit-box-orient: vertical; /* Adjust the width as needed */
+  margin-top: 20px;
+}
+
+.banner-img {
+  width: 100%;
+}
 

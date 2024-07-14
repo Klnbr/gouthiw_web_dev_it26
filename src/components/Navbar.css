@@ -53,7 +53,7 @@
      display: none;
 }
 
-button {
+.button {
      padding: 0.5rem 1rem;
      white-space: nowrap;
      border-radius: 0.3rem;
@@ -63,7 +63,7 @@ button {
      cursor: pointer;
 }
 
-button:hover {
+.button:hover {
      background-color: black;
      color: white;
 }
@@ -130,7 +130,7 @@ button:hover {
           padding: 10px;
      }
 
-     button {
+     .button {
           display: none;
      }
 
