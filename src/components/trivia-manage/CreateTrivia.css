@@ -1,0 +1,53 @@
+.form-trivia {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.hr-line-full {
+    width: 100%;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.form--input {
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.form-bt {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn-addtv, .btn-cancel {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-addtv {
+    background-color: #4AB4A2;
+}
+
+.btn-addtv:hover {
+    background-color: #3a9380;
+}
+
+.btn-cancel {
+    background-color: #f44336;
+}
+
+.btn-cancel:hover {
+    background-color: #d32f2f;
+}

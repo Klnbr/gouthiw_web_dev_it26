@@ -145,3 +145,30 @@
   width: 100%;
 }
 
+
+.add-trivia-card {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 13px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 2px 1px lightgrey;
+}
+
+.add-trivia-card:hover {
+  border: 2px solid #4AB4A2;
+}
+
+.add-trivia-card i {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  color: gray;
+  cursor: pointer;
+}
+
+.add-trivia-card i:hover {
+  color: #4AB4A2;
+}

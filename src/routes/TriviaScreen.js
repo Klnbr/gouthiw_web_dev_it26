@@ -1,11 +1,17 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
+import '.././App.css'
+import { useNavigate } from 'react-router-dom';
 
 function TriviaScreen() {
+     const navigate = useNavigate();
      return (
           <>
                <Navbar />
                <div className='trivia-block'>
+               <div className='add-trivia-card' onClick={() => navigate('/create-trivia')}>
+                         <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
+                    </div>
                     <div className='trivia-card'>
                          <img className='trivia-pic' alt='สาเหตุของโรคเกาต์' src='https://img.wongnai.com/p/800x0/2018/10/22/ce894b08df4649d6847a600b53a685e1.jpg' />
                          <div className='trivia-des'>

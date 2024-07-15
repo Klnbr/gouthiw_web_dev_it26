@@ -8,6 +8,7 @@ import TopicScreen from './routes/TopicScreen'
 import RegisterScreen from './routes/RegisterScreen';
 import LoginScreen from './routes/LoginScreen';
 import Menu from './routes/Menu';
+import Trivia from './routes/Trivia';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path='/signup' element={<RegisterScreen />} />
         <Route path='/login' element={<LoginScreen />} />
         <Route path='/create-menu' element={<Menu />} />
+        <Route path='/create-trivia' element={<Trivia />} />
       </Routes>
     </div>
   );
