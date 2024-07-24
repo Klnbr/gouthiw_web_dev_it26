@@ -1,67 +1,60 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import '.././App.css'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function TriviaScreen() {
      const navigate = useNavigate();
+     const [trivs, setTrivia] = useState([]);
+
+     useEffect(() => {
+          const fetchTriviaData = async () => {
+               try {
+                    const response = await axios.get("http://localhost:5500/trivias", { timeout: 10000 });
+                    setTrivia(response.data);
+               } catch (error) {
+                    console.log("Error fetching trivias data", error.message)
+               }
+          }
+          fetchTriviaData();
+     }, [])
+
+     const handleItemPress = async (itemId) => {
+          try {
+               const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
+               const triviaData = response.data;
+
+               navigate('TriviaDetailScreen', { triviaData });
+          } catch (error) {
+               console.log('Error fetching trivia data', error.message);
+          }
+     };
+
+     const renderItem = (item) => (
+          <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
+               <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} />
+               <div className='trivia-des'>
+                    <h1>{item.head}</h1>
+                    <div className='description'>
+                         <p>{item.content}</p>
+                    </div>
+               </div>
+          </div>
+     );
+
      return (
           <>
                <Navbar />
                <div className='trivia-block'>
-               <div className='add-trivia-card' onClick={() => navigate('/create-trivia')}>
+                    <div className='add-trivia-card' onClick={() => navigate('/create-trivia')}>
                          <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
                     </div>
-                    <div className='trivia-card'>
-                         <img className='trivia-pic' alt='สาเหตุของโรคเกาต์' src='https://img.wongnai.com/p/800x0/2018/10/22/ce894b08df4649d6847a600b53a685e1.jpg' />
-                         <div className='trivia-des'>
-                              <h1>สาเหตุของโรคเกาต์</h1>
-                              <div className='description'>
-                                   <p>การสะสมตัวของกรดยูริกในกระแสเลือดส่งผลให้เกิดโรคเกาต์ได้ ร่างกายสร้างกรดยูริกจากการ
-                                        สลายตัวของสารเพียวรีนในอาหารและเครื่องดื่มที่รับประทานและจากแหล่งภายในร่างกายเอง อาหารที่มีสารเพียวรีนสูงได้แก่ เนื้อแดง เครื่องใน เช่นตับ และอาหารทะเล เช่น เคย ปลาซาร์ดีน หอยแมลงภู่ หอยเชลล์ ปลาเทราต์ และปลาทูน่า เครื่องดื่มแอลกอฮอล์ โดยเฉพาะเบียร์...</p>
-                              </div>
-                         </div>   
-                    </div>
-                    <div className='trivia-card'>
-                         <img className='trivia-pic' alt='สาเหตุของโรคเกาต์' src='https://img.wongnai.com/p/800x0/2018/10/22/ce894b08df4649d6847a600b53a685e1.jpg' />
-                         <div className='trivia-des'>
-                              <h1>สาเหตุของโรคเกาต์</h1>
-                              <div className='description'>
-                                   <p>การสะสมตัวของกรดยูริกในกระแสเลือดส่งผลให้เกิดโรคเกาต์ได้ ร่างกายสร้างกรดยูริกจากการ
-                                        สลายตัวของสารเพียวรีนในอาหารและเครื่องดื่มที่รับประทานและจากแหล่งภายในร่างกายเอง อาหารที่มีสารเพียวรีนสูงได้แก่ เนื้อแดง เครื่องใน เช่นตับ และอาหารทะเล เช่น เคย ปลาซาร์ดีน หอยแมลงภู่ หอยเชลล์ ปลาเทราต์ และปลาทูน่า เครื่องดื่มแอลกอฮอล์ โดยเฉพาะเบียร์...</p>
-                              </div>
-                         </div>   
-                    </div>
-                    <div className='trivia-card'>
-                         <img className='trivia-pic' alt='สาเหตุของโรคเกาต์' src='https://img.wongnai.com/p/800x0/2018/10/22/ce894b08df4649d6847a600b53a685e1.jpg' />
-                         <div className='trivia-des'>
-                              <h1>สาเหตุของโรคเกาต์</h1>
-                              <div className='description'>
-                                   <p>การสะสมตัวของกรดยูริกในกระแสเลือดส่งผลให้เกิดโรคเกาต์ได้ ร่างกายสร้างกรดยูริกจากการ
-                                        สลายตัวของสารเพียวรีนในอาหารและเครื่องดื่มที่รับประทานและจากแหล่งภายในร่างกายเอง อาหารที่มีสารเพียวรีนสูงได้แก่ เนื้อแดง เครื่องใน เช่นตับ และอาหารทะเล เช่น เคย ปลาซาร์ดีน หอยแมลงภู่ หอยเชลล์ ปลาเทราต์ และปลาทูน่า เครื่องดื่มแอลกอฮอล์ โดยเฉพาะเบียร์...</p>
-                              </div>
-                         </div>   
-                    </div>
-                    <div className='trivia-card'>
-                         <img className='trivia-pic' alt='สาเหตุของโรคเกาต์' src='https://img.wongnai.com/p/800x0/2018/10/22/ce894b08df4649d6847a600b53a685e1.jpg' />
-                         <div className='trivia-des'>
-                              <h1>สาเหตุของโรคเกาต์</h1>
-                              <div className='description'>
-                                   <p>การสะสมตัวของกรดยูริกในกระแสเลือดส่งผลให้เกิดโรคเกาต์ได้ ร่างกายสร้างกรดยูริกจากการ
-                                        สลายตัวของสารเพียวรีนในอาหารและเครื่องดื่มที่รับประทานและจากแหล่งภายในร่างกายเอง อาหารที่มีสารเพียวรีนสูงได้แก่ เนื้อแดง เครื่องใน เช่นตับ และอาหารทะเล เช่น เคย ปลาซาร์ดีน หอยแมลงภู่ หอยเชลล์ ปลาเทราต์ และปลาทูน่า เครื่องดื่มแอลกอฮอล์ โดยเฉพาะเบียร์...</p>
-                              </div>
-                         </div>   
-                    </div>
-                    <div className='trivia-card'>
-                         <img className='trivia-pic' alt='สาเหตุของโรคเกาต์' src='https://img.wongnai.com/p/800x0/2018/10/22/ce894b08df4649d6847a600b53a685e1.jpg' />
-                         <div className='trivia-des'>
-                              <h1>สาเหตุของโรคเกาต์</h1>
-                              <div className='description'>
-                                   <p>การสะสมตัวของกรดยูริกในกระแสเลือดส่งผลให้เกิดโรคเกาต์ได้ ร่างกายสร้างกรดยูริกจากการ
-                                        สลายตัวของสารเพียวรีนในอาหารและเครื่องดื่มที่รับประทานและจากแหล่งภายในร่างกายเอง อาหารที่มีสารเพียวรีนสูงได้แก่ เนื้อแดง เครื่องใน เช่นตับ และอาหารทะเล เช่น เคย ปลาซาร์ดีน หอยแมลงภู่ หอยเชลล์ ปลาเทราต์ และปลาทูน่า เครื่องดื่มแอลกอฮอล์ โดยเฉพาะเบียร์...</p>
-                              </div>
-                         </div>   
-                    </div>
+                    {trivs.length > 0 ? (
+                         trivs.map(item => renderItem(item))
+                    ) : (
+                         <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                    )}
                </div>
           </>
      )

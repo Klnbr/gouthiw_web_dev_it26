@@ -1,21 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import './CreateTrivia.css';
-import { Input, Select } from "antd";
+import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
+import { firebase } from '../../firebase'
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import axios from 'axios';
 
 function CreateTrivia() {
     const navigate = useNavigate();
+
+    const [head, setHead] = useState("")
+    const [image, setImage] = useState(null)
+    const [content, setContent] = useState("")
+
+    const handleAddTriv = async () => {
+        try {
+            if (!image) {
+                alert("Please select an image!");
+                return;
+            }
+
+            const storage = firebase.storage();
+            const imageRef = storage.ref(`images/${image.name}`);
+            await imageRef.put(image);
+            const imageUrl = await imageRef.getDownloadURL();
+            console.log("Image uploaded successfully. URL:", imageUrl);
+        
+            const trivData = {
+                head: head,
+                image: imageUrl,
+                content: content,
+                isDeleted: false
+            };
+        
+            console.log("Triv Data:", trivData);
+        
+            const response = await axios.post("http://localhost:5500/addTrivia", trivData);
+            console.log("Response from server:", response);
+        
+            if (response.status === 201) {
+                alert("เพิ่มเข้าสำเร็จ");
+                navigate('/trivias');
+            }
+        } catch (error) {
+            alert("เพิ่มเข้าไม่สำเร็จ");
+            console.log("error creating trivia", error);
+            if (error.response) {
+                console.log("Error response data:", error.response.data);
+            }
+        }
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+    };
 
     return (
         <>
             <div className='form-trivia'>
                 <h2>เพิ่มเกร็ดความรู้</h2>
                 <div className='form--input'>
-                        <label htmlFor='menu-name'>
-                            ภาพประกอบ
-                        </label>
+                        <label htmlFor='menu-name'>ภาพประกอบ</label>
                         <div className='form--drop-pic'>
+                            <input type="file" id="image-input" name="TriviaImage" onChange={handleImageChange}/>
                             <i class="fa-regular fa-images"></i>
                         </div>
                     </div>
@@ -24,18 +73,18 @@ function CreateTrivia() {
                         <label htmlFor='menu-type'>
                             หัวข้อ
                         </label>
-                        <Input className='form--inputbox' />
+                        <Input className='form--inputbox' value={head} onChange={(e) => setHead(e.target.value)} />
                     </div>
                     <div className='form--input'>
                         <label htmlFor='menu-type'>
                             เนื้อหา
                         </label>
-                        <TextArea className='form--inputbox' rows='6'/>
+                        <TextArea className='form--inputbox' rows='6' value={content} onChange={(e) => setContent(e.target.value)} />
                     </div>
                 </div>
                 <div className='form-group form-bt'>
                         <button type='button' className='btn-cancel' onClick={() => navigate('/trivias')}>ยกเลิก</button>
-                        <button type='submit' className='btn-addtv'>บันทึกข้อมูล</button>
+                        <button type='button' className='btn-addtv' onClick={handleAddTriv}>บันทึกข้อมูล</button>
                     </div>
               
             </div>
