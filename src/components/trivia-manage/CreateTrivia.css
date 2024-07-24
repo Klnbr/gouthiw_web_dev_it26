@@ -11,12 +11,14 @@
     margin-bottom: 20px;
 }
 
-.form--input {
-
+.form-trivia {
+    width: 50%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     padding: 30px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .form-bt {

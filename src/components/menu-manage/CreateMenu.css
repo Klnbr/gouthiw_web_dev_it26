@@ -81,6 +81,10 @@
      border: 1px solid #19b46b;
 }
 
+.form--input {
+     width: 100%;
+}
+
 .form--drop-pic {
      width: 100%;
      height: 200px;
@@ -105,8 +109,11 @@
 }
 
 .form--input-2-col, .form--hidden-ingr {
+     width: 100%;
      display: flex;
      justify-content: space-between;
+     margin-left: auto;
+     margin-right: auto;
 }
 
 .form--hidden-ingr  h2 {

@@ -60,9 +60,10 @@
 
 .menu-card h1 {
   text-align: left;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   margin-top: 10px;
-  height: 50px;
+  font-weight: 400;
+  height: 45px;
 }
 
 .menu-pic {
@@ -80,17 +81,30 @@
   background-color: #FFA13F;
   padding: 5px;
   color: white;
+  font-size: 0.8rem;
 }
 
 .uric {
   background-color: #7F1BFF;
   padding: 5px;
   color: white;
+  font-size: 0.8rem;
 }
 
 .banner-text {
   text-align:center;
   justify-self: center;
+  /* background-color: lightgrey;
+  width: 40%;
+  padding: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -20%;
+  z-index: -99; */
+}
+
+.banner-text h1 {
+  font-weight: 700;
 }
 
 .trivia-block {
@@ -157,7 +171,9 @@
 }
 
 .add-trivia-card:hover {
-  border: 2px solid #4AB4A2;
+  background-color: rgb(235, 235, 235);
+  box-shadow: 0 2px 2px 1px #4AB4A2;
+  cursor: pointer;
 }
 
 .add-trivia-card i {
@@ -171,4 +187,10 @@
 
 .add-trivia-card i:hover {
   color: #4AB4A2;
+}
+
+.table-ingr, .table-ingr th, .table-ingr td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 5px;
 }
