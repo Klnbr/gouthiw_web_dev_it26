@@ -8,10 +8,6 @@
   font-weight: 300;
   font-style: normal;
 }
-.web {
-  font-family: sans-serif;
-  text-align: center;
-}
 
 .menu-block {
   display: flex;
@@ -56,6 +52,7 @@
   text-align: center;
   margin-top: 20px;
   box-shadow: 0 2px 2px 1px lightgrey;
+  cursor: pointer;
 }
 
 .menu-card h1 {

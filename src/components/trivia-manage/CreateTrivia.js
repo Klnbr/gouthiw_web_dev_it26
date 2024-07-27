@@ -55,17 +55,6 @@ function CreateTrivia() {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             setImage(selectedFile)
-            // const storageRef = firebase.storage().ref()
-            // const fileRef = storageRef.child(selectedFile.name)
-
-            // fileRef.put(selectedFile)
-            // .then((snapshot) => {
-            //     snapshot.ref.getDownloadURL()
-            //     .then((downloadURL) => {
-            //         console.log("downloadURL: ", downloadURL)
-            //         setImage(downloadURL)
-            //     })
-            // })
         } else {
             console.log("No file selected!")
         }

@@ -19,11 +19,12 @@ function App() {
         <Route path='/menus' element={<MenuScreen />} />
         <Route path='/trivias' element={<TriviaScreen />} />
         <Route path='/topics' element={<TopicScreen />} />
-        <Route path='/signup' element={<RegisterScreen />} />
-        <Route path='/login' element={<LoginScreen />} />
-        <Route path='/create-menu' element={<Menu />} />
+        <Route path='/menu' element={<Menu />} />
         <Route path='/trivia' element={<Trivia />} />
         <Route path='/ingredients' element={<IngrScreen />} />
+
+        <Route path='/signup' element={<RegisterScreen />} />
+        <Route path='/signin' element={<LoginScreen />} />
       </Routes>
     </div>
   );

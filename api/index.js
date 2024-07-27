@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const port = 5500;
@@ -45,6 +47,44 @@ app.listen(port, () => {
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
 const myMenu = require("./models/menu");
+const myUser = require("./models/user");
+
+//signup
+app.post("/signup", async (req, res) => {
+     try {
+          const { firstname, lastname, password, license_number, tel, email, image_profile, confirm_password, isDeleted } = req.body;
+          const user = await myUser.findOne({ email })
+
+          if (user) {
+               return res.status(409).send("This email is already exist");
+          }
+
+          let hashPassword = await bcrypt.hash(password, 10);
+
+          const newUser = new myUser({
+               firstname, 
+               lastname, 
+               password: hashPassword, 
+               license_number, 
+               tel, 
+               email: email.toLowerCase(),
+               image_profile,
+               confirm_password, 
+               menu_owner: [], 
+               triv_owner: [],
+               isDeleted
+          })
+
+          await newUser.save()
+
+          res
+               .status(201)
+               .json({ message: "Signed up successfully", user: newUser });
+     } catch (error) {
+          console.error("Sign up Error: ", error);
+          res.status(500).json({ message: "Failed to sign up" });
+     }
+});
 
 //ดึงเมนูมาแสดง
 app.get("/menus", async (req, res) => {
@@ -56,6 +96,77 @@ app.get("/menus", async (req, res) => {
           res.status(500).json({ message: "Failed to retrieve the menus" });
      }
 });
+
+//เพิ่มเมนู
+app.post("/menus", async (req, res) => {
+     try {
+          const { menuName, category, ingredients, method, purine, uric, image, isDeleted } = req.body;
+     
+          const newMenu = new myMenu({
+               menuName,
+               category,
+               ingredients,
+               method,
+               purine,
+               uric,
+               image,
+               isDeleted
+          });
+     
+          await newMenu.save();
+     
+          res
+               .status(201)
+               .json({ message: "Ingredient saved successfully", menu: newMenu });
+     } catch (error) {
+          console.log("Error creating menu", error);
+          res.status(500).json({ message: "Failed to add an menu" });
+     }
+});
+
+//ดึงเมนูมา 1 เมนู
+app.get("/menu/:id", async (req, res) => {
+     try {
+          const { id } = req.params;
+          const menus = await myMenu.findById(id);
+          console.log(menus)
+          res.status(200).json(menus);
+     } catch (error) {
+          console.log("error fetching all the menus", error);
+          res.status(500).json({ message: "Error fetching all the menus" });
+     }
+});
+
+//แก้ไขเมนู
+app.put('/menu/:id', async (req, res) => {
+     try {
+          const { id } = req.params;
+          const {
+               menuName,
+               category,
+               ingredients,
+               method,
+               purine,
+               uric,
+               image
+          } = req.body;
+     
+          await myMenu.findByIdAndUpdate(id, {
+               menuName,
+               category,
+               ingredients,
+               method,
+               purine,
+               uric,
+               image
+          })
+     
+          res.status(200).json({ message: "Update Menu successfully" })
+     } catch (error) {
+          console.log("Error update Menu", error);
+          res.status(500).json({ message: "Error update Menu" })
+     }
+})
 
 //ดึงวัตถุดิบมาแสดง
 app.get("/ingrs", async (req, res) => {

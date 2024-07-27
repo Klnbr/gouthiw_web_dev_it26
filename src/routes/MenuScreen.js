@@ -37,7 +37,7 @@ function MenuScreen() {
                const response = await axios.get(`http://localhost:5500/menu/${itemId}`);
                const menuData = response.data;
 
-               navigate('MenuDetailScreen', { menuData });
+               navigate('/menu', { state: { menuData } });
           } catch (error) {
                console.log('Error fetching menu data', error.message);
           }
@@ -47,8 +47,8 @@ function MenuScreen() {
           <>
                <Navbar/>
                <div className='menu-block'>
-                    <div className='add-menu-card' onClick={() => navigate('/create-menu')}>
-                         <i class="fa-solid fa-plus" cl></i>
+                    <div className='add-menu-card' onClick={() => navigate('/menu')}>
+                         <i className="fa-solid fa-plus"></i>
                     </div>
                     {menus.length > 0 ? (
                          menus.map(item => renderItem(item))

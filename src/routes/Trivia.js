@@ -13,8 +13,7 @@ function Trivia() {
                     <EditTrivia triviaData={triviaData} />
                ) : (
                     <CreateTrivia />
-               )}
-               
+               )}   
           </>
      )
 }

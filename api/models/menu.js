@@ -14,7 +14,9 @@ const menuSchema = new mongoose.Schema({
           {
                ingrName: { type: String, ref: 'Ingredient' },
                ingrQty: { type: Number },
-               ingrUnit: { type: String }
+               ingrUnit: { type: String },
+               ingrPurine: { type: Number },
+               ingrUric: { type: Number },
           }
      ],
      method: [

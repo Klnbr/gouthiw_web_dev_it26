@@ -1,34 +1,34 @@
 /* Register.css */
-.web {
+body {
+    background-image: url("../../public/Banner.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* .web {
     background-color: #FFA13F;
-    height: 130vh; /* Full viewport height */
+    height: 130vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white; /* Text color for better contrast */
+    color: white;
     font-family: Arial, sans-serif;
-}
+} */
 
-.card {
+.signup-card {
     background-color: white;
-    width: 700px; /* Adjust the width as needed */
-    height: 130vh; /* Adjust the height as needed */
+    width: 60%;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px; /* Add padding inside the card */
-    margin-top: 20vh;
+    padding: 20px;
+    /* justify-content: center;
+    align-items: center; */
+    margin: auto;
+    margin-top: 1%;
 }
 
-.card h1 , .card b{
-    color: black;
-    margin-top: 20px;
-}
-.card b a{
-    color: #FFA13F;
-    text-decoration: none;
-}
-label {
+.signup-form--right label {
     color: black;
     text-align: left;
     width: calc(100% - 40px);
@@ -36,26 +36,50 @@ label {
     margin: 15px 0 5px 0;
 }
 
-.form {
+.signup-form {
     margin-top: 20px;
-    width: 100%; /* Ensure the form takes full width */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
 }
 
-input {
-    width: calc(100% - 40px); /* Adjust width to account for padding */
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background-color: #F2F2F2;
-    border-color: #F2F2F2;
+.signup-form--left {
+    width: 20%;
+    justify-content: center;
 }
 
-.btn-regis {
-    margin-top: 50px;
-    width: 30vh;
-    border-radius: 30px;
-    color: white;
+.signup-form--image {
+    border-radius: 50%;
+    cursor: pointer;
+    filter: grayscale(50%);
+}
+
+.signup-form--image:hover {
+    filter: grayscale(60%);
+}
+
+.signup-form--right {
+    width: 60%;
+}
+
+.signup-form--left input[type="file"] {
+    display: none;
+}
+
+.signup-btn {
+    width: 100%;
     background-color: #4AB4A2;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.signup-form--right b {
+    text-align: center;
+    font-size: 0.8rem;
 }

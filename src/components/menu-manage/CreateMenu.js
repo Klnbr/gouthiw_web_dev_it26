@@ -5,21 +5,33 @@ import Form2 from './Form2';
 import Form3 from './Form3';
 import './CreateMenu.css';
 import { useNavigate } from 'react-router-dom';
+import { firebase } from '../.././firebase'
+import axios from 'axios';
 
 function CreateMenu() {
      const navigate = useNavigate();
+     const [formData, setFormData] = useState({
+          menuName: '',
+          category: '',
+          image: null,
+          ingredients: [{ ingrName: '', ingrQty: '', ingrUnit: '', ingrPurine: '', ingrUric: '' }],
+          method: [''],
+          purine: '',
+          uric: ''
+     });
+
      const steps = [
           {
                title: "ข้อมูลทั่วไป",
-               content: <Form1/>
+               content: <Form1 formData={formData} setFormData={setFormData} />
           },
           {
                title: "วัตถุดิบ",
-               content: <Form2/>
+               content: <Form2 formData={formData} setFormData={setFormData} />
           },
           {
                title: "วิธีการทำอาหาร",
-               content: <Form3/>
+               content: <Form3 formData={formData} setFormData={setFormData} />
           },
      ]
 
@@ -37,6 +49,42 @@ function CreateMenu() {
 
      const prevStepper = () => {
           setCurrent(current - 1);
+     };
+
+     const handleSave = async () => {
+          try {
+               const storageRef = firebase.storage().ref();
+               const imageRef = storageRef.child(`images/${formData.image.name}`);
+               await imageRef.put(formData.image);
+               const imageUrl = await imageRef.getDownloadURL();
+               console.log("Image uploaded successfully. URL:", imageUrl);
+
+               const menuData = {
+                    menuName: formData.menuName,
+                    category: formData.category,
+                    ingredients: formData.ingredients,
+                    method: formData.method,
+                    purine: formData.purine,
+                    uric: formData.uric,
+                    image: imageUrl,
+                    isDeleted: false
+               };
+
+               console.log("Menu Data:", menuData);
+
+               const response = await axios.post(
+                    "http://localhost:5500/menus", menuData
+               );
+
+               console.log("Menu created", response.data);
+               if (response.status === 201) {
+                    alert("เพิ่มเข้าสำเร็จ");
+                    navigate('/menus');
+               }
+          } catch (error) {
+               alert("เพิ่มเข้าไม่สำเร็จ", error.response.data.message || "Unknown error");
+               console.log("error creating menu", error);
+          }
      };
 
      return (
@@ -60,7 +108,7 @@ function CreateMenu() {
                               </button>
                          )}
                          {current === steps.length - 1 && (
-                              <button className="step-btn--next">
+                              <button className="step-btn--next" onClick={handleSave}>
                                    บันทึก
                               </button>
                          )}
