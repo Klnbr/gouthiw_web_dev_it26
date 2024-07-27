@@ -22,7 +22,7 @@ function App() {
         <Route path='/signup' element={<RegisterScreen />} />
         <Route path='/login' element={<LoginScreen />} />
         <Route path='/create-menu' element={<Menu />} />
-        <Route path='/create-trivia' element={<Trivia />} />
+        <Route path='/trivia' element={<Trivia />} />
         <Route path='/ingredients' element={<IngrScreen />} />
       </Routes>
     </div>

@@ -25,7 +25,7 @@ function TriviaScreen() {
                const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
                const triviaData = response.data;
 
-               navigate('TriviaDetailScreen', { triviaData });
+               navigate('/trivia', { state: { triviaData } });
           } catch (error) {
                console.log('Error fetching trivia data', error.message);
           }
@@ -47,7 +47,7 @@ function TriviaScreen() {
           <>
                <Navbar />
                <div className='trivia-block'>
-                    <div className='add-trivia-card' onClick={() => navigate('/create-trivia')}>
+                    <div className='add-trivia-card' onClick={() => navigate('/trivia')}>
                          <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
                     </div>
                     {trivs.length > 0 ? (

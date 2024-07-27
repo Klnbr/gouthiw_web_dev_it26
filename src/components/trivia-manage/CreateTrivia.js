@@ -4,7 +4,6 @@ import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 import { firebase } from '../../firebase'
-// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import axios from 'axios';
 
 function CreateTrivia() {
@@ -21,8 +20,8 @@ function CreateTrivia() {
                 return;
             }
 
-            const storage = firebase.storage();
-            const imageRef = storage.ref(`images/${image.name}`);
+            const storageRef = firebase.storage().ref();
+            const imageRef = storageRef.child(`images/${image.name}`);
             await imageRef.put(image);
             const imageUrl = await imageRef.getDownloadURL();
             console.log("Image uploaded successfully. URL:", imageUrl);
@@ -53,8 +52,23 @@ function CreateTrivia() {
     };
 
     const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setImage(file);
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setImage(selectedFile)
+            // const storageRef = firebase.storage().ref()
+            // const fileRef = storageRef.child(selectedFile.name)
+
+            // fileRef.put(selectedFile)
+            // .then((snapshot) => {
+            //     snapshot.ref.getDownloadURL()
+            //     .then((downloadURL) => {
+            //         console.log("downloadURL: ", downloadURL)
+            //         setImage(downloadURL)
+            //     })
+            // })
+        } else {
+            console.log("No file selected!")
+        }
     };
 
     return (
@@ -64,8 +78,8 @@ function CreateTrivia() {
                 <div className='form--input'>
                         <label htmlFor='menu-name'>ภาพประกอบ</label>
                         <div className='form--drop-pic'>
-                            <input type="file" id="image-input" name="TriviaImage" onChange={handleImageChange}/>
-                            <i class="fa-regular fa-images"></i>
+                            <input type="file" onChange={handleImageChange}/>
+                            <i className="fa-regular fa-images"></i>
                         </div>
                     </div>
                 <div>
