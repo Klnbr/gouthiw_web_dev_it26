@@ -30,10 +30,6 @@ const userSchema = new mongoose.Schema({
           type: String,
           required: true
      },
-     confirm_password: {
-          type: String,
-          required: true
-     },
      menu_owner: [
           {
                menuName: { type: String, ref: 'Menu' }

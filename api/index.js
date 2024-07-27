@@ -52,7 +52,7 @@ const myUser = require("./models/user");
 //signup
 app.post("/signup", async (req, res) => {
      try {
-          const { firstname, lastname, password, license_number, tel, email, image_profile, confirm_password, isDeleted } = req.body;
+          const { firstname, lastname, password, license_number, tel, email, image_profile, isDeleted } = req.body;
           const user = await myUser.findOne({ email })
 
           if (user) {
@@ -69,7 +69,6 @@ app.post("/signup", async (req, res) => {
                tel, 
                email: email.toLowerCase(),
                image_profile,
-               confirm_password, 
                menu_owner: [], 
                triv_owner: [],
                isDeleted
@@ -77,12 +76,62 @@ app.post("/signup", async (req, res) => {
 
           await newUser.save()
 
+          const token = jwt.sign({ _id: newUser._id }, "secretkey123", {
+               expiresIn: '90d'
+          })
+
           res
                .status(201)
-               .json({ message: "Signed up successfully", user: newUser });
+               .json({ 
+                    message: "Signed up successfully", 
+                    token
+               });
      } catch (error) {
           console.error("Sign up Error: ", error);
           res.status(500).json({ message: "Failed to sign up" });
+     }
+});
+
+//signin
+app.post("/signin", async (req, res) => {
+     try {
+          const { email, password } = req.body;
+          const user = await myUser.findOne({ email })
+
+          if (!user) {
+               return res.status(404).send("User not found!");
+          }
+
+          const checkPass = await bcrypt.compare( password, user.password );
+          if (!checkPass) {
+               return res.status(401).send("Invalid email or password");
+          }
+
+          const token = jwt.sign({ _id: user._id }, "secretkey123", {
+               expiresIn: '90d'
+          })
+
+          res
+               .status(201)
+               .json({ 
+                    message: "Signed in successfully", 
+                    token,
+                    user
+               });
+     } catch (error) {
+          console.error("Sign up Error: ", error);
+          res.status(500).json({ message: "Failed to sign up" });
+     }
+});
+
+//ดึงuserมาแสดง
+app.get("/users", async (req, res) => {
+     try {
+          const users = await myUser.find({ isDeleted: false })
+          return res.json(users)
+     } catch (error) {
+          console.error("Error fetching users data", error);
+          res.status(500).json({ message: "Failed to retrieve the users" });
      }
 });
 

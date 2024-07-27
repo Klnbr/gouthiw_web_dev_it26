@@ -4,9 +4,11 @@ import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import { firebase } from '.././firebase'
 import axios from 'axios';
+import { useAuth } from '../middleware/Auth';
 
 function RegisterScreen() {
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
@@ -53,6 +55,7 @@ function RegisterScreen() {
             console.log("Response from server:", response);
         
             if (response.status === 201) {
+                login(response.data.token, response.data.user);
                 alert("ลงทะเบียนสำเร็จ กำลังพาคุณไปที่หน้าเข้าสู่ระบบ");
                 navigate('/signin');
             }

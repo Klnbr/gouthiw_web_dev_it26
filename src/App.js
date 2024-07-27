@@ -1,6 +1,8 @@
 // import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
+import AuthProvider from './middleware/Auth';
+
 import HomeScreen from './routes/HomeScreen';
 import MenuScreen from './routes/MenuScreen';
 import TriviaScreen from './routes/TriviaScreen';
@@ -13,20 +15,22 @@ import IngrScreen from './routes/IngrScreen';
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path='/' element={<HomeScreen />} />
-        <Route path='/menus' element={<MenuScreen />} />
-        <Route path='/trivias' element={<TriviaScreen />} />
-        <Route path='/topics' element={<TopicScreen />} />
-        <Route path='/menu' element={<Menu />} />
-        <Route path='/trivia' element={<Trivia />} />
-        <Route path='/ingredients' element={<IngrScreen />} />
+    <AuthProvider>
+      <div className="App">
+        <Routes>
+          <Route path='/' element={<HomeScreen />} />
+          <Route path='/menus' element={<MenuScreen />} />
+          <Route path='/trivias' element={<TriviaScreen />} />
+          <Route path='/topics' element={<TopicScreen />} />
+          <Route path='/menu' element={<Menu />} />
+          <Route path='/trivia' element={<Trivia />} />
+          <Route path='/ingredients' element={<IngrScreen />} />
 
-        <Route path='/signup' element={<RegisterScreen />} />
-        <Route path='/signin' element={<LoginScreen />} />
-      </Routes>
-    </div>
+          <Route path='/signup' element={<RegisterScreen />} />
+          <Route path='/signin' element={<LoginScreen />} />
+        </Routes>
+      </div>
+    </AuthProvider> 
   );
 }
 
