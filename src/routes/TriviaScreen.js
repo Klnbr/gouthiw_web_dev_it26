@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Navbar/Navbar'
+import SideBar from '../components/SideBar/SideBar'
 import '.././App.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -34,9 +35,9 @@ function TriviaScreen() {
      const renderItem = (item) => (
           <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
                <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} />
-               <div className='trivia-des'>
+               <div className='trivia-info'>
                     <h1>{item.head}</h1>
-                    <div className='description'>
+                    <div className='trivia-des'>
                          <p>{item.content}</p>
                     </div>
                </div>
@@ -45,16 +46,33 @@ function TriviaScreen() {
 
      return (
           <>
-               <Navbar />
-               <div className='trivia-block'>
-                    <div className='add-trivia-card' onClick={() => navigate('/trivia')}>
-                         <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
+               <div className='container'>
+                    <SideBar />
+                    <div className='content'>
+                         <div className='nav'>
+                              <Navbar />
+                         </div>
+                         <div className='trivia-search'>
+                              <input type='text' placeholder='ค้นหาเกร็ดความรู้ที่นี่' />
+                              <button>
+                                   <i class="fa-solid fa-magnifying-glass"></i>
+                              </button>
+                         </div>
+                         <div className='main-content'>
+                              <div className='trivia-content'>
+                                   <div className='add-trivia-card' onClick={() => navigate('/trivia')}>
+                                        <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
+                                   </div>
+                                   {trivs.length > 0 ? (
+                                        trivs.map(item => renderItem(item))
+                                   ) : (
+                                        <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                   )}
+                              </div>
+                              
+                              
+                         </div>
                     </div>
-                    {trivs.length > 0 ? (
-                         trivs.map(item => renderItem(item))
-                    ) : (
-                         <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-                    )}
                </div>
           </>
      )

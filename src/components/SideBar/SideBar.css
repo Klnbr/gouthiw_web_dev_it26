@@ -1,46 +1,95 @@
-.Nav-container {
-     background-color: white;
+.side-bar--container {
+     background-color: #4AB4A2;
+     min-width: 248px;
+     position: relative;
+}
+
+.side-bar--content {
      display: flex;
-     justify-content: space-between;
+     flex-direction: column;
      align-items: center;
-     padding: 0 30px;
-     box-shadow: 0 5px 5px 0 gray;
-     width: 95%;
-     height: 80px;
-     border-radius: 13px;
-     position: fixed;
-     top: 20px;
-     left: 50%;
-     transform: translate(-50%);
-     z-index: 9999;
+     position: absolute;
+     top: 52px;
+     left: 20px;
+     gap: 16px;
 }
 
-.Nav-logo {
-     color: #4AB4A2;
-     font-size: 2rem;
+.side-bar--logo {
+     width: 200px;
+     height: 180px;
+}
+
+.side-bar--menu {
+     display: flex;
+     flex-direction: column;
+     gap: 8px;
+     position: absolute;
+     top: 200px;
+}
+
+.side-bar--btm {
+     position: absolute;
+     bottom: 0;
+     width: 60%;
+}
+
+.side-bar--links {
+     display: flex;
+     flex-direction: column;
+     width: 232px;
+     height: 56px;
+     background-color: rgba(255, 255, 255, 0);
+     border-top-right-radius: 32px;
+     border-bottom-right-radius: 32px;
      cursor: pointer;
+}
+
+.side-bar--links .side-bar--title, 
+.side-bar--links i {
+     color: #ffffff;
+}
+
+.side-bar--links:hover {
+     background-color: #89bcb4;
+}
+
+.side-bar--focus {
+     display: flex;
+     flex-direction: column;
+     width: 232px;
+     height: 56px;
+     background-color: white;
+     border-top-right-radius: 32px;
+     border-bottom-right-radius: 32px;
+     cursor: pointer;
+}
+
+.side-bar--focus .side-bar--title, 
+.side-bar--focus i {
+     color: #4AB4A2;
      font-weight: 700;
+     font-size: 16px;
 }
 
-.Nav-menu {
-     display: grid;
-     grid-template-columns: repeat(6, auto);
-     grid-gap: 10px;
-     list-style: none;
-     align-items: center;
+.side-bar--item {
+     width: 100%;
+     position: relative;
 }
 
-.nav-links {
-     text-decoration: none;
-     color: black;
-     font-size: 1.2rem;
-     font-weight: 600;
-     padding: 0.7rem 1rem;
-     white-space: nowrap;
+.side-bar--item i {
+     position: absolute;
+     top: 18px;
+     left: 18px;
+     width: 232px;
+     height: 56px;
+     border-top-right-radius: 32px;
+     border-bottom-right-radius: 32px;
 }
 
-.nav-links i {
-     padding-right: 10px;
+.side-bar--title {
+     position: absolute;
+     top: 16px;
+     left: 44px;
 }
 
 .nav-links:hover {
@@ -67,10 +116,6 @@
 .button:hover {
      background-color: black;
      color: white;
-}
-
-.menu-icons {
-     display: none;
 }
 
 @media screen and (max-width: 850px) {

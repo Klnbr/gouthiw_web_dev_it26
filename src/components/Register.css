@@ -1,19 +1,10 @@
 /* Register.css */
-body {
-    background-image: url("../../public/Banner.jpeg");
-    background-repeat: no-repeat;
-    background-size: cover;
+.sign-up--container {
+    margin-top: -11vh;
+    background-color: #4AB4A2;
+    height: 111vh;
+    padding-top: 11vh;
 }
-
-/* .web {
-    background-color: #FFA13F;
-    height: 130vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-family: Arial, sans-serif;
-} */
 
 .signup-card {
     background-color: white;
@@ -75,6 +66,7 @@ body {
     padding: 10px;
     margin-top: 30px;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .signup-form--right b {

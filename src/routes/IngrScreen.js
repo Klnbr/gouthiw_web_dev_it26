@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import '.././App.css'
 import '../components/Modal.css'
+import Navbar from '../components/Navbar/Navbar'
+import SideBar from '../components/SideBar/SideBar'
 import { Input } from "antd";
 import axios from 'axios';
 
@@ -112,62 +114,83 @@ function IngrScreen() {
                <td>{item.purine}</td>
                <td>{item.uric}</td>
                <td>
-                    <button onClick={() => handleItemPress(item._id)}>
-                         แก้ไข
-                    </button>
-               </td>
-               <td>
-                    <button onClick={() => handleItemDelete(item._id)}>
-                         ลบ
-                    </button>
+                    <div className='ingr-btn--layout'>
+                         <div className='ingr-btn' onClick={() => handleItemPress(item._id)}>
+                              <i className="fa-solid fa-pen"></i>
+                         </div>
+                         <div className='ingr-btn' onClick={() => handleItemDelete(item._id)}>
+                              <i className="fa-solid fa-trash-can"></i>
+                         </div>
+                    </div>
                </td>
           </tr>
      );
 
      return (
-          <div>
-               <button onClick={toggleModal}>เพิ่มวัตถุดิบ</button>
-
-               {modal && (
-                    <div className='modal'>
-                         <div className='overlay'></div>
-                         <div className='modal-content'>
-                              <h1>{currentItemId ? "แก้ไขวัตถุดิบ" : "เพิ่มวัตถุดิบใหม่"}</h1>
-
-                              <label htmlFor='ingr-name'>ชื่อวัตถุดิบ</label>
-                              <Input className='modal--input' value={name} onChange={(e) => setName(e.target.value)} />
-
-                              <label htmlFor='ingr-purine'>พิวรีน (โดยเฉลี่ย)</label>
-                              <Input className='modal--input' value={purine} onChange={(e) => setPurine(e.target.value)} />
-
-                              <label htmlFor='ingr-uric'>ยูริก (โดยเฉลี่ย)</label>
-                              <Input className='modal--input' value={uric} onChange={(e) => setUric(e.target.value)} />
+          <>
+               <div className='container'>
+                    <SideBar />
+                    <div className='content'>
+                         <div className='nav'>
+                              <Navbar />
+                         </div>
+                         <div className='ingr-search'>
+                              <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
+                              <button className='ingr-search--btn'>
+                                   <i class="fa-solid fa-magnifying-glass"></i>
+                              </button>
+                         </div>
+                         <button className='ingr-add--btn' onClick={toggleModal}>เพิ่มวัตถุดิบ</button>
+                         <div className='main-content'>
                               
-                              <button onClick={handleSave}>บันทึก</button>
-                              <button onClick={toggleModal}>ปิด</button>
+                              {modal && (
+                                   <div className='modal'>
+                                        <div className='modal-content'>
+                                             <button className='ingr-cancel--btn' onClick={toggleModal}>
+                                                  <i class="fa-solid fa-xmark"></i>
+                                             </button>
+                                             <h1>{currentItemId ? "แก้ไขวัตถุดิบ" : "เพิ่มวัตถุดิบใหม่"}</h1>
+
+                                             <label htmlFor='ingr-name'>ชื่อวัตถุดิบ</label>
+                                             <Input className='modal--input' value={name} onChange={(e) => setName(e.target.value)} />
+
+                                             <label htmlFor='ingr-purine'>พิวรีน (โดยเฉลี่ย)</label>
+                                             <Input className='modal--input' value={purine} onChange={(e) => setPurine(e.target.value)} />
+
+                                             <label htmlFor='ingr-uric'>ยูริก (โดยเฉลี่ย)</label>
+                                             <Input className='modal--input' value={uric} onChange={(e) => setUric(e.target.value)} />
+                                             
+                                             <button className='ingr-save--btn' onClick={handleSave}>
+                                                  <i class="fa-solid fa-floppy-disk"></i>
+                                                  <span className='btn-title'>บันทึก</span>
+                                             </button>                                  
+                                        </div>
+                                   </div>
+                              )}
+
+                              <table className='table-ingr'>
+                                   <thead>
+                                        <tr>
+                                             <th>ชื่อวัตถุดิบ</th>
+                                             <th>ค่าพิวรีน (โดยเฉลี่ย)</th>
+                                             <th>ค่ากรดยูริก (โดยเฉลี่ย)</th>
+                                             <th></th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                        {ingrs.length > 0 ? (
+                                             ingrs.map(item => renderItem(item))
+                                        ) : (
+                                             <tr>
+                                                  <td colSpan="4">ยังไม่มีข้อมูลวัตถุดิบ</td>
+                                             </tr>
+                                        )}
+                                   </tbody>
+                              </table>
                          </div>
                     </div>
-               )}
-
-               <table className='table-ingr'>
-                    <thead>
-                         <tr>
-                              <th>ชื่อวัตถุดิบ</th>
-                              <th>ค่าพิวรีน (โดยเฉลี่ย)</th>
-                              <th>ค่ากรดยูริก (โดยเฉลี่ย)</th>
-                         </tr>
-                    </thead>
-                    <tbody>
-                         {ingrs.length > 0 ? (
-                              ingrs.map(item => renderItem(item))
-                         ) : (
-                              <tr>
-                                   <td colSpan="4">ยังไม่มีข้อมูลวัตถุดิบ</td>
-                              </tr>
-                         )}
-                    </tbody>
-               </table>
-          </div>
+               </div>
+          </>
      )
 }
 

@@ -4,6 +4,7 @@ import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../middleware/Auth';
+import Logo from '../images/logo_temporary.png'
 
 function LoginScreen() {
     const navigate = useNavigate();
@@ -30,8 +31,9 @@ function LoginScreen() {
     };
 
     return (
-        <div>
+        <div className='sign-in--container'>
             <div className='signin-card'>
+                <img alt='gouthiw logo' src={Logo} />
                 <h1>เข้าสู่ระบบ</h1>
                 <div className='signin-form'>
                     <label htmlFor='signin-email'>อีเมล</label>
@@ -44,7 +46,6 @@ function LoginScreen() {
                     <b>ยังไม่มีมีบัญชี?  <a href='/signup'>ลงทะเบียน</a></b>
                 </div>
             </div>
-            sty
         </div>
     );
 }

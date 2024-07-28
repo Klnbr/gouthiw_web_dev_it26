@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
-import '.././App.css'
+import Navbar from '../components/Navbar/Navbar'
+import SideBar from '../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -45,16 +45,37 @@ function MenuScreen() {
 
      return (
           <>
-               <Navbar/>
-               <div className='menu-block'>
-                    <div className='add-menu-card' onClick={() => navigate('/menu')}>
-                         <i className="fa-solid fa-plus"></i>
+               <div className='container'>
+                    <SideBar />
+                    <div className='content'>
+                         <div className='nav'>
+                              <Navbar />
+                         </div>
+                         <div className='menu-search'>
+                              <input type='text' placeholder='ค้นหาอาหารที่นี่' />
+                              <button>
+                                   <i class="fa-solid fa-magnifying-glass"></i>
+                              </button>
+                              {/* <button>
+                                   <i class="fa-solid fa-plus"></i>
+                                   เพิ่มอาหาร
+                              </button> */}
+                         </div>
+                         <div className='main-content'>
+                              <div className='menu-content'>
+                                   <div className='add-menu-card' onClick={() => navigate('/menu')}>
+                                        <i className="fa-solid fa-plus"></i>
+                                   </div>
+                                   {menus.length > 0 ? (
+                                        menus.map(item => renderItem(item))
+                                   ) : (
+                                        <h2>ยังไม่มีข้อมูลอาหาร</h2>
+                                   )}
+                              </div>
+                              
+                              
+                         </div>
                     </div>
-                    {menus.length > 0 ? (
-                         menus.map(item => renderItem(item))
-                    ) : (
-                         <h2>ยังไม่มีข้อมูลอาหาร</h2>
-                    )}
                </div>
           </>
      )

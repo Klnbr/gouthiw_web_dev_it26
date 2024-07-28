@@ -1,31 +1,32 @@
 export const MenuItems = [
      {
-          title: "Home",
+          title: "หน้าหลัก",
           url: "/",
-          cName: "nav-links",
           icon: "fa-solid fa-house"
      },
      {
-          title: "Food",
+          title: "อาหาร",
           url: "/menus",
-          cName: "nav-links",
           icon: "fa-solid fa-burger"
      },
      {
-          title: "Trivia",
+          title: "วัตถุดิบ",
+          url: "/ingredients",
+          icon: "fa-solid fa-shrimp"
+     },
+     {
+          title: "เกร็ดความรู้",
           url: "/trivias",
-          cName: "nav-links",
           icon: "fa-solid fa-book"
      },
      {
-          title: "Topic",
+          title: "กระทู้คำถาม",
           url: "/topics",
-          cName: "nav-links",
           icon: "fa-solid fa-question"
-     },
-     {
-          title: "Sign up",
-          url: "/signup",
-          cName: "nav-links-mobile",
-     },
+     }
+     // {
+     //      title: "Sign up",
+     //      url: "/signup",
+     //      cName: "nav-links-mobile",
+     // },
 ]

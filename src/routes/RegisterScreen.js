@@ -82,7 +82,7 @@ function RegisterScreen() {
     };
 
     return (
-        <div>
+        <div className='sign-up--container'>
             <div className='signup-card'>
                 <h1>ลงทะเบียน</h1>
                 <div className='signup-form'>
