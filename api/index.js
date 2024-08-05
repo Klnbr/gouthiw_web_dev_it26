@@ -309,6 +309,19 @@ app.get("/trivias", async (req, res) => {
      }
 });
 
+//ดึงเกร็ดความรู้มาแสดง (Auth)
+app.get("/trivias/auth/:id", async (req, res) => {
+     try {
+          const { id } = req.params;
+          const user = await myUser.findById(id).populate('triv_owner');
+          const trivias = await myTrivia.find({ isDeleted: false, userId: id });
+          return res.json(user.triv_owner)
+     } catch (error) {
+          console.log("error fetching all the trivias", error);
+          res.status(500).json({ message: "Error fetching all the trivias" });
+     }
+});
+
 //เพิ่มเกร็ดความรู้
 app.post("/addTrivia", upload.single('image'), async (req, res) => {
      try {
@@ -322,6 +335,34 @@ app.post("/addTrivia", upload.single('image'), async (req, res) => {
                isDeleted,
           });
           await addTrivia.save();
+     
+          res
+               .status(201)
+               .json({ message: "Trivia created successfully", trivia: addTrivia });
+     } catch (error) {
+          console.log("error creating the trivia", error);
+          res.status(500).json({ message: "Error creating the trivia" });
+     }
+});
+
+//เพิ่มเกร็ดความรู้ (Auth)
+app.post("/trivia/:id", upload.single('image'), async (req, res) => {
+     try {
+          const { id } = req.params;
+          const { head, image, content, isDeleted } = req.body;
+     
+          const addTrivia = new myTrivia({
+               head,
+               image,
+               content,
+               isDeleted,
+          });
+
+          await addTrivia.save();
+
+          await myUser.findByIdAndUpdate(id, {
+               $push: { triv_owner: { head: addTrivia._id } }
+          });
      
           res
                .status(201)

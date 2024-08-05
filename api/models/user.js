@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
      ],
      triv_owner: [
           {
-               head: { type: String, ref: 'Trivia' }
+               head: { type: mongoose.Schema.Types.ObjectId, ref: 'Trivia' }
           }
      ],
      isDeleted: {

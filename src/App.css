@@ -354,9 +354,14 @@
     background-color: #ca7d2a;
 }
 
+.btn-switch {
+  display: flex;
+}
+
 .table-ingr {
   border-collapse: collapse;
   width: 80%;
+  margin-bottom: 30px;
 }
 
 .table-ingr tr:nth-child(even) {

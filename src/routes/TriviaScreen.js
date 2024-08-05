@@ -3,11 +3,16 @@ import Navbar from '../components/Navbar/Navbar'
 import SideBar from '../components/SideBar/SideBar'
 import '.././App.css'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../middleware/Auth';
 import axios from 'axios';
 
 function TriviaScreen() {
      const navigate = useNavigate();
+     const { userData, logout } = useAuth();
+
      const [trivs, setTrivia] = useState([]);
+     const [trivsUser, setTriviaUser] = useState([]);
+     const [showUserTrivias, setShowUserTrivias] = useState(false);
 
      useEffect(() => {
           const fetchTriviaData = async () => {
@@ -18,7 +23,18 @@ function TriviaScreen() {
                     console.log("Error fetching trivias data", error.message)
                }
           }
+          const fetchTriviaDataUser = async () => {
+               try {
+                    const response = await axios.get(`http://localhost:5500/trivias/auth/${userData._id}`, { timeout: 10000 });
+                    setTriviaUser(response.data);
+               } catch (error) {
+                    console.log("Error fetching trivias data", error.message)
+               }
+          }
           fetchTriviaData();
+          if (userData) {
+               fetchTriviaDataUser();
+          }
      }, [])
 
      const handleItemPress = async (itemId) => {
@@ -63,14 +79,25 @@ function TriviaScreen() {
                                    <div className='add-trivia-card' onClick={() => navigate('/trivia')}>
                                         <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
                                    </div>
-                                   {trivs.length > 0 ? (
-                                        trivs.map(item => renderItem(item))
+                                   <div className='btn-switch'>
+                                        <button onClick={() => setShowUserTrivias(false)}>ทั้งหมด</button>
+                                        <button onClick={() => setShowUserTrivias(true)}>เกร็ดความรู้ของฉัน</button>
+                                   </div>
+                                   
+                                   {showUserTrivias ? (
+                                        trivsUser.length > 0 ? (
+                                             trivsUser.map(item => renderItem(item))
+                                        ) : (
+                                             <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                        )
                                    ) : (
-                                        <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                        trivs.length > 0 ? (
+                                             trivs.map(item => renderItem(item))
+                                        ) : (
+                                             <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                        )
                                    )}
                               </div>
-                              
-                              
                          </div>
                     </div>
                </div>
