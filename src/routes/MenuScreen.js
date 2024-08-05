@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar/Navbar'
 import SideBar from '../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../middleware/Auth';
 import axios from 'axios';
 
 function MenuScreen() {
      const navigate = useNavigate();
+     const { userData } = useAuth();
+
      const [menus, setMenus] = useState([]);
+     const [menusUser, setMenusUser] = useState([]);
 
      useEffect(() => {
           const fetchMenuData = async () => {
@@ -18,8 +22,21 @@ function MenuScreen() {
                     console.log("Error fetching menus data", error.message)
                }
           }
+          const fetchMenuDataUser = async () => {
+               try {
+                    const response = await axios.get(`http://localhost:5500/menus/auth/${userData._id}`, { timeout: 10000 });
+                    console.log(response.data)
+                    setMenusUser(response.data);
+
+               } catch (error) {
+                    console.log("Error fetching menus data", error.message)
+               }
+          }
           fetchMenuData();
-     }, [])
+          if (userData) {
+               fetchMenuDataUser();
+          }
+     }, [userData])
 
      const renderItem = (item) => (
           <div className='menu-card' onClick={() => handleItemPress(item._id)} key={item._id}>
@@ -63,17 +80,27 @@ function MenuScreen() {
                          </div>
                          <div className='main-content'>
                               <div className='menu-content'>
-                                   <div className='add-menu-card' onClick={() => navigate('/menu')}>
-                                        <i className="fa-solid fa-plus"></i>
-                                   </div>
+                                   {userData && (
+                                        <>
+                                             <div className='add-menu-card' onClick={() => navigate('/menu')}>
+                                                  <i className="fa-solid fa-plus"></i>
+                                             </div>
+                                             {menusUser.length > 0 ? (
+                                                  <>
+                                                       {menusUser.map(item => renderItem(item))}
+                                                       <hr className='hr-line' />
+                                                  </> 
+                                             ) : (
+                                                  <h2>ยังไม่มีข้อมูลอาหารของคุณ</h2>
+                                             )}
+                                        </>
+                                   )}                                   
                                    {menus.length > 0 ? (
                                         menus.map(item => renderItem(item))
                                    ) : (
                                         <h2>ยังไม่มีข้อมูลอาหาร</h2>
                                    )}
                               </div>
-                              
-                              
                          </div>
                     </div>
                </div>

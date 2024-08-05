@@ -142,7 +142,6 @@ function IngrScreen() {
                          </div>
                          <button className='ingr-add--btn' onClick={toggleModal}>เพิ่มวัตถุดิบ</button>
                          <div className='main-content'>
-                              
                               {modal && (
                                    <div className='modal'>
                                         <div className='modal-content'>

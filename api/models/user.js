@@ -32,12 +32,12 @@ const userSchema = new mongoose.Schema({
      },
      menu_owner: [
           {
-               menuName: { type: String, ref: 'Menu' }
+               menu_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Menu' }
           }
      ],
      triv_owner: [
           {
-               head: { type: mongoose.Schema.Types.ObjectId, ref: 'Trivia' }
+               triv_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Trivia' }
           }
      ],
      isDeleted: {

@@ -6,10 +6,13 @@ import Form3 from './Form3';
 import './CreateMenu.css';
 import { useNavigate } from 'react-router-dom';
 import { firebase } from '../.././firebase'
+import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
 
 function CreateMenu() {
      const navigate = useNavigate();
+     const { userData } = useAuth();
+
      const [formData, setFormData] = useState({
           menuName: '',
           category: '',
@@ -87,12 +90,48 @@ function CreateMenu() {
           }
      };
 
+     const handleSaveId = async () => {
+          try {
+               const storageRef = firebase.storage().ref();
+               const imageRef = storageRef.child(`images/${formData.image.name}`);
+               await imageRef.put(formData.image);
+               const imageUrl = await imageRef.getDownloadURL();
+               console.log("Image uploaded successfully. URL:", imageUrl);
+
+               const menuData = {
+                    menuName: formData.menuName,
+                    category: formData.category,
+                    ingredients: formData.ingredients,
+                    method: formData.method,
+                    purine: formData.purine,
+                    uric: formData.uric,
+                    image: imageUrl,
+                    isDeleted: false
+               };
+
+               console.log("Menu Data:", menuData);
+
+               const response = await axios.post(
+                    `http://localhost:5500/menus/${userData._id}`, menuData
+               );
+
+               console.log("Menu created", response.data);
+               if (response.status === 201) {
+                    alert("เพิ่มเข้าสำเร็จ");
+                    navigate('/menus');
+               }
+          } catch (error) {
+               alert("เพิ่มเข้าไม่สำเร็จ", error.response.data.message || "Unknown error");
+               console.log("error creating menu", error);
+          }
+     };
+
      return (
           <div className='step-container'>
                <div className='step-layout'>
                     <Steps current={current} items={items} labelPlacement="vertical" />
                </div>
-               <div>{steps[current].content}</div>
+               <div className='step-content'>{steps[current].content}</div>
 
                <div className='step-btn'>
                     <button className='step-btn--cancel' onClick={() => navigate('/menus')}>ยกเลิก</button>
@@ -108,7 +147,7 @@ function CreateMenu() {
                               </button>
                          )}
                          {current === steps.length - 1 && (
-                              <button className="step-btn--next" onClick={handleSave}>
+                              <button className="step-btn--next" onClick={handleSaveId}>
                                    บันทึก
                               </button>
                          )}

@@ -8,7 +8,7 @@ import axios from 'axios';
 
 function TriviaScreen() {
      const navigate = useNavigate();
-     const { userData, logout } = useAuth();
+     const { userData } = useAuth();
 
      const [trivs, setTrivia] = useState([]);
      const [trivsUser, setTriviaUser] = useState([]);
@@ -35,7 +35,7 @@ function TriviaScreen() {
           if (userData) {
                fetchTriviaDataUser();
           }
-     }, [])
+     }, [userData])
 
      const handleItemPress = async (itemId) => {
           try {
@@ -68,22 +68,29 @@ function TriviaScreen() {
                          <div className='nav'>
                               <Navbar />
                          </div>
-                         <div className='trivia-search'>
-                              <input type='text' placeholder='ค้นหาเกร็ดความรู้ที่นี่' />
-                              <button>
-                                   <i class="fa-solid fa-magnifying-glass"></i>
-                              </button>
-                         </div>
                          <div className='main-content'>
+                              <div className='trivia-manage'>
+                                   <div className='trivia-search'>
+                                        <input type='text' placeholder='ค้นหาเกร็ดความรู้ที่นี่' />
+                                        <button className='search-trivia-btn'>
+                                             <i className="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                   </div>
+                                   <button className='add-trivia-btn' onClick={() => navigate('/trivia')}>
+                                        <i className="fa-solid fa-plus"> เพิ่มเกร็ดความรู้</i>
+                                   </button>
+                              </div>
                               <div className='trivia-content'>
-                                   <div className='add-trivia-card' onClick={() => navigate('/trivia')}>
-                                        <i class="fa-solid fa-plus" cl> เพิ่มเกร็ดความรู้</i>
-                                   </div>
-                                   <div className='btn-switch'>
-                                        <button onClick={() => setShowUserTrivias(false)}>ทั้งหมด</button>
-                                        <button onClick={() => setShowUserTrivias(true)}>เกร็ดความรู้ของฉัน</button>
-                                   </div>
-                                   
+                                   {userData && (
+                                       <div className='btn-switch'>
+                                             <button 
+                                                  onClick={() => setShowUserTrivias(false)}
+                                                  className={!showUserTrivias ? 'btn-switch-clicked' : 'btn-switch-noclick'}>ทั้งหมด</button>
+                                             <button 
+                                                  onClick={() => setShowUserTrivias(true)}
+                                                  className={showUserTrivias ? 'btn-switch-clicked' : 'btn-switch-noclick'}>เกร็ดความรู้ของฉัน</button>
+                                        </div>
+                                   )}
                                    {showUserTrivias ? (
                                         trivsUser.length > 0 ? (
                                              trivsUser.map(item => renderItem(item))

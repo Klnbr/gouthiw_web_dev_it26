@@ -146,6 +146,53 @@ app.get("/menus", async (req, res) => {
      }
 });
 
+//ดึงเมนูมาแสดง (Auth)
+app.get("/menus/auth/:id", async (req, res) => {
+     try {
+          const { id } = req.params;
+
+          if (!mongoose.Types.ObjectId.isValid(id)) {
+               return res.status(400).json({ message: "Invalid user ID" });
+          }
+
+          const userMenu = await myUser.aggregate([
+               { $match:
+                    { _id: new mongoose.Types.ObjectId(id) }
+               },
+               {
+                    $unwind: '$menu_owner'
+               },
+               { $lookup:
+                    {
+                         from: 'menus',
+                         localField: 'menu_owner.menu_id',
+                         foreignField: '_id',
+                         as: 'menuDetails'
+                    }
+               },
+               {
+                    $unwind: '$menuDetails'
+               },
+               { $project:
+                    {
+                         _id: '$menuDetails._id',
+                         menuName: '$menuDetails.menuName',
+                         category: '$menuDetails.category',
+                         ingredients: '$menuDetails.ingredients',
+                         method: '$menuDetails.method',
+                         purine: '$menuDetails.purine',
+                         uric: '$menuDetails.uric',
+                         image: '$menuDetails.image'
+                    }
+               }
+          ])
+          return res.json(userMenu)
+     } catch (error) {
+          console.error("Error fetching menus data", error);
+          res.status(500).json({ message: "Failed to retrieve the menus" });
+     }
+});
+
 //เพิ่มเมนู
 app.post("/menus", async (req, res) => {
      try {
@@ -167,6 +214,38 @@ app.post("/menus", async (req, res) => {
           res
                .status(201)
                .json({ message: "Ingredient saved successfully", menu: newMenu });
+     } catch (error) {
+          console.log("Error creating menu", error);
+          res.status(500).json({ message: "Failed to add an menu" });
+     }
+});
+
+//เพิ่มเมนู (Auth)
+app.post("/menus/:id", async (req, res) => {
+     try {
+          const { id } = req.params;
+          const { menuName, category, ingredients, method, purine, uric, image, isDeleted } = req.body;
+     
+          const newMenu = new myMenu({
+               menuName,
+               category,
+               ingredients,
+               method,
+               purine,
+               uric,
+               image,
+               isDeleted
+          });
+     
+          await newMenu.save();
+
+          await myUser.findByIdAndUpdate(id, {
+               $push: { menu_owner: { menu_id: newMenu._id } }
+          });
+     
+          res
+               .status(201)
+               .json({ message: "Menu saved successfully", menu: newMenu });
      } catch (error) {
           console.log("Error creating menu", error);
           res.status(500).json({ message: "Failed to add an menu" });
@@ -313,9 +392,40 @@ app.get("/trivias", async (req, res) => {
 app.get("/trivias/auth/:id", async (req, res) => {
      try {
           const { id } = req.params;
-          const user = await myUser.findById(id).populate('triv_owner');
-          const trivias = await myTrivia.find({ isDeleted: false, userId: id });
-          return res.json(user.triv_owner)
+
+          if (!mongoose.Types.ObjectId.isValid(id)) {
+               return res.status(400).json({ message: "Invalid user ID" });
+          }
+
+          const userTrivia = await myUser.aggregate([
+               { $match:
+                    { _id: new mongoose.Types.ObjectId(id) }
+               },
+               {
+                    $unwind: '$triv_owner'
+               },
+               { $lookup:
+                    {
+                         from: 'trivias',
+                         localField: 'triv_owner.triv_id',
+                         foreignField: '_id',
+                         as: 'triviaDetails'
+                    }
+               },
+               {
+                    $unwind: '$triviaDetails'
+               },
+               { $project:
+                    {
+                         _id: '$triviaDetails._id',
+                         head: '$triviaDetails.head',
+                         image: '$triviaDetails.image',
+                         content: '$triviaDetails.content'
+                    }
+               }
+          ])
+          return res.json(userTrivia)
+          
      } catch (error) {
           console.log("error fetching all the trivias", error);
           res.status(500).json({ message: "Error fetching all the trivias" });
@@ -326,7 +436,6 @@ app.get("/trivias/auth/:id", async (req, res) => {
 app.post("/addTrivia", upload.single('image'), async (req, res) => {
      try {
           const { head, image, content, isDeleted } = req.body;
-          console.log("Received trivia data:", { head, image, content, isDeleted });
      
           const addTrivia = new myTrivia({
                head,
@@ -361,7 +470,7 @@ app.post("/trivia/:id", upload.single('image'), async (req, res) => {
           await addTrivia.save();
 
           await myUser.findByIdAndUpdate(id, {
-               $push: { triv_owner: { head: addTrivia._id } }
+               $push: { triv_owner: { triv_id: addTrivia._id } }
           });
      
           res

@@ -9,7 +9,7 @@ import axios from 'axios';
 
 function CreateTrivia() {
     const navigate = useNavigate();
-    const { userData, logout } = useAuth();
+    const { userData } = useAuth();
 
     const [head, setHead] = useState("")
     const [image, setImage] = useState(null)

@@ -9,6 +9,12 @@
     font-style: normal;
 }
 
+.hr-line {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 .container {
     display: flex;
     flex-direction: row;
@@ -30,7 +36,7 @@
 }
 
 .main-content {
-  display: flex;
+  /* display: flex; */
   justify-content: center;
   margin-top: 20px;
   padding-left: 28px;
@@ -194,10 +200,16 @@
 
 /* TriviaScreen */
 
-.trivia-search {
-  width: 77%;
+.trivia-manage {
+  display: flex;
+  width: 80%; 
   margin-left: auto;
   margin-right: auto;
+  justify-content: space-between;
+}
+
+.trivia-search {
+  width: 82%;
   box-shadow: 0 2px 2px 1px lightgrey;
 }
 
@@ -209,7 +221,7 @@
   border: none;
 }
 
-.trivia-search button {
+.trivia-search .search-trivia-btn {
   width: 5%;
   padding: 10px;
   margin-left: auto;
@@ -217,6 +229,15 @@
   border: none;
   background-color: #FFA13F;
   color: white;
+  cursor: pointer;
+}
+
+.trivia-manage .add-trivia-btn {
+  width: 15%;
+  padding: 10px;
+  border: none;
+  color: white;
+  background-color: #4AB4A2;
   cursor: pointer;
 }
 
@@ -356,11 +377,34 @@
 
 .btn-switch {
   display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-switch button{
+  padding: 5px 10px;
+  border-radius: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.btn-switch-clicked {
+  background-color: #4AB4A2;
+  color: white;
+  border: 1px solid #4AB4A2;
+}
+
+.btn-switch-noclick {
+  /* background-color: white; */
+  color: #4AB4A2;
+  border: 1px solid #4AB4A2;
 }
 
 .table-ingr {
   border-collapse: collapse;
   width: 80%;
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 30px;
 }
 

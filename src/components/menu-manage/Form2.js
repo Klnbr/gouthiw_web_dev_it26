@@ -1,10 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Select } from "antd";
 import './CreateMenu.css';
+import axios from 'axios';
 
 function Form2({ formData, setFormData }) {
+     const [ingrs, setIngrs] = useState([]);
+     const [selectedIngredientIndex, setSelectedIngredientIndex] = useState(null);
+
      const [totalPurine, setTotalPurine] = useState(0);
      const [totalUric, setTotalUric] = useState(0);
+
+     const [modal, setModal] = useState(false)
+
+     const toggleModal = () => {
+          setModal(!modal);
+          // if (!modal) {
+          //      setName("");
+          //      setPurine("");
+          //      setUric("");
+          //      setCurrentItemId(null);
+          // }
+     }
+
+     if (modal) {
+          document.body.classList.add('active-modal')
+     } else {
+          document.body.classList.remove('active-modal')
+     }
+
      const { ingredients } = formData;
 
      const convertToGrams = (quantity, unit) => {
@@ -34,6 +57,17 @@ function Form2({ formData, setFormData }) {
                const uric = convertToGrams(quantity, unit) * uricPerUnit;
                return total + uric;
           }, 0);
+
+          const fetchIngrData = async () => {
+               try {
+                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+                    setIngrs(response.data);
+               } catch (error) {
+                    console.log("Error fetching ingrs data", error.message)
+               }
+          }
+
+          fetchIngrData();
   
           setTotalPurine(newTotalPurine);
           setTotalUric(newTotalUric);
@@ -67,26 +101,98 @@ function Form2({ formData, setFormData }) {
           });
      };
 
+     const handleSelectIngr = (itemId) => {
+          const selectedIngr = ingrs.find(ingr => ingr._id === itemId);
+          if (selectedIngr !== undefined && selectedIngredientIndex !== null) {
+               const newIngredients = [...formData.ingredients];
+               newIngredients[selectedIngredientIndex] = {
+                    ...newIngredients[selectedIngredientIndex],
+                    ingrName: selectedIngr.name,
+                    ingrPurine: selectedIngr.purine,
+                    ingrUric: selectedIngr.uric
+               };
+
+               setFormData({
+                    ...formData,
+                    ingredients: newIngredients
+               });
+
+               setSelectedIngredientIndex(null);
+               toggleModal();
+          }
+     }
+
+     const renderItem = (item) => (
+          <tr key={item._id} onClick={() => handleSelectIngr(item._id)}>
+               <td>{item.name}</td>
+               <td>{item.purine}</td>
+               <td>{item.uric}</td>
+          </tr>
+     );
+
      return (
           <div>
                <h1>รวมพิวรีน: {totalPurine.toFixed(2)} mg</h1>
                <h1>รวมยูริก: {totalUric.toFixed(2)} mg</h1>
+               {modal && (
+                    <div className='modal-ingr'>
+                         <div className='modal-ingr-content'>
+                               <button className='ingr-cancel--btn' onClick={toggleModal}>
+                                   <i className="fa-solid fa-xmark"></i>
+                              </button>
+                              <h1>รายชื่อวัตถุดิบ</h1>
+
+                              <div className='ingr-search'>
+                                   <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
+                                   <button className='ingr-search--btn'>
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                   </button>
+                              </div>
+                              <div className='table-ingr-container'>
+                                   <table className='table-ingr'>
+                                        <thead>
+                                             <tr>
+                                                  <th>ชื่อวัตถุดิบ</th>
+                                                  <th>ค่าพิวรีน (โดยเฉลี่ย)</th>
+                                                  <th>ค่ากรดยูริก (โดยเฉลี่ย)</th>
+                                             </tr>
+                                        </thead>
+                                        <tbody>
+                                             {ingrs.length > 0 ? (
+                                                  ingrs.map(item => renderItem(item))
+                                             ) : (
+                                                  <tr>
+                                                       <td colSpan="3">ยังไม่มีข้อมูลวัตถุดิบ</td>
+                                                  </tr>
+                                             )}
+                                        </tbody>
+                                   </table>                                    
+                              </div>
+                         </div>
+                    </div>
+               )}
                {formData.ingredients.map((ingredient, index) => (
                     <div key={index}>
                          <div className='form--hidden-ingr'>
                               <h2>วัตถุดิบที่ {index + 1}</h2>
-                              <i className="fa-solid fa-caret-down"></i>
+                              <i class="fa-solid fa-circle-xmark"></i>
                          </div>
                          <hr className='hr-line-full' />
                          <div className='form--input'>
                               <label htmlFor='ingr-name'>
                                    ชื่อวัตถุดิบ
                               </label>
-                              <Input 
-                                   className='form--inputbox' 
-                                   placeholder='ระบุชื่อวัตถุดิบ'
-                                   value={ingredient.ingrName}
-                                   onChange={(e) => handleIngredientChange(index, 'ingrName', e.target.value)} />
+                              <div>
+                                   <Input 
+                                        className='form--inputbox' 
+                                        placeholder='ระบุชื่อวัตถุดิบ'
+                                        value={ingredient.ingrName}
+                                        onChange={(e) => handleIngredientChange(index, 'ingrName', e.target.value)} />
+                                   <div className='list-ingr-icon' onClick={() => { setSelectedIngredientIndex(index); toggleModal(); }}>
+                                        <i className="fa-solid fa-clipboard-list"></i>
+                                   </div>
+                              </div>
+                              
                          </div>
                          <div className='form--input-2-col'>
                               <div className='form--input-1-col'>
