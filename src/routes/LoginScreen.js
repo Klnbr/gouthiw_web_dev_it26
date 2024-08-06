@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../middleware/Auth';
 import Logo from '../images/logo_temporary.png'
+import BottomScreen from '../images/bottom_screen.png'
 
 function LoginScreen() {
     const navigate = useNavigate();
@@ -40,12 +41,13 @@ function LoginScreen() {
                     <Input className='form--inputbox' value={email} onChange={(e) => setEmail(e.target.value)} />
 
                     <label htmlFor='signin-password'>รหัสผ่าน</label>
-                    <Input className='form--inputbox' value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Input type='password' className='form--inputbox' value={password} onChange={(e) => setPassword(e.target.value)} />
 
                     <button className='signin-btn' onClick={handleSignin}>เข้าสู่ระบบ</button>
                     <b>ยังไม่มีมีบัญชี?  <a href='/signup'>ลงทะเบียน</a></b>
                 </div>
             </div>
+            {/* <img className='screen--btm' alt='' src={BottomScreen} /> */}
         </div>
     );
 }

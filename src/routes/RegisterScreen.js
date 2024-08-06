@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { firebase } from '.././firebase'
 import axios from 'axios';
 import { useAuth } from '../middleware/Auth';
+import BottomScreen from '../images/bottom_screen.png'
 
 function RegisterScreen() {
     const navigate = useNavigate();
@@ -134,6 +135,7 @@ function RegisterScreen() {
                     </div>
                 </div>
             </div>
+            {/* <img className='screen--btm' alt='' src={BottomScreen} /> */}
         </div>
     );
 }

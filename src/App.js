@@ -12,6 +12,7 @@ import LoginScreen from './routes/LoginScreen';
 import Menu from './routes/Menu';
 import Trivia from './routes/Trivia';
 import IngrScreen from './routes/IngrScreen';
+import ProfileScreen from './routes/ProfileScreen';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path='/menu' element={<Menu />} />
           <Route path='/trivia' element={<Trivia />} />
           <Route path='/ingredients' element={<IngrScreen />} />
+          <Route path='/profile' element={<ProfileScreen />} />
 
           <Route path='/signup' element={<RegisterScreen />} />
           <Route path='/signin' element={<LoginScreen />} />

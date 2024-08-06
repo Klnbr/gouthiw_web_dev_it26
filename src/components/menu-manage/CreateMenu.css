@@ -47,7 +47,6 @@
      font-size: 16px;
      line-height: 24px;
      font-weight: 500;
-
      color: red;
      background-color: #ffffff;
      border: 1px solid red;
@@ -63,7 +62,6 @@
      font-size: 16px;
      line-height: 24px;
      font-weight: 500;
-
      color: #19b46b;
      background-color: #ffffff;
      border: 1px solid #19b46b;
@@ -79,7 +77,6 @@
      font-size: 16px;
      line-height: 24px;
      font-weight: 500;
-
      color: #ffffff;
      background-color: #19b46b;
      border: 1px solid #19b46b;
@@ -96,9 +93,6 @@
      margin-bottom: 80px;
 }
 
-Input {
-     margin-top: 300px;
-}
 .form--drop-pic {
      display: flex;
      align-items: center;

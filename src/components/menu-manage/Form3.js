@@ -14,6 +14,14 @@ function Form3({ formData, setFormData }) {
      const addMethod = () => {
           setFormData({ ...formData, method: [...formData.method, ""] });
      };
+
+     const handleDeleteMethod = (index) => {
+          const newMethods = formData.method.filter((_, i) => i !== index);
+          setFormData({
+              ...formData,
+              method: newMethods
+          });
+     };
      return (
           <div>
                <div className='form--hidden-ingr'>
@@ -25,6 +33,7 @@ function Form3({ formData, setFormData }) {
                          <label htmlFor={`step-${index + 1}`}>
                               ขั้นตอนที่ {index + 1}
                          </label>
+                         <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteMethod(index)}></i>
                          <TextArea 
                               className='form--inputbox' 
                               placeholder='ระบุขั้นตอนการทำอาหาร' 

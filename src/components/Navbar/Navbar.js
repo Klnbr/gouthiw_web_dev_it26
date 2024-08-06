@@ -26,7 +26,7 @@ function Navbar() {
                          <i class="fa-solid fa-angle-down"></i>
                          {dropdownVisible && (
                               <div className='dropdown-menu'>
-                                   <button onClick={() => navigate('/')}>My profile</button>
+                                   <button onClick={() => navigate('/profile')}>My profile</button>
                                    <button onClick={handleLogout}>Log out</button>
                               </div>
                          )}

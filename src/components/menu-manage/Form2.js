@@ -122,6 +122,14 @@ function Form2({ formData, setFormData }) {
           }
      }
 
+     const handleDeleteIngr = (index) => {
+          const newIngredients = formData.ingredients.filter((_, i) => i !== index);
+          setFormData({
+              ...formData,
+              ingredients: newIngredients
+          });
+     };
+
      const renderItem = (item) => (
           <tr key={item._id} onClick={() => handleSelectIngr(item._id)}>
                <td>{item.name}</td>
@@ -175,7 +183,7 @@ function Form2({ formData, setFormData }) {
                     <div key={index}>
                          <div className='form--hidden-ingr'>
                               <h2>วัตถุดิบที่ {index + 1}</h2>
-                              <i class="fa-solid fa-circle-xmark"></i>
+                              <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteIngr(index)}></i>
                          </div>
                          <hr className='hr-line-full' />
                          <div className='form--input'>
