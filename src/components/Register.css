@@ -40,6 +40,12 @@
     justify-content: center;
 }
 
+.signup-form--left img {
+    border-radius: 50%;
+    cursor: pointer;
+    filter: grayscale(50%);
+}
+
 .signup-form--image {
     border-radius: 50%;
     cursor: pointer;

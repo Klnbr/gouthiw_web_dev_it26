@@ -184,6 +184,9 @@ app.get("/menus/auth/:id", async (req, res) => {
         $unwind: "$menuDetails",
       },
       {
+        $match: { "menuDetails.isDeleted": false }
+      },
+      {
         $project: {
           _id: "$menuDetails._id",
           menuName: "$menuDetails.menuName",
@@ -192,7 +195,7 @@ app.get("/menus/auth/:id", async (req, res) => {
           method: "$menuDetails.method",
           purine: "$menuDetails.purine",
           uric: "$menuDetails.uric",
-          image: "$menuDetails.image",
+          image: "$menuDetails.image"
         },
       },
     ]);
@@ -312,6 +315,23 @@ app.put("/menu/:id", async (req, res) => {
   } catch (error) {
     console.log("Error update Menu", error);
     res.status(500).json({ message: "Error update Menu" });
+  }
+});
+
+//ลบเมนู
+app.delete("/menu/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const softDeletedMenu = await myMenu.findByIdAndUpdate(id, {
+      isDeleted: true,
+    });
+    if (!softDeletedMenu) {
+      return res.status(404).json({ message: "Menu not found" });
+    }
+    res.status(200).json({ message: "Menu soft deleted successfully" });
+  } catch (error) {
+    console.log("Error delete menu", error);
+    res.status(500).json({ message: "Error delete menu" });
   }
 });
 
@@ -577,5 +597,5 @@ app.put("/user/:id", async (req, res) => {
        console.log("Error update User", error);
        res.status(500).json({ message: "Error update User" });
      }
-   });
+});
    

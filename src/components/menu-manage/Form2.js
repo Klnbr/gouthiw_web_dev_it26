@@ -14,12 +14,6 @@ function Form2({ formData, setFormData }) {
 
      const toggleModal = () => {
           setModal(!modal);
-          // if (!modal) {
-          //      setName("");
-          //      setPurine("");
-          //      setUric("");
-          //      setCurrentItemId(null);
-          // }
      }
 
      if (modal) {
@@ -46,7 +40,7 @@ function Form2({ formData, setFormData }) {
                const quantity = parseFloat(ingredient.ingrQty) || 0;
                const unit = ingredient.ingrUnit;
                const purinePerUnit = parseFloat(ingredient.ingrPurine) || 0;
-               const purine = convertToGrams(quantity, unit) * purinePerUnit;
+               const purine = convertToGrams(quantity, unit) * purinePerUnit / 100;
                return total + purine;
           }, 0);
   
@@ -54,7 +48,7 @@ function Form2({ formData, setFormData }) {
                const quantity = parseFloat(ingredient.ingrQty) || 0;
                const unit = ingredient.ingrUnit;
                const uricPerUnit = parseFloat(ingredient.ingrUric) || 0;
-               const uric = convertToGrams(quantity, unit) * uricPerUnit;
+               const uric = convertToGrams(quantity, unit) * uricPerUnit / 100;
                return total + uric;
           }, 0);
 
@@ -140,8 +134,16 @@ function Form2({ formData, setFormData }) {
 
      return (
           <div>
-               <h1>รวมพิวรีน: {totalPurine.toFixed(2)} mg</h1>
-               <h1>รวมยูริก: {totalUric.toFixed(2)} mg</h1>
+               <div className='ingr-head'>
+                    <div className='ingr-head-l'>
+                         <h1>รวมพิวรีน: </h1>
+                         <p>{totalPurine.toFixed(2)} mg</p>
+                    </div>
+                    <div className='ingr-head-r'>
+                         <h1>รวมยูริก: </h1>
+                         <p>{totalUric.toFixed(2)} mg</p>
+                    </div>
+               </div>
                {modal && (
                     <div className='modal-ingr'>
                          <div className='modal-ingr-content'>
@@ -180,17 +182,17 @@ function Form2({ formData, setFormData }) {
                     </div>
                )}
                {formData.ingredients.map((ingredient, index) => (
-                    <div key={index}>
+                    <div className='form2-containner' key={index}>
                          <div className='form--hidden-ingr'>
                               <h2>วัตถุดิบที่ {index + 1}</h2>
                               <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteIngr(index)}></i>
                          </div>
                          <hr className='hr-line-full' />
-                         <div className='form--input'>
+                         <div>
                               <label htmlFor='ingr-name'>
                                    ชื่อวัตถุดิบ
                               </label>
-                              <div>
+                              <div className='form2--input'>
                                    <Input 
                                         className='form--inputbox' 
                                         placeholder='ระบุชื่อวัตถุดิบ'
@@ -200,7 +202,6 @@ function Form2({ formData, setFormData }) {
                                         <i className="fa-solid fa-clipboard-list"></i>
                                    </div>
                               </div>
-                              
                          </div>
                          <div className='form--input-2-col'>
                               <div className='form--input-1-col'>
@@ -264,9 +265,10 @@ function Form2({ formData, setFormData }) {
                          </div>
                     </div>
                ))}
-               <button className='add-ingredient-btn' onClick={handleAddIngredient}>
-                    เพิ่มวัตถุดิบใหม่
+               <button className='add-index-btn' onClick={handleAddIngredient}>
+                    เพิ่มวัตถุดิบถัดไป
                </button>
+               <hr className='hr-line-80' />
           </div>
      )
 }

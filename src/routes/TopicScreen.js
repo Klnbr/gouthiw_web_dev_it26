@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function TopicScreen() {
+     const navigate = useNavigate();
      return (
           <>
                <div className='container'>
@@ -14,7 +15,40 @@ function TopicScreen() {
                               <Navbar />
                          </div>
                          <div className='main-content'>
-                              <h1>TopicScreen</h1>
+                              <div className='topic-option'>
+                                   <i class="fa-solid fa-angle-down"></i>
+                                   <p>เรียงจากล่าสุด</p>
+                              </div>
+                              <div className='topic-card' onClick={() => navigate('/topic-answer')}>
+                                   <div className='topic-content'>
+                                        <h1>กินอะไรแล้วหายเป็นเกาต์ได้บ้างคะ</h1>
+                                        <p>2 ชั่วโมงที่แล้ว</p>
+                                   </div>
+                                   <div className='topic-user'>
+                                        <i className="fa-solid fa-user"></i>
+                                        <p>นางสาวอัญธิมา ผาละบุตร</p>
+                                   </div>
+                              </div>
+                              <div className='topic-card'>
+                                   <div className='topic-content'>
+                                        <h1>กินอะไรแล้วหายเป็นเกาต์ได้บ้างคะ</h1>
+                                        <p>2 ชั่วโมงที่แล้ว</p>
+                                   </div>
+                                   <div className='topic-user'>
+                                        <i className="fa-solid fa-user"></i>
+                                        <p>นางสาวอัญธิมา ผาละบุตร</p>
+                                   </div>
+                              </div> 
+                              <div className='topic-card'>
+                                   <div className='topic-content'>
+                                        <h1>กินอะไรแล้วหายเป็นเกาต์ได้บ้างคะ</h1>
+                                        <p>2 ชั่วโมงที่แล้ว</p>
+                                   </div>
+                                   <div className='topic-user'>
+                                        <i className="fa-solid fa-user"></i>
+                                        <p>นางสาวอัญธิมา ผาละบุตร</p>
+                                   </div>
+                              </div>                           
                          </div>
                     </div>
                </div>

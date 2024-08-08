@@ -69,13 +69,17 @@ function EditTrivia() {
           }
      };
 
+     const triggerFileInputClick = () => {
+          document.getElementById('imageUpload').click();
+     };
+
      return (
           <>
                <div className='form-trivia'>
                     <h2>แก้ไขเกร็ดความรู้</h2>
                     <div className='form--input'>
                          <label htmlFor='menu-name'>ภาพประกอบ</label>
-                         <div className='form--drop-pic'>
+                         <div className='form--drop-pic' onClick={triggerFileInputClick}>
                               {image && (
                                    <img
                                         className='form--pic'
@@ -83,7 +87,7 @@ function EditTrivia() {
                                         src={typeof image === 'string' ? image : URL.createObjectURL(image)}
                                    />
                               )}
-                              <input type="file" onChange={handleImageChange} />
+                              <input type="file" id="imageUpload" onChange={handleImageChange} />
                               <i className="fa-regular fa-images"></i>
                          </div>
                          </div>
@@ -102,10 +106,9 @@ function EditTrivia() {
                          </div>
                     </div>
                     <div className='form-group form-bt'>
-                         <button type='button' className='btn-cancel' onClick={() => navigate('/trivias')}>ยกเลิก</button>
                          <button type='button' className='btn-addtv' onClick={handleUpdateTriv}>บันทึกข้อมูล</button>
-                         </div>
-               
+                         <button type='button' className='btn-cancel' onClick={() => navigate('/trivias')}>ยกเลิก</button>
+                    </div>
                </div>
           </>
      )

@@ -66,7 +66,7 @@ function Form1({ formData, setFormData }) {
                     <label htmlFor='menu-name'>
                          ภาพประกอบ
                     </label>
-                    <div className='form--drop-pic' onClick={triggerFileInputClick}>
+                    <div className='form--drop-pic-menu' onClick={triggerFileInputClick}>
                          {formData.image ? (
                               <img
                                    className='form--pic'

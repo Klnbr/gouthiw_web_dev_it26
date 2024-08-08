@@ -23,17 +23,19 @@ function Form3({ formData, setFormData }) {
           });
      };
      return (
-          <div>
+          <div className='form3-containner'>
                <div className='form--hidden-ingr'>
                     <h2>วิธีการทำอาหาร</h2>
                </div>
                <hr className='hr-line-full' />
                {formData.method.map((step, index) => (
-                    <div className='form--input' key={index}>
-                         <label htmlFor={`step-${index + 1}`}>
-                              ขั้นตอนที่ {index + 1}
-                         </label>
-                         <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteMethod(index)}></i>
+                    <div key={index}>
+                         <div className='form3--input'>
+                              <label htmlFor={`step-${index + 1}`}>
+                                   ขั้นตอนที่ {index + 1}
+                              </label>
+                              <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteMethod(index)}></i>
+                         </div>
                          <TextArea 
                               className='form--inputbox' 
                               placeholder='ระบุขั้นตอนการทำอาหาร' 
@@ -42,8 +44,8 @@ function Form3({ formData, setFormData }) {
                               onChange={(e) => handleMethodChange(index, e.target.value)} />
                     </div>
                ))}
-               <button type="button" onClick={addMethod}>
-                    เพิ่มขั้นตอน
+               <button className='add-step-btn' onClick={addMethod}>
+                    เพิ่มขั้นตอนถัดไป
                </button>
           </div>
      )

@@ -3,6 +3,8 @@ import { Steps } from "antd";
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
+import SideBar from '../SideBar/SideBar';
+import Navbar from '../Navbar/Navbar';
 import './CreateMenu.css';
 import { useNavigate } from 'react-router-dom';
 import { firebase } from '../.././firebase'
@@ -127,33 +129,45 @@ function CreateMenu() {
      };
 
      return (
-          <div className='step-container'>
-               <div className='step-layout'>
-                    <Steps current={current} items={items} labelPlacement="vertical" />
-               </div>
-               <div className='step-content'>{steps[current].content}</div>
+          <>
+               <div className='container'>
+                    <SideBar />
+                    <div className='content'>
+                         <div className='nav'>
+                              <Navbar />
+                         </div>
+                         <div className='main-content'>
+                              <div className='step-container'>
+                                   <div className='step-layout'>
+                                        <Steps current={current} items={items} labelPlacement="vertical" />
+                                   </div>
+                                   <div className='step-content'>{steps[current].content}</div>
 
-               <div className='step-btn'>
-                    <button className='step-btn--cancel' onClick={() => navigate('/menus')}>ยกเลิก</button>
-                    <div className="step-btn-layout">
-                         {current > 0 && (
-                              <button className="step-btn--prev" onClick={() => prevStepper()}>
-                                   ย้อนกลับ
-                              </button>
-                         )}
-                         {current < steps.length - 1 && (
-                              <button className="step-btn--next" onClick={() => nextStepper()}>
-                                   ถัดไป
-                              </button>
-                         )}
-                         {current === steps.length - 1 && (
-                              <button className="step-btn--next" onClick={handleSaveId}>
-                                   บันทึก
-                              </button>
-                         )}
+                                   <div className='step-btn'>
+                                        <button className='step-btn--cancel' onClick={() => navigate('/menus')}>ยกเลิก</button>
+                                        <div className="step-btn-layout">
+                                             {current > 0 && (
+                                                  <button className="step-btn--prev" onClick={() => prevStepper()}>
+                                                       ย้อนกลับ
+                                                  </button>
+                                             )}
+                                             {current < steps.length - 1 && (
+                                                  <button className="step-btn--next" onClick={() => nextStepper()}>
+                                                       ถัดไป
+                                                  </button>
+                                             )}
+                                             {current === steps.length - 1 && (
+                                                  <button className="step-btn--next" onClick={handleSaveId}>
+                                                       บันทึก
+                                                  </button>
+                                             )}
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
                     </div>
                </div>
-          </div>
+          </>
      )
 }
 

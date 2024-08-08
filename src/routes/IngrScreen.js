@@ -153,10 +153,10 @@ function IngrScreen() {
                                              <label htmlFor='ingr-name'>ชื่อวัตถุดิบ</label>
                                              <Input className='modal--input' value={name} onChange={(e) => setName(e.target.value)} />
 
-                                             <label htmlFor='ingr-purine'>พิวรีน (โดยเฉลี่ย)</label>
+                                             <label htmlFor='ingr-purine'>พิวรีน (มิลลิกรัม)</label>
                                              <Input className='modal--input' value={purine} onChange={(e) => setPurine(e.target.value)} />
 
-                                             <label htmlFor='ingr-uric'>ยูริก (โดยเฉลี่ย)</label>
+                                             <label htmlFor='ingr-uric'>ยูริก (มิลลิกรัม)</label>
                                              <Input className='modal--input' value={uric} onChange={(e) => setUric(e.target.value)} />
                                              
                                              <button className='ingr-save--btn' onClick={handleSave}>

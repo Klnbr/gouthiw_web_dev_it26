@@ -12,11 +12,16 @@ function MenuScreen() {
      const [menus, setMenus] = useState([]);
      const [menusUser, setMenusUser] = useState([]);
 
+     const [dropdownVisible, setDropdownVisible] = useState(null);
+
+     const toggleDropdown = (menuId) => {
+          setDropdownVisible(dropdownVisible === menuId ? null : menuId);
+     };
+
      useEffect(() => {
           const fetchMenuData = async () => {
                try {
                     const response = await axios.get("http://localhost:5500/menus", { timeout: 10000 });
-                    // console.log(response.data)
                     setMenus(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message)
@@ -39,7 +44,14 @@ function MenuScreen() {
      }, [userData])
 
      const renderItem = (item) => (
-          <div className='menu-card' onClick={() => handleItemPress(item._id)} key={item._id}>
+          <div className='menu-card' key={item._id}>
+               <i className="fa-solid fa-ellipsis-vertical" onClick={() => toggleDropdown(item._id)}></i>
+               {dropdownVisible === item._id && (
+                    <div className='dropdown-menu-card'>
+                         <button onClick={() => handleItemPress(item._id)}>แก้ไข</button>
+                         <button onClick={() => handleDelete(item._id)}>ลบ</button>
+                    </div>
+               )}
                <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
                <h1>{item.menuName}</h1>
                <div className='layout'>
@@ -55,6 +67,18 @@ function MenuScreen() {
                const menuData = response.data;
 
                navigate('/menu', { state: { menuData } });
+          } catch (error) {
+               console.log('Error fetching menu data', error.message);
+          }
+     }; 
+
+     const handleDelete = async (itemId) => {
+          try {
+               const response = await axios.delete(`http://localhost:5500/menu/${itemId}`);
+               if (response.status === 200) {
+                    alert("ลบสำเร็จ");
+                    navigate('/menus');
+               }
           } catch (error) {
                console.log('Error fetching menu data', error.message);
           }
@@ -91,7 +115,7 @@ function MenuScreen() {
                                                        <hr className='hr-line' />
                                                   </> 
                                              ) : (
-                                                  <h2>ยังไม่มีข้อมูลอาหารของคุณ</h2>
+                                                  <hr className='hr-line' />
                                              )}
                                         </>
                                    )}                                   

@@ -1,51 +1,61 @@
-import React from 'react'
-import Navbar from '../components/Navbar/Navbar'
-import SideBar from '../components/SideBar/SideBar'
-import '../App.css'
-import { useAuth } from '../middleware/Auth';
-import { useNavigate } from 'react-router-dom';
-import HomeBanner from '../images/Banner.jpeg'
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar/Navbar";
+import SideBar from "../components/SideBar/SideBar";
+import "../App.css";
+import { useAuth } from "../middleware/Auth";
+import { useNavigate } from "react-router-dom";
+import HomeBanner from "../images/homebanner.jpg";
+import axios from 'axios';
 
 function HomeScreen() {
-     const navigate = useNavigate();
-     const { userData, logout } = useAuth();
+  const navigate = useNavigate();
+  const { userData, logout } = useAuth();
+  const [menus, setMenus] = useState([]);
 
-     return (
-          <>
-               <div className='container'>
-                    <SideBar />
-                    <div className='content'>
-                         <div className='nav'>
-                              <Navbar />
-                         </div>
-                         <div className='main-content'>
-                              <div className='home-content'>
-                                   <div class="banner-img">
-                                        <img alt='Banner gouthiw' src={HomeBanner} />
-                                   </div>
+  useEffect(() => {
+     const fetchMenuData = async () => {
+          try {
+               const response = await axios.get("http://localhost:5500/menus", { timeout: 10000 });
+               setMenus(response.data);
+          } catch (error) {
+               console.log("Error fetching menus data", error.message)
+          }
+     }
+     fetchMenuData()
+  })
 
-                                   <div class="banner-text">
-                                        <h1>Gouthiw, gout diet management for nutritionist</h1>
-                                        <p>
-                                             Lorem Ipsum is simply dummy text of the printing and 
-                                             typesetting industry. Lorem Ipsum has been the industry's 
-                                             standard dummy text ever since the 1500s, when an unknown 
-                                             printer took a galley of type and scrambled it to make a 
-                                             type specimen book. It has survived not only five centuries, 
-                                             but also the leap into electronic typesetting, remaining 
-                                             essentially unchanged.
-                                        </p>
-                                        <button onClick={() => navigate('/menus')}>
-                                             Create your menu
-                                             
-                                        </button>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               </div>
-          </>
-     )
+  return (
+    <>
+      <div className="container">
+        <SideBar />
+        <div className="content">
+          <div className="nav">
+            <Navbar />
+          </div>
+          <div class="main-content">
+            <div className="dashboard">
+              <div class="show-all-food">
+              <h2>เมนูอาหารทั้งหมด</h2>
+              <p>45</p>
+              </div>
+              <div class="show-all-wtd">
+               <h2>วัตถุดิบทั้งหมด</h2>
+               <p>45</p>
+              </div>
+              <div class="show-all-triv">
+               <h2>เกร็ดความรู้ทั้งหมด</h2>
+               <p>56</p>
+              </div>
+              <div class="show-all-topic">
+               <h2>กระทู้ทั้งหมด</h2>
+               <p>67</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
-export default HomeScreen
+export default HomeScreen;
