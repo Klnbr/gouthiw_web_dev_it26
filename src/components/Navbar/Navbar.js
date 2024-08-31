@@ -1,12 +1,11 @@
 import React, { Component, useState } from 'react'
 import './Navbar.css'
-import { MenuItems } from '../MenuItems';
 import { useAuth } from '../../middleware/Auth';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar() {
      const navigate = useNavigate();
-     const { userData, logout } = useAuth();
+     const { nutrData, logout } = useAuth();
      const [dropdownVisible, setDropdownVisible] = useState(false);
 
      const toggleDropdown = () => {
@@ -20,9 +19,9 @@ function Navbar() {
 
      return (
           <div className='nav--container'>
-               {userData ? (
+               {nutrData ? (
                     <div className='nav--username' onClick={toggleDropdown}>
-                         <p>{userData.firstname} {userData.lastname}</p>
+                         <p>{nutrData.firstname} {nutrData.lastname}</p>
                          <i class="fa-solid fa-angle-down"></i>
                          {dropdownVisible && (
                               <div className='dropdown-menu'>

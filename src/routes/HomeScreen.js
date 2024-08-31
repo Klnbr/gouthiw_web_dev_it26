@@ -8,54 +8,70 @@ import HomeBanner from "../images/homebanner.jpg";
 import axios from 'axios';
 
 function HomeScreen() {
-  const navigate = useNavigate();
-  const { userData, logout } = useAuth();
-  const [menus, setMenus] = useState([]);
+    const navigate = useNavigate();
+    const { nutrData, logout } = useAuth();
+    const [menus, setMenus] = useState([]);
 
-  useEffect(() => {
-     const fetchMenuData = async () => {
-          try {
-               const response = await axios.get("http://localhost:5500/menus", { timeout: 10000 });
-               setMenus(response.data);
-          } catch (error) {
-               console.log("Error fetching menus data", error.message)
-          }
-     }
-     fetchMenuData()
-  })
+    useEffect(() => {
+        const fetchMenuData = async () => {
+            try {
+                const response = await axios.get("http://localhost:5500/menus", { timeout: 10000 });
+                setMenus(response.data);
+            } catch (error) {
+                console.log("Error fetching menus data", error.message)
+            }
+        }
+        fetchMenuData()
+    })
 
-  return (
-    <>
-      <div className="container">
-        <SideBar />
-        <div className="content">
-          <div className="nav">
-            <Navbar />
-          </div>
-          <div class="main-content">
-            <div className="dashboard">
-              <div class="show-all-food">
-              <h2>เมนูอาหารทั้งหมด</h2>
-              <p>45</p>
-              </div>
-              <div class="show-all-wtd">
-               <h2>วัตถุดิบทั้งหมด</h2>
-               <p>45</p>
-              </div>
-              <div class="show-all-triv">
-               <h2>เกร็ดความรู้ทั้งหมด</h2>
-               <p>56</p>
-              </div>
-              <div class="show-all-topic">
-               <h2>กระทู้ทั้งหมด</h2>
-               <p>67</p>
-              </div>
+    return (
+        <>
+            <div className="container">
+                <SideBar />
+                <div className="content">
+                    <div className="nav">
+                        <Navbar />
+                    </div>
+                    <div className="head-content--home">
+                        <img
+                            className="image-home"
+                            src="https://blog-images-1.pharmeasy.in/blog/production/wp-content/uploads/2021/01/25180542/shutterstock_1545283778-1.jpg"
+                            alt="head image"
+                            />
+                        <div className="text-over-image">
+                            สร้างเมนูอาหารที่ปลอดภัย<br/>ต่อผู้ป่วยโรคเกาต์
+                        </div>
+                        <div className="btn-over-image">
+                            <button>
+                                สร้างเมนูของคุณ 
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="main-content">
+                        <div className="dashboard">
+                            <div className="show-all-food">
+                                <h2>เมนูอาหารทั้งหมด</h2>
+                                <p>45</p>
+                            </div>
+                            <div className="show-all-wtd">
+                                <h2>วัตถุดิบทั้งหมด</h2>
+                                <p>45</p>
+                            </div>
+                            <div class="show-all-triv">
+                                <h2>เกร็ดความรู้ทั้งหมด</h2>
+                                <p>56</p>
+                            </div>
+                            <div class="show-all-topic">
+                                <h2>กระทู้ทั้งหมด</h2>
+                                <p>67</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+        </>
+    );
 }
 
 export default HomeScreen;

@@ -4,145 +4,160 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import SideBar from "../components/SideBar/SideBar";
 import axios from "axios";
+import '../../src/components/profile.css'
 
 function ProfileScreen() {
-  const navigate = useNavigate();
-  const { userData } = useAuth();
+    const navigate = useNavigate();
+    const { nutrData } = useAuth();
 
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [license_number, setLicense_number] = useState("");
-  const [tel, setTel] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const [menus, setMenus] = useState([]);
+    const [menusUser, setMenusUser] = useState([]);
 
-  useEffect(() => {
-    if (userData) {
-      console.log("userData: ", userData);
-      setFirstname(userData.firstname);
-      setLastname(userData.lastname);
-      setLicense_number(userData.license_number);
-      setTel(userData.tel);
-      setEmail(userData.email);
-      setPassword(userData.password);
-    }
-  }, [userData]);
+    const [dropdownVisible, setDropdownVisible] = useState(null);
 
-  const handleUpdateProfile = async () => {
-    if (!userData || !userData._id) {
-      alert("User ID is not available.");
-      return;
-    }
+    const toggleDropdown = (menuId) => {
+        setDropdownVisible(dropdownVisible === menuId ? null : menuId);
+    };
 
-    try {
-      const updateData = {
-        firstname,
-        lastname,
-        license_number,
-        tel,
-        email,
-        ...(password ? { password } : {}),
-      };
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [license_number, setLicense_number] = useState("");
+    const [tel, setTel] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-      console.log("Updated User Data:", updateData);
+    useEffect(() => {
+        const fetchMenuDataUser = async () => {
+             try {
+                  const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                  console.log(response.data)
+                  setMenusUser(response.data);
 
-      const response = await axios.put(
-        `http://localhost:5500/user/${userData._id}`,
-        updateData
-      );
+             } catch (error) {
+                console.log("Error fetching menus data", error.message)
+             }
+        }
+        fetchMenuDataUser();
+    }, [nutrData])
 
-      console.log("User updated", response.data);
-
-      if (response.status === 200) {
-        alert("แก้ไขสำเร็จ");
-        navigate("/profile");
-      }
-    } catch (error) {
-      console.error("Error updating user:", error.response || error.message);
-      alert(
-        "แก้ไขไม่สำเร็จ: " + (error.response?.data?.message || error.message)
-      );
-    }
-  };
-
-  return (
-    <>
-      <div className="container">
-        <SideBar />
-        <div className="content">
-          <div className="nav">
-            <Navbar />
-          </div>
-          <div className="main-content">
-            <div className="profile-card">
-              {userData && (
-                <>
-                  <h1>Profile</h1>
-                  <div className="profile-content">
-                    <div className="profile-image">
-                      <img
-                        src={userData.image_profile}
-                        alt={`${userData.firstname} ${userData.lastname}`}
-                      />
-                      <p>ชื่อ:</p>
-                      <input
-                        name="firstname"
-                        value={firstname}
-                        onChange={(e) => setFirstname(e.target.value)}
-                      />
-                      <p>นามสกุล:</p>
-                      <input
-                        name="lastname"
-                        value={lastname}
-                        onChange={(e) => setLastname(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="profile-data">
-                      <p>เลขใบประกอบวิชาชีพ:</p>
-                      <input
-                        name="license_number"
-                        value={license_number}
-                        onChange={(e) => setLicense_number(e.target.value)}
-                      />
-
-                      <p>เบอร์โทรศัพท์:</p>
-                      <input
-                        name="tel"
-                        value={tel}
-                        onChange={(e) => setTel(e.target.value)}
-                      />
-
-                      <p>อีเมล:</p>
-                      <input
-                        name="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-
-                      <p>รหัสผ่าน (ถ้าต้องการเปลี่ยน):</p>
-                      <input
-                        name="password"
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    className="edt-profile-btn"
-                    onClick={handleUpdateProfile}
-                  >
-                    บันทึก
-                  </button>
-                </>
-              )}
+    const renderItem = (item) => (
+        <div className='menu-card' key={item._id}>
+            <i className="fa-solid fa-ellipsis-vertical" onClick={() => toggleDropdown(item._id)}></i>
+            {dropdownVisible === item._id && (
+                <div className='dropdown-menu-card'>
+                    <button onClick={() => handleItemPress(item._id)}>แก้ไข</button>
+                    <button onClick={() => handleDelete(item._id)}>ลบ</button>
+                </div>
+            )}
+            <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
+            <h1>{item.menuName}</h1>
+            <div className='layout'>
+                <p className='purine'>พิวรีน: {item.purine}</p>
+                <p className='uric'>กรดยูริก: {item.uric}</p>
             </div>
-          </div>
         </div>
-      </div>
-    </>
-  );
+    );
+
+    const handleItemPress = async (itemId) => {
+        try {
+             const response = await axios.get(`http://localhost:5500/menu/${itemId}`);
+             const menuData = response.data;
+
+             navigate('/menu', { state: { menuData } });
+        } catch (error) {
+             console.log('Error fetching menu data', error.message);
+        }
+   }; 
+
+    const handleDelete = async (itemId) => {
+        try {
+             const response = await axios.delete(`http://localhost:5500/menu/${itemId}`);
+             if (response.status === 200) {
+                  alert("ลบสำเร็จ");
+                  navigate('/menus');
+             }
+        } catch (error) {
+             console.log('Error fetching menu data', error.message);
+        }
+    };
+
+    return (
+        <>
+            <div className="container">
+            <SideBar />
+                <div className="content">
+                    <div className="nav">
+                        <Navbar />
+                    </div>
+                    <div className="profile-image-background">
+                        <img
+                            src={nutrData.image_background}
+                            alt={`${nutrData.image_background}`}
+                            />
+                    </div>
+                    <div className="profile-layout">
+                        <div className="profile-info">
+                                <img
+                                    className="profile-image"
+                                    src={nutrData.image_profile}
+                                    alt={`${nutrData.firstname} ${nutrData.lastname}`}
+                                    /> 
+                            <p className="name">{nutrData.firstname} {nutrData.lastname}</p>
+
+                            <div className="profile-info-layout">
+                                <p>อีเมล:</p>
+                                <p className="email">{nutrData.email}</p>
+                            </div>
+
+                            <hr className="hr-line-90"/>
+                            <div className="profile-info-layout">
+                                <p>เลขใบประกอบวิชาชีพ:</p>
+                                <p className="email">{nutrData.license_number}</p>
+                            </div>
+
+                            <hr className="hr-line-90"/>
+                            <div className="profile-info-layout">
+                                <p>เบอร์โทรศัพท์:</p>
+                                <p className="email">{nutrData.tel}</p>
+                            </div>
+                            <hr className="hr-line-90"/>
+
+                            <button className="profile-btn" onClick={() => navigate('/profile-edit')}>
+                                แก้ไขข้อมูลส่วนตัว
+                                <i className="fa-regular fa-pen-to-square"></i>
+                            </button>
+                        </div>
+
+                        <div className="profile-context">
+                            <p>{nutrData.firstname} {nutrData.lastname}</p>
+                            <p className="info">{nutrData.email}</p>   
+                        </div>
+                    </div>  
+
+                    <div className="profile-content">
+                        <p className="head">เมนูอาหารของคุณ</p>
+                        <div>
+                            <p></p>
+                        </div>
+                        <div className='profile-menu-content'>
+                            {menusUser.length > 5 && (
+                                <>
+                                    <a href="/">ดูทั้งหมด</a> 
+                                </>
+                            )}
+                            {menusUser.length > 0 ? (
+                                <>
+                                    {menusUser.map(item => renderItem(item))}
+                                </> 
+                            ) : (
+                                <p>ยังไม่มีเมนูอาหารของคุณ</p>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 }
 
 export default ProfileScreen;

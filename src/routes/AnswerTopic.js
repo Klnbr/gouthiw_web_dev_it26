@@ -5,7 +5,7 @@ import { useAuth } from '../middleware/Auth';
 import { Input } from "antd";
 
 function AnswerTopic() {
-     const { userData } = useAuth();
+     const { nutrData } = useAuth();
      const { TextArea } = Input;
 
      return (
@@ -42,7 +42,7 @@ function AnswerTopic() {
                                    <div className='topic-btn'>
                                         <div className='topic-user'>
                                              <i className="fa-solid fa-user-nurse"></i>
-                                             <p>{userData.firstname} {userData.lastname}</p>
+                                             <p>{nutrData.firstname} {nutrData.lastname}</p>
                                         </div>
                                         <button>ตอบกระทู้</button>
                                    </div>

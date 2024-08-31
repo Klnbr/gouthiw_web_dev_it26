@@ -9,40 +9,40 @@ function AuthProvider({ children }) {
      const navigate = useNavigate();
 
      const [token, setToken] = useState(null);
-     const [userData, setUserData] = useState(null);
+     const [nutrData, setNutrData] = useState(null);
      const [isAuthenticated, setIsAuthenticated] = useState(false);
-     const storedData = JSON.parse(localStorage.getItem('user_data'))
+     const storedData = JSON.parse(localStorage.getItem('nutr_data'))
 
      useEffect(() => {
           if (storedData) {
-               const { userToken, user } = storedData;
-               setToken(userToken);
-               setUserData(user);
+               const { nutrToken, nutr } = storedData;
+               setToken(nutrToken);
+               setNutrData(nutr);
                setIsAuthenticated(true);
           }
      }, [])
 
      const login = (newToken, newData) => {
           localStorage.setItem(
-               'user_data', 
-               JSON.stringify({ userToken: newToken, user: newData })
+               'nutr_data', 
+               JSON.stringify({ nutrToken: newToken, nutr: newData })
           );
 
           setToken(newToken);
-          setUserData(newData);
+          setNutrData(newData);
           setIsAuthenticated(true);
      }
 
      const logout = () => {
-          localStorage.removeItem('user_data');
+          localStorage.removeItem('nutr_data');
           setToken(null);
-          setUserData(null);
+          setNutrData(null);
           setIsAuthenticated(false);
           navigate('/signin');
      }
 
      return (
-          <AuthContext.Provider value={{token, isAuthenticated, login, logout, userData}}>
+          <AuthContext.Provider value={{token, isAuthenticated, login, logout, nutrData}}>
                {children}
           </AuthContext.Provider>
      )

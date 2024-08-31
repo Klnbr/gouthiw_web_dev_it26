@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const nutrSchema = new mongoose.Schema({
      firstname: {
           type: String,
           required: true
@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
      image_profile: {
           type: String
      },
+     image_background: {
+          type: String
+     },
      password: {
           type: String,
           required: true
@@ -46,6 +49,6 @@ const userSchema = new mongoose.Schema({
      },
 }, { timestamps: true })
 
-const myUser = mongoose.model('User', userSchema)
+const myNutr = mongoose.model('Nutr', nutrSchema)
 
-module.exports = myUser
+module.exports = myNutr

@@ -19,8 +19,10 @@ function RegisterScreen() {
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
     const [image, setImage] = useState(null);
+    const [background, setBackground] = useState(null)
 
-    const defaultImage = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSoW3g9hjXIasgon-kpzz-lD9z4SsalyPbZA&s"
+    const defaultImage = "https://cdn-icons-png.flaticon.com/512/147/147131.png"
+    const defaultBackground = "https://jamie-wong.com/images/color/Purple.png"
 
     const handleSignup = async () => {
         if (password !== confirm) {
@@ -31,6 +33,11 @@ function RegisterScreen() {
         try {
             let imageUrl = defaultImage;
 
+            // const storageRef = firebase.storage().ref();
+            // const backgroundRef = storageRef.child(`images/${defaultBackground.name}`);
+            // await backgroundRef.put(defaultBackground);
+            // const backgroundUrl = await backgroundRef.getDownloadURL();
+
             if (image) {
                 const storageRef = firebase.storage().ref();
                 const imageRef = storageRef.child(`images/${image.name}`);
@@ -39,20 +46,21 @@ function RegisterScreen() {
                 console.log("Image uploaded successfully. URL:", imageUrl);
             }
             
-            const userData = {
+            const nutrData = {
                 firstname: firstname, 
                 lastname: lastname, 
                 password: password, 
-                license_number: license, 
+                license_number: license,
                 tel: tel, 
                 email: email, 
                 image_profile: imageUrl,
+                image_background: defaultBackground,
                 isDeleted: false
             };
         
-            console.log("User Data:", userData);
+            console.log("User Data:", nutrData);
         
-            const response = await axios.post("http://localhost:5500/signup", userData);
+            const response = await axios.post("http://localhost:5500/signup", nutrData);
             console.log("Response from server:", response);
         
             if (response.status === 201) {

@@ -6,7 +6,10 @@ const multer = require("multer");
 const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
+// const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const app = express();
 const port = 5500;
 
@@ -35,17 +38,27 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/gouthiw", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((error) => {
-    console.log("Error connecting to MongoDB", error);
-  });
+// const client = new MongoClient(uri, {
+//   serverApi: {
+//     version: ServerApiVersion.v1,
+//     strict: true,
+//     deprecationErrors: true,
+//   }
+// });
+// async function run() {
+//   try {
+//     await client.connect();
+//     await client.db("admin").command({ ping: 1 });
+//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+//   } finally {
+//     await client.close();
+//   }
+// }
+// run().catch(console.dir);
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB successfully'))
+  .catch(err => console.error('Failed to connect to MongoDB', err));
 
 app.listen(port, () => {
   console.log("Server is running on port 5500");
@@ -54,7 +67,7 @@ app.listen(port, () => {
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
 const myMenu = require("./models/menu");
-const myUser = require("./models/user");
+const myNutr = require("./models/nutr");
 
 //signup
 app.post("/signup", async (req, res) => {
@@ -67,17 +80,18 @@ app.post("/signup", async (req, res) => {
       tel,
       email,
       image_profile,
+      image_background,
       isDeleted,
     } = req.body;
-    const user = await myUser.findOne({ email });
+    const nutr = await myNutr.findOne({ email });
 
-    if (user) {
+    if (nutr) {
       return res.status(409).send("This email is already exist");
     }
 
     let hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new myUser({
+    const newNutr = new myNutr({
       firstname,
       lastname,
       password: hashPassword,
@@ -85,14 +99,15 @@ app.post("/signup", async (req, res) => {
       tel,
       email: email.toLowerCase(),
       image_profile,
+      image_background,
       menu_owner: [],
       triv_owner: [],
       isDeleted,
     });
 
-    await newUser.save();
+    await newNutr.save();
 
-    const token = jwt.sign({ _id: newUser._id }, "secretkey123", {
+    const token = jwt.sign({ _id: newNutr._id }, "secretkey123", {
       expiresIn: "90d",
     });
 
@@ -110,25 +125,25 @@ app.post("/signup", async (req, res) => {
 app.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await myUser.findOne({ email });
+    const nutr = await myNutr.findOne({ email });
 
-    if (!user) {
+    if (!nutr) {
       return res.status(404).send("User not found!");
     }
 
-    const checkPass = await bcrypt.compare(password, user.password);
+    const checkPass = await bcrypt.compare(password, nutr.password);
     if (!checkPass) {
       return res.status(401).send("Invalid email or password");
     }
 
-    const token = jwt.sign({ _id: user._id }, "secretkey123", {
+    const token = jwt.sign({ _id: nutr._id }, "secretkey123", {
       expiresIn: "90d",
     });
 
     res.status(201).json({
       message: "Signed in successfully",
       token,
-      user,
+      nutr,
     });
   } catch (error) {
     console.error("Sign up Error: ", error);
@@ -139,7 +154,7 @@ app.post("/signin", async (req, res) => {
 //ดึงuserมาแสดง
 app.get("/users", async (req, res) => {
   try {
-    const users = await myUser.find({ isDeleted: false });
+    const users = await myNutr.find({ isDeleted: false });
     return res.json(users);
   } catch (error) {
     console.error("Error fetching users data", error);
@@ -167,7 +182,7 @@ app.get("/menus/auth/:id", async (req, res) => {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const userMenu = await myUser.aggregate([
+    const userMenu = await myNutr.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(id) } },
       {
         $unwind: "$menu_owner",
@@ -257,20 +272,23 @@ app.post("/menus/:id", async (req, res) => {
       isDeleted,
     } = req.body;
 
+    const formattedPurine = parseFloat(purine).toFixed(2);
+    const formattedUric = parseFloat(uric).toFixed(2);
+
     const newMenu = new myMenu({
       menuName,
       category,
       ingredients,
       method,
-      purine,
-      uric,
+      purine: formattedPurine,
+      uric: formattedUric,
       image,
       isDeleted,
     });
 
     await newMenu.save();
 
-    await myUser.findByIdAndUpdate(id, {
+    await myNutr.findByIdAndUpdate(id, {
       $push: { menu_owner: { menu_id: newMenu._id } },
     });
 
@@ -298,16 +316,18 @@ app.get("/menu/:id", async (req, res) => {
 app.put("/menu/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { menuName, category, ingredients, method, purine, uric, image } =
-      req.body;
+    const { menuName, category, ingredients, method, purine, uric, image } = req.body;
+
+    const formattedPurine = parseFloat(purine).toFixed(2);
+    const formattedUric = parseFloat(uric).toFixed(2);
 
     await myMenu.findByIdAndUpdate(id, {
       menuName,
       category,
       ingredients,
       method,
-      purine,
-      uric,
+      purine: formattedPurine,
+      uric: formattedUric,
       image,
     });
 
@@ -436,7 +456,7 @@ app.get("/trivias/auth/:id", async (req, res) => {
       return res.status(400).json({ message: "Invalid user ID" });
     }
 
-    const userTrivia = await myUser.aggregate([
+    const userTrivia = await myNutr.aggregate([
       { $match: { _id: new mongoose.Types.ObjectId(id) } },
       {
         $unwind: "$triv_owner",
@@ -505,7 +525,7 @@ app.post("/trivia/:id", upload.single("image"), async (req, res) => {
 
     await addTrivia.save();
 
-    await myUser.findByIdAndUpdate(id, {
+    await myNutr.findByIdAndUpdate(id, {
       $push: { triv_owner: { triv_id: addTrivia._id } },
     });
 

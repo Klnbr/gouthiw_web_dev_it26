@@ -13,13 +13,13 @@ import axios from 'axios';
 
 function CreateMenu() {
      const navigate = useNavigate();
-     const { userData } = useAuth();
+     const { nutrData } = useAuth();
 
      const [formData, setFormData] = useState({
           menuName: '',
           category: '',
           image: null,
-          ingredients: [{ ingrName: '', ingrQty: '', ingrUnit: '', ingrPurine: '', ingrUric: '' }],
+          ingredients: [{ ingrName:'', ingrQty:'', ingrUnit:'', ingrPurine:'', ingrUric:'' }],
           method: [''],
           purine: '',
           uric: ''
@@ -114,7 +114,7 @@ function CreateMenu() {
                console.log("Menu Data:", menuData);
 
                const response = await axios.post(
-                    `http://localhost:5500/menus/${userData._id}`, menuData
+                    `http://localhost:5500/menus/${nutrData._id}`, menuData
                );
 
                console.log("Menu created", response.data);

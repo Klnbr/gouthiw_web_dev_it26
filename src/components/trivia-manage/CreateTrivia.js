@@ -9,7 +9,7 @@ import axios from 'axios';
 
 function CreateTrivia() {
     const navigate = useNavigate();
-    const { userData } = useAuth();
+    const { nutrData } = useAuth();
 
     const [head, setHead] = useState("")
     const [image, setImage] = useState(null)
@@ -75,7 +75,7 @@ function CreateTrivia() {
         
             console.log("Triv Data:", trivData);
         
-            const response = await axios.post(`http://localhost:5500/trivia/${userData._id}`, trivData);
+            const response = await axios.post(`http://localhost:5500/trivia/${nutrData._id}`, trivData);
             console.log("Response from server:", response);
         
             if (response.status === 201) {

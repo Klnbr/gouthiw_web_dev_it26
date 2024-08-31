@@ -5,10 +5,11 @@ import '.././App.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../middleware/Auth';
 import axios from 'axios';
+import '../../src/components/trivia.css'
 
 function TriviaScreen() {
      const navigate = useNavigate();
-     const { userData } = useAuth();
+     const { nutrData } = useAuth();
 
      const [trivs, setTrivia] = useState([]);
      const [trivsUser, setTriviaUser] = useState([]);
@@ -25,17 +26,17 @@ function TriviaScreen() {
           }
           const fetchTriviaDataUser = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/trivias/auth/${userData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/trivias/auth/${nutrData._id}`, { timeout: 10000 });
                     setTriviaUser(response.data);
                } catch (error) {
                     console.log("Error fetching trivias data", error.message)
                }
           }
           fetchTriviaData();
-          if (userData) {
+          if (nutrData) {
                fetchTriviaDataUser();
           }
-     }, [userData])
+     }, [nutrData])
 
      const handleItemPress = async (itemId) => {
           try {
@@ -81,7 +82,7 @@ function TriviaScreen() {
                                    </button>
                               </div>
                               <div className='trivia-content'>
-                                   {userData && (
+                                   {nutrData && (
                                        <div className='btn-switch'>
                                              <button 
                                                   onClick={() => setShowUserTrivias(false)}

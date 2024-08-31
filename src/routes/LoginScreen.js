@@ -18,7 +18,7 @@ function LoginScreen() {
         try {
             const response = await axios.post("http://localhost:5500/signin", { email, password });
             if (response.status === 201) {
-                login(response.data.token, response.data.user);
+                login(response.data.token, response.data.nutr);
                 alert("เข้าสู่ระบบสำเร็จ");
                 navigate('/');
             }

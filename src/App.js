@@ -13,6 +13,7 @@ import Menu from './routes/Menu';
 import Trivia from './routes/Trivia';
 import IngrScreen from './routes/IngrScreen';
 import ProfileScreen from './routes/ProfileScreen';
+import EditProfile from './routes/EditProfile';
 import MenuDetailScreen from './routes/MenuDetailScreen';
 import AnswerTopic from './routes/AnswerTopic';
 
@@ -30,6 +31,7 @@ function App() {
           <Route path='/trivia' element={<Trivia />} />
           <Route path='/ingredients' element={<IngrScreen />} />
           <Route path='/profile' element={<ProfileScreen />} />
+          <Route path='/profile-edit' element={<EditProfile />} />
           <Route path='/topic-answer' element={<AnswerTopic />} />
 
           <Route path='/signup' element={<RegisterScreen />} />
