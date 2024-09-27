@@ -1,0 +1,131 @@
+.ingr-manage {
+     display: flex;
+     width: 80%; 
+     margin-left: auto;
+     margin-right: auto;
+     justify-content: space-between;
+}
+
+.ingr-search {
+     width: 82%;
+     box-shadow: 0 2px 2px 1px lightgrey;
+}
+ 
+.ingr-search input {
+     width: 95%;
+     margin-left: auto;
+     margin-right: auto;
+     padding: 10px;
+     border: none;
+}
+ 
+.ingr-search .ingr-search--btn {
+     width: 5%;
+     padding: 10px;
+     margin-left: auto;
+     margin-right: auto;
+     border: none;
+     background-color: #FFA13F;
+     color: white;
+     cursor: pointer;
+}
+
+.ingr-manage .add-ingr-btn {
+     width: 17%;
+     padding: 10px;
+     border: none;
+     color: white;
+     background-color: #4AB4A2;
+     cursor: pointer;
+}
+ 
+.ingr-add--btn {
+     width: 20%;
+     padding: 10px;
+     margin-left: auto;
+     margin-right: auto;
+     border: none;
+     border-radius: 10px;
+     background-color: #FFA13F;
+     color: white;
+     cursor: pointer;
+}
+ 
+.ingr-add--btn:hover {
+     background-color: #ca7d2a;
+}
+ 
+.btn-switch {
+     display: flex;
+     margin-top: 30px;
+     margin-bottom: 10px;
+}
+ 
+.btn-switch button{
+     padding: 5px 10px;
+     border-radius: 50px;
+     margin-right: 10px;
+     cursor: pointer;
+}
+ 
+.btn-switch-clicked {
+     background-color: #4AB4A2;
+     color: white;
+     border: 1px solid #4AB4A2;
+}
+ 
+.btn-switch-noclick {
+     /* background-color: white; */
+     color: #4AB4A2;
+     border: 1px solid #4AB4A2;
+}
+ 
+.table-ingr {
+     border-collapse: collapse;
+     width: 80%;
+     margin-top: 30px;
+     margin-left: auto;
+     margin-right: auto;
+     margin-bottom: 30px;
+}
+ 
+.table-ingr tr:nth-child(even) {
+     background-color: #cee4e0;
+}
+ 
+.table-ingr tr:nth-child(odd) {
+     background-color: white;
+}
+ 
+.table-ingr th, .table-ingr td {
+     padding: 6px;
+}
+ 
+.ingr-btn--layout {
+     display: flex;
+     justify-content: space-around;
+}
+ 
+.table-ingr th {
+     background-color: #4AB4A2;
+     color: white;
+     text-align: left;
+     font-weight: 500;
+}
+ 
+.table-ingr td {
+     font-size: 14px;
+}
+ 
+.ingr-btn i {
+     color: #7e7e7e;
+     cursor: pointer;
+     padding: 5px;
+}
+ 
+.ingr-btn i:hover {
+     background-color: white;
+     box-shadow: 0 2px 2px 1px lightgrey;
+     border-radius: 5px;
+     color: #4AB4A2;
+}

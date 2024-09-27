@@ -22,7 +22,7 @@ function Navbar() {
                {nutrData ? (
                     <div className='nav--username' onClick={toggleDropdown}>
                          <p>{nutrData.firstname} {nutrData.lastname}</p>
-                         <i class="fa-solid fa-angle-down"></i>
+                         <i className="fa-solid fa-angle-down"></i>
                          {dropdownVisible && (
                               <div className='dropdown-menu'>
                                    <button onClick={() => navigate('/profile')}>My profile</button>

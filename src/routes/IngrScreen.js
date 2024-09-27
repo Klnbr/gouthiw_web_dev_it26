@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import '.././App.css'
+import '../../src/components/ingr.css'
 import '../components/Modal.css'
 import Navbar from '../components/Navbar/Navbar'
 import SideBar from '../components/SideBar/SideBar'
-import { Input } from "antd";
+import { Input, Select } from "antd";
 import axios from 'axios';
 
 function IngrScreen() {
@@ -12,6 +12,7 @@ function IngrScreen() {
      const [name, setName] = useState("");
      const [purine, setPurine] = useState("");
      const [uric, setUric] = useState("");
+     const [type, setType] = useState("");
      const [currentItemId, setCurrentItemId] = useState(null);
 
      //set modal
@@ -22,6 +23,7 @@ function IngrScreen() {
                setName("");
                setPurine("");
                setUric("");
+               setType("");
                setCurrentItemId(null);
           }
      }
@@ -54,6 +56,7 @@ function IngrScreen() {
                name: name,
                purine: purine,
                uric: uric,
+               ingr_type: type,
                isDeleted: false
           };
 
@@ -69,6 +72,7 @@ function IngrScreen() {
                setName("");
                setPurine("");
                setUric("");
+               setType("");
                setModal(false);
                setCurrentItemId(null);
 
@@ -87,6 +91,7 @@ function IngrScreen() {
                setName(ingrData.name);
                setPurine(ingrData.purine);
                setUric(ingrData.uric);
+               setType(ingrData.ingr_type);
                setCurrentItemId(itemId);
                setModal(true);
           } catch (error) {
@@ -134,24 +139,56 @@ function IngrScreen() {
                          <div className='nav'>
                               <Navbar />
                          </div>
-                         <div className='ingr-search'>
-                              <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
-                              <button className='ingr-search--btn'>
-                                   <i class="fa-solid fa-magnifying-glass"></i>
-                              </button>
-                         </div>
-                         <button className='ingr-add--btn' onClick={toggleModal}>เพิ่มวัตถุดิบ</button>
+                         
                          <div className='main-content'>
+                              <div className='ingr-manage'>
+                                   <div className='ingr-search'>
+                                        <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
+                                        <button className='ingr-search--btn'>
+                                             <i className="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                   </div>
+                                   <button className='add-ingr-btn' onClick={toggleModal}>
+                                        <i className="fa-solid fa-plus"> เพิ่มวัตถุดิบของคุณ</i>
+                                   </button>
+                              </div>
                               {modal && (
                                    <div className='modal'>
                                         <div className='modal-content'>
                                              <button className='ingr-cancel--btn' onClick={toggleModal}>
-                                                  <i class="fa-solid fa-xmark"></i>
+                                                  <i className="fa-solid fa-xmark"></i>
                                              </button>
                                              <h1>{currentItemId ? "แก้ไขวัตถุดิบ" : "เพิ่มวัตถุดิบใหม่"}</h1>
 
                                              <label htmlFor='ingr-name'>ชื่อวัตถุดิบ</label>
                                              <Input className='modal--input' value={name} onChange={(e) => setName(e.target.value)} />
+
+                                             <label htmlFor='ingr-type'>ประเภท</label>
+                                             <Select 
+                                                  className='ingr-form--select'
+                                                  placeholder="เลือกประเภทวัตถุดิบ"
+                                                  value={type}
+                                                  onChange={(value) => setType(value)}
+                                                  optionFilterProp="children"
+                                                  options={[
+                                                       {
+                                                            value: "เนื้อสัตว์",
+                                                            label: "เนื้อสัตว์"
+                                                       },
+                                                       {
+                                                            value: "ผัก",
+                                                            label: "ผัก"
+                                                       },
+                                                       {
+                                                            value: "ผลไม้",
+                                                            label: "ผลไม้"
+                                                       },
+                                                       {
+                                                            value: "---",
+                                                            label: "---"
+                                                       },
+                                                  ]}
+                                             />
 
                                              <label htmlFor='ingr-purine'>พิวรีน (มิลลิกรัม)</label>
                                              <Input className='modal--input' value={purine} onChange={(e) => setPurine(e.target.value)} />
@@ -160,7 +197,7 @@ function IngrScreen() {
                                              <Input className='modal--input' value={uric} onChange={(e) => setUric(e.target.value)} />
                                              
                                              <button className='ingr-save--btn' onClick={handleSave}>
-                                                  <i class="fa-solid fa-floppy-disk"></i>
+                                                  <i className="fa-solid fa-floppy-disk"></i>
                                                   <span className='btn-title'>บันทึก</span>
                                              </button>                                  
                                         </div>

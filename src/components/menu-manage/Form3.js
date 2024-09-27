@@ -34,7 +34,7 @@ function Form3({ formData, setFormData }) {
                               <label htmlFor={`step-${index + 1}`}>
                                    ขั้นตอนที่ {index + 1}
                               </label>
-                              <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteMethod(index)}></i>
+                              <i className="fa-solid fa-circle-xmark" onClick={() => handleDeleteMethod(index)}></i>
                          </div>
                          <TextArea 
                               className='form--inputbox' 

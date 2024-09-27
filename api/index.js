@@ -68,6 +68,9 @@ const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
 const myMenu = require("./models/menu");
 const myNutr = require("./models/nutr");
+const myTopic = require("./models/topic");
+const myUser = require("./models/user");
+
 
 //signup
 app.post("/signup", async (req, res) => {
@@ -369,12 +372,13 @@ app.get("/ingrs", async (req, res) => {
 //เพิ่มวัตถุดิบ
 app.post("/addIngr", async (req, res) => {
   try {
-    const { name, purine, uric, isDeleted } = req.body;
+    const { name, purine, uric, ingr_type, isDeleted } = req.body;
 
     const newIngre = new myIngr({
       name,
       purine,
       uric,
+      ingr_type,
       isDeleted,
     });
 
@@ -406,7 +410,7 @@ app.get("/ingr/:id", async (req, res) => {
 app.put("/ingr/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, purine, uric } = req.body;
+    const { name, purine, uric, ingr_type } = req.body;
 
     await myIngr.findByIdAndUpdate(id, { name, purine, uric });
 
@@ -618,4 +622,155 @@ app.put("/user/:id", async (req, res) => {
        res.status(500).json({ message: "Error update User" });
      }
 });
-   
+
+// ดึงกระทู้มาโชว์
+app.get("/topics", async (req, res) => {
+  try {
+    const topics = await myTopic.aggregate([
+      {
+        $match: { isDeleted: false }  // ดึงเฉพาะกระทู้ที่ไม่ถูกลบ
+      },
+      {
+        $lookup: {
+          from: "users",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
+          localField: "user",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
+          foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
+          as: "userDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
+        }
+      },
+      {
+        $unwind: "$userDetails"  // ใช้ unwind เพื่อแปลง array เป็น object
+      },
+      {
+        $project: {
+          title: 1,              // แสดงฟิลด์ title ของ topic
+          image: 1,              // แสดงฟิลด์ image ของ topic
+          detail: 1,             // แสดงฟิลด์ detail ของ topic
+          answer: 1,
+          createdAt: 1,
+          "userDetails.name": 1  // แสดงเฉพาะชื่อผู้ใช้จาก userDetails
+        }
+      }
+    ]);
+
+    console.log("Topics with user details:", topics);
+    return res.json(topics);
+  } catch (error) {
+    console.error("Error fetching topics data", error);
+    res.status(500).json({ message: "Failed to retrieve the topics" });
+  }
+});
+
+//ดึงกระทู้มา 1 กระทู้
+app.get("/topic/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid topic ID" });
+    }
+
+    const objectId = new mongoose.Types.ObjectId(id);
+    console.log("objectId: ", objectId)
+
+    const topics = await myTopic.aggregate([
+      {
+        $match: { _id: objectId  }
+      },
+      {
+        $lookup: {
+          from: "users",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
+          localField: "user",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
+          foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
+          as: "userDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
+        }
+      },
+      {
+        $unwind: "$userDetails"  // ใช้ unwind เพื่อแปลง array เป็น object
+      },
+      {
+        $unwind: {
+            path: "$answer", 
+            preserveNullAndEmptyArrays: true // เพื่อหลีกเลี่ยงการสูญเสียกระทู้ที่ไม่มี answer
+        }
+      },
+      {
+        $lookup: 
+            {
+                from: "nutrs",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
+                localField: "answer.nutr_id",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
+                foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
+                as: "nutrDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
+            },
+        
+      },
+      {
+        $unwind: {
+            path: "$nutrDetails",
+            preserveNullAndEmptyArrays: true  // เพื่อหลีกเลี่ยงการสูญเสียกระทู้ที่ไม่มี nutrDetails
+        }            
+      },
+      {
+        $group: {
+            _id: "$_id",
+            title: { $first: "$title" },
+            detail: { $first: "$detail" },
+            createdAt: { $first: "$createdAt" },
+            answer: { 
+                $push: { 
+                    nutrDetails: {
+                        firstname: "$nutrDetails.firstname",
+                        lastname: "$nutrDetails.lastname"
+                    }, 
+                    answer_detail: "$answer.answer_detail" 
+                } 
+            },
+            userDetails: { $first: "$userDetails" }
+        }
+      },
+      {
+        $project: {
+            title: 1,              // แสดงฟิลด์ title ของ topic
+            detail: 1,             // แสดงฟิลด์ detail ของ topic
+            answer: 1,
+            createdAt: 1,
+            "userDetails.name": 1  // แสดงเฉพาะชื่อผู้ใช้จาก userDetails
+        }
+      }
+    ]);
+
+    // ตรวจสอบว่ากระทู้ถูกพบหรือไม่
+    if (topics.length === 0) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    console.log("topics:", topics);
+
+    // ส่งกลับข้อมูลกระทู้แรก
+    return res.json(topics[0]);
+  } catch (error) {
+    console.log("error fetching the topic", error);
+    res.status(500).json({ message: "Error fetching the topic" });
+  }
+});
+
+app.put("/topic/answer/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nutr_id, answer_detail } = req.body;
+
+    await myTopic.findByIdAndUpdate(id, { 
+      $push: {
+        answer: {
+          nutr_id, 
+          answer_detail
+        }
+      }
+    });
+
+    res.status(200).json({ message: "Answer added successfully" });
+  } catch (error) {
+    console.log("Error adding answer to topic", error);
+    res.status(500).json({ message: "Error adding answer to topic" });
+  }
+});

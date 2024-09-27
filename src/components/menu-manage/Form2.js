@@ -155,7 +155,7 @@ function Form2({ formData, setFormData }) {
                               <div className='ingr-search'>
                                    <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
                                    <button className='ingr-search--btn'>
-                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <i className="fa-solid fa-magnifying-glass"></i>
                                    </button>
                               </div>
                               <div className='table-ingr-container'>
@@ -185,7 +185,7 @@ function Form2({ formData, setFormData }) {
                     <div className='form2-containner' key={index}>
                          <div className='form--hidden-ingr'>
                               <h2>วัตถุดิบที่ {index + 1}</h2>
-                              <i class="fa-solid fa-circle-xmark" onClick={() => handleDeleteIngr(index)}></i>
+                              <i className="fa-solid fa-circle-xmark" onClick={() => handleDeleteIngr(index)}></i>
                          </div>
                          <hr className='hr-line-full' />
                          <div>

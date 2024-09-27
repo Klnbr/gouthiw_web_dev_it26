@@ -10,7 +10,6 @@ function ProfileScreen() {
     const navigate = useNavigate();
     const { nutrData } = useAuth();
 
-    const [menus, setMenus] = useState([]);
     const [menusUser, setMenusUser] = useState([]);
 
     const [dropdownVisible, setDropdownVisible] = useState(null);

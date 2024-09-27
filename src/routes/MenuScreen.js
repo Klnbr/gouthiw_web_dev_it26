@@ -68,7 +68,7 @@ function MenuScreen() {
                                    <div className='menu-search'>
                                         <input type='text' placeholder='ค้นหาอาหารที่นี่' />
                                         <button className='search-menu-btn'>
-                                             <i class="fa-solid fa-magnifying-glass"></i>
+                                             <i className="fa-solid fa-magnifying-glass"></i>
                                         </button>
                                    </div>
                                    <button className='add-menu-btn' onClick={() => navigate('/menu')}>

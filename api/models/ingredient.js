@@ -11,6 +11,9 @@ const ingreSchema = new mongoose.Schema({
      uric: {
           type: Number
      },
+     ingr_type: {
+          type: String
+     },
      isDeleted: {
           type: Boolean,
           default: false
