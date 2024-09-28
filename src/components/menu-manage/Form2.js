@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Input, Select } from "antd";
 import './CreateMenu.css';
 import axios from 'axios';
 
 function Form2({ formData, setFormData }) {
      const [ingrs, setIngrs] = useState([]);
-     const [selectedIngredientIndex, setSelectedIngredientIndex] = useState(null);
+     const [selectedIndex, setSelectedIndex] = useState(null);
 
      const [totalPurine, setTotalPurine] = useState(0);
      const [totalUric, setTotalUric] = useState(0);
 
-     const [modal, setModal] = useState(false)
+     const [modal, setModal] = useState(false);
+
+     const { ingredients } = formData;
 
      const toggleModal = () => {
           setModal(!modal);
@@ -22,7 +24,18 @@ function Form2({ formData, setFormData }) {
           document.body.classList.remove('active-modal')
      }
 
-     const { ingredients } = formData;
+     useEffect(() => {
+          const fetchIngrData = async () => {
+               try {
+                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+                    setIngrs(response.data);
+               } catch (error) {
+                    console.log("Error fetching ingrs data", error.message);
+               }
+          };
+
+          fetchIngrData();
+     }, []);
 
      const convertToGrams = (quantity, unit) => {
           switch (unit) {
@@ -35,86 +48,94 @@ function Form2({ formData, setFormData }) {
           }
      };
 
+     const getNameValue = (ingr_id) => {
+          const ingr = ingrs.find(item => item._id === ingr_id);
+          return ingr ? ingr.name : "";
+     };
+
+     const getPurineValue = (ingr_id) => {
+          const ingr = ingrs.find(item => item._id === ingr_id);
+          return ingr ? ingr.purine : 0;
+     };
+      
+      const getUricValue = (ingr_id) => {
+          const ingr = ingrs.find(item => item._id === ingr_id);
+          return ingr ? ingr.uric : 0;
+     };
+
      useEffect(() => {
           const newTotalPurine = ingredients.reduce((total, ingredient) => {
-               const quantity = parseFloat(ingredient.ingrQty) || 0;
-               const unit = ingredient.ingrUnit;
-               const purinePerUnit = parseFloat(ingredient.ingrPurine) || 0;
+               const quantity = parseFloat(ingredient.qty) || 0;
+               const unit = ingredient.unit;
+               const purinePerUnit = parseFloat(getPurineValue(ingredient.ingr_id)) || 0;
                const purine = convertToGrams(quantity, unit) * purinePerUnit / 100;
                return total + purine;
           }, 0);
-  
+       
           const newTotalUric = ingredients.reduce((total, ingredient) => {
-               const quantity = parseFloat(ingredient.ingrQty) || 0;
-               const unit = ingredient.ingrUnit;
-               const uricPerUnit = parseFloat(ingredient.ingrUric) || 0;
+               const quantity = parseFloat(ingredient.qty) || 0;
+               const unit = ingredient.unit;
+               const uricPerUnit = parseFloat(getUricValue(ingredient.ingr_id)) || 0;
                const uric = convertToGrams(quantity, unit) * uricPerUnit / 100;
                return total + uric;
           }, 0);
-
-          const fetchIngrData = async () => {
-               try {
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
-                    setIngrs(response.data);
-               } catch (error) {
-                    console.log("Error fetching ingrs data", error.message)
-               }
-          }
-
-          fetchIngrData();
-  
+       
           setTotalPurine(newTotalPurine);
           setTotalUric(newTotalUric);
 
-          setFormData({
-               ...formData,
-               purine: newTotalPurine,
-               uric: newTotalUric
-          });
+          setFormData((prevFormData) => ({
+               ...prevFormData,
+               purine_total: newTotalPurine,
+               uric_total: newTotalUric
+          }));
 
-      }, [ingredients]);
+     }, [setFormData, ingredients]);
+
 
      const handleIngredientChange = (index, field, value) => {
-          const newIngredients = [...ingredients];
-          newIngredients[index] = { ...newIngredients[index], [field]: value };
+          const newIngrs = [...formData.ingredients];
+          newIngrs[index] = { ...newIngrs[index], [field]: value };
           
-          if (field === 'ingrQty' || field === 'ingrPurine' || field === 'ingrUric') {
-               newIngredients[index][field] = value.replace(/[^0-9.]/g, '');
+          if (field === 'qty') {
+               newIngrs[index][field] = value.replace(/[^0-9.]/g, '');
           }
 
           setFormData({
                ...formData,
-               ingredients: newIngredients
+               ingredients: newIngrs
           });
      };
 
      const handleAddIngredient = () => {
           setFormData({
               ...formData,
-              ingredients: [...formData.ingredients, { ingrName: '', ingrQty: '', ingrUnit: '', ingrPurine: '', ingrUric: '' }]
+              ingredients: [...formData.ingredients, { ingr_id: '', qty: '', unit: '' }]
           });
+
+          console.log("formData FORM2: ", formData)
      };
 
      const handleSelectIngr = (itemId) => {
           const selectedIngr = ingrs.find(ingr => ingr._id === itemId);
-          if (selectedIngr !== undefined && selectedIngredientIndex !== null) {
-               const newIngredients = [...formData.ingredients];
-               newIngredients[selectedIngredientIndex] = {
-                    ...newIngredients[selectedIngredientIndex],
-                    ingrName: selectedIngr.name,
-                    ingrPurine: selectedIngr.purine,
-                    ingrUric: selectedIngr.uric
-               };
-
-               setFormData({
-                    ...formData,
-                    ingredients: newIngredients
-               });
-
-               setSelectedIngredientIndex(null);
-               toggleModal();
+          if (selectedIngr !== undefined && selectedIndex !== null) {
+              const newIngr = [...formData.ingredients];
+      
+              newIngr[selectedIndex] = {
+                  ...newIngr[selectedIndex],
+                  ingr_id: selectedIngr._id,
+                  qty: newIngr[selectedIndex].qty, // เก็บค่า qty เดิม
+                  unit: newIngr[selectedIndex].unit, // เก็บค่า unit เดิม
+              };
+      
+              setFormData({
+                  ...formData,
+                  ingredients: newIngr
+              });
+      
+              setSelectedIndex(null);
+              toggleModal(); // ปิด modal หลังจากเลือก
           }
-     }
+     };
 
      const handleDeleteIngr = (index) => {
           const newIngredients = formData.ingredients.filter((_, i) => i !== index);
@@ -196,9 +217,9 @@ function Form2({ formData, setFormData }) {
                                    <Input 
                                         className='form--inputbox' 
                                         placeholder='ระบุชื่อวัตถุดิบ'
-                                        value={ingredient.ingrName}
-                                        onChange={(e) => handleIngredientChange(index, 'ingrName', e.target.value)} />
-                                   <div className='list-ingr-icon' onClick={() => { setSelectedIngredientIndex(index); toggleModal(); }}>
+                                        value={getNameValue(ingredient.ingr_id)}
+                                        readOnly />
+                                   <div className='list-ingr-icon' onClick={() => { setSelectedIndex(index); toggleModal(); }}>
                                         <i className="fa-solid fa-clipboard-list"></i>
                                    </div>
                               </div>
@@ -211,8 +232,8 @@ function Form2({ formData, setFormData }) {
                                    <Input 
                                         className='form--inputbox' 
                                         placeholder='ระบุปริมาณ'
-                                        value={ingredient.ingrQty}
-                                        onChange={(e) => handleIngredientChange(index, 'ingrQty', e.target.value)} />
+                                        value={ingredient.qty}
+                                        onChange={(e) => handleIngredientChange(index, 'qty', e.target.value)} />
                               </div>
                               <div className='form--input-1-col'>
                                    <label htmlFor='ingr-amount'>
@@ -221,8 +242,8 @@ function Form2({ formData, setFormData }) {
                                    <Select 
                                         className='form--select'
                                         placeholder="เลือกหน่วย"
-                                        value={ingredient.ingrUnit}
-                                        onChange={(value) => handleIngredientChange(index, 'ingrUnit', value)}
+                                        value={ingredient.unit}
+                                        onChange={(value) => handleIngredientChange(index, 'unit', value)}
                                         optionFilterProp="children"
                                         options={[
                                              {
@@ -249,8 +270,9 @@ function Form2({ formData, setFormData }) {
                                    <Input 
                                         className='form--inputbox' 
                                         placeholder='ระบุพิวรีน'
-                                        value={ingredient.ingrPurine}
-                                        onChange={(e) => handleIngredientChange(index, 'ingrPurine', e.target.value)} />
+                                        value={getPurineValue(ingredient.ingr_id).toFixed(2)}
+                                        readOnly
+                                        />
                               </div>
                               <div className='form--input-1-col'>
                                    <label htmlFor='ingr-uric'>
@@ -259,8 +281,9 @@ function Form2({ formData, setFormData }) {
                                    <Input 
                                         className='form--inputbox' 
                                         placeholder='ระบุกรดยูริก'
-                                        value={ingredient.ingrUric}
-                                        onChange={(e) => handleIngredientChange(index, 'ingrUric', e.target.value)} />
+                                        value={getUricValue(ingredient.ingr_id).toFixed(2)}
+                                        readOnly
+                                        />
                               </div>
                          </div>
                     </div>

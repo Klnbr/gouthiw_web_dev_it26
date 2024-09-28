@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input, Select } from "antd";
 import './CreateMenu.css';
 
 function Form1({ formData, setFormData }) {
+     useEffect(() => {
+          return () => {
+               if (formData.image && typeof formData.image !== 'string') {
+                    URL.revokeObjectURL(formData.image);
+               }
+          };
+          // ลบ URL ที่สร้างขึ้นจาก URL.revokeObjectURL หลังจากไม่ใช้งานแล้ว เพื่อป้องกันการใช้หน่วยความจำเกินความจำเป็น
+     }, [formData.image]);
+
      const handleInputChange = (e) => {
           const { name, value } = e.target;
           setFormData({ ...formData, [name]: value });

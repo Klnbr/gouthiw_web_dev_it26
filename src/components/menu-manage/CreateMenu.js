@@ -14,12 +14,13 @@ import axios from 'axios';
 function CreateMenu() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
+     const [loading, setLoading] = useState(false);
 
      const [formData, setFormData] = useState({
           menuName: '',
           category: '',
           image: null,
-          ingredients: [{ ingrName:'', ingrQty:'', ingrUnit:'', ingrPurine:'', ingrUric:'' }],
+          ingredients: [{ ingr_id:'', qty:'', unit:'', purine_total: '', uric_total: '' }],
           method: [''],
           purine: '',
           uric: ''
@@ -56,6 +57,33 @@ function CreateMenu() {
           setCurrent(current - 1);
      };
 
+     // const handleSubmit = async () => {
+     //      if (isNaN(formData.purine_total) || isNaN(formData.uric_total)) {
+     //          alert("Purine or Uric total is not valid.");
+     //          return;
+     //      }
+      
+     //      try {
+     //          const response = await fetch(`/menus/${id}`, {
+     //              method: "POST",
+     //              headers: {
+     //                  "Content-Type": "application/json",
+     //              },
+     //              body: JSON.stringify(formData),
+     //          });
+      
+     //          if (response.ok) {
+     //              const data = await response.json();
+     //              console.log("Menu saved successfully", data);
+     //          } else {
+     //              console.error("Failed to save menu", await response.json());
+     //          }
+     //      } catch (error) {
+     //          console.error("Error submitting menu", error);
+     //      }
+     // };
+      
+
      const handleSave = async () => {
           try {
                const storageRef = firebase.storage().ref();
@@ -69,44 +97,8 @@ function CreateMenu() {
                     category: formData.category,
                     ingredients: formData.ingredients,
                     method: formData.method,
-                    purine: formData.purine,
-                    uric: formData.uric,
-                    image: imageUrl,
-                    isDeleted: false
-               };
-
-               console.log("Menu Data:", menuData);
-
-               const response = await axios.post(
-                    "http://localhost:5500/menus", menuData
-               );
-
-               console.log("Menu created", response.data);
-               if (response.status === 201) {
-                    alert("เพิ่มเข้าสำเร็จ");
-                    navigate('/menus');
-               }
-          } catch (error) {
-               alert("เพิ่มเข้าไม่สำเร็จ", error.response.data.message || "Unknown error");
-               console.log("error creating menu", error);
-          }
-     };
-
-     const handleSaveId = async () => {
-          try {
-               const storageRef = firebase.storage().ref();
-               const imageRef = storageRef.child(`images/${formData.image.name}`);
-               await imageRef.put(formData.image);
-               const imageUrl = await imageRef.getDownloadURL();
-               console.log("Image uploaded successfully. URL:", imageUrl);
-
-               const menuData = {
-                    menuName: formData.menuName,
-                    category: formData.category,
-                    ingredients: formData.ingredients,
-                    method: formData.method,
-                    purine: formData.purine,
-                    uric: formData.uric,
+                    purine_total: formData.purine_total,
+                    uric_total: formData.uric_total,
                     image: imageUrl,
                     isDeleted: false
                };
@@ -157,7 +149,7 @@ function CreateMenu() {
                                                   </button>
                                              )}
                                              {current === steps.length - 1 && (
-                                                  <button className="step-btn--next" onClick={handleSaveId}>
+                                                  <button className="step-btn--next" onClick={handleSave}>
                                                        บันทึก
                                                   </button>
                                              )}

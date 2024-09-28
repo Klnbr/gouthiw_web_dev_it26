@@ -224,42 +224,6 @@ app.get("/menus/auth/:id", async (req, res) => {
   }
 });
 
-//เพิ่มเมนู
-app.post("/menus", async (req, res) => {
-  try {
-    const {
-      menuName,
-      category,
-      ingredients,
-      method,
-      purine,
-      uric,
-      image,
-      isDeleted,
-    } = req.body;
-
-    const newMenu = new myMenu({
-      menuName,
-      category,
-      ingredients,
-      method,
-      purine,
-      uric,
-      image,
-      isDeleted,
-    });
-
-    await newMenu.save();
-
-    res
-      .status(201)
-      .json({ message: "Ingredient saved successfully", menu: newMenu });
-  } catch (error) {
-    console.log("Error creating menu", error);
-    res.status(500).json({ message: "Failed to add an menu" });
-  }
-});
-
 //เพิ่มเมนู (Auth)
 app.post("/menus/:id", async (req, res) => {
   try {
@@ -269,22 +233,26 @@ app.post("/menus/:id", async (req, res) => {
       category,
       ingredients,
       method,
-      purine,
-      uric,
+      purine_total,
+      uric_total,
       image,
       isDeleted,
     } = req.body;
 
-    const formattedPurine = parseFloat(purine).toFixed(2);
-    const formattedUric = parseFloat(uric).toFixed(2);
+    if (!menuName || !category || !Array.isArray(ingredients) || ingredients.length === 0) {
+      return res.status(400).json({ message: "Invalid data. Please provide all required fields." });
+    }
+
+    const formattedPurine = !isNaN(parseFloat(purine_total)) ? parseFloat(purine_total).toFixed(2) : 0;
+    const formattedUric = !isNaN(parseFloat(uric_total)) ? parseFloat(uric_total).toFixed(2) : 0;
 
     const newMenu = new myMenu({
       menuName,
       category,
       ingredients,
       method,
-      purine: formattedPurine,
-      uric: formattedUric,
+      purine_total: formattedPurine,
+      uric_total: formattedUric,
       image,
       isDeleted,
     });

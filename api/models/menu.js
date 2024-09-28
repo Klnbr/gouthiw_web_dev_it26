@@ -12,21 +12,19 @@ const menuSchema = new mongoose.Schema({
      },
      ingredients: [
           {
-               ingrName: { type: String, ref: 'Ingredient' },
-               ingrQty: { type: Number },
-               ingrUnit: { type: String },
-               ingrPurine: { type: Number },
-               ingrUric: { type: Number },
+               ingr_id: { type:  mongoose.Schema.Types.ObjectId, ref: 'Ingr' },
+               qty: { type: Number },
+               unit: { type: String }
           }
      ],
      method: [
           String
      ],
-     purine: {
+     purine_total: {
           type: Number,
           required: true
      },
-     uric: {
+     uric_total: {
           type: Number,
           required: true
      },
