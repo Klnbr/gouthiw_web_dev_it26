@@ -722,6 +722,7 @@ app.get("/topic/:id", async (req, res) => {
   }
 });
 
+// ตอบกลับกระทู้
 app.put("/topic/answer/:id", async (req, res) => {
   try {
     const { id } = req.params;

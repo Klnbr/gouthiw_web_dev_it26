@@ -41,6 +41,10 @@ function AnswerTopic() {
                          <i className="fa-solid fa-user-nurse"></i>
                          <p>{item.nutrDetails?.firstname} {item.nutrDetails?.lastname}</p>
                     </div>
+                    <div className='flex'>
+                         <i className="fa-solid fa-reply"></i>
+                         <p>{item.answer?.length}</p>
+                    </div>
                </div>
           </div>
      );

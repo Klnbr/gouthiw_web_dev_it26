@@ -1,5 +1,46 @@
 const mongoose = require('mongoose')
 
+const answerSchema = new mongoose.Schema({
+    nutr_id: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Nutr' 
+    },
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    answer_detail: { 
+        type: String,
+        required: true
+    },
+    replies: [
+        {
+            user_id: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            reply_detail: { 
+                type: String,
+                required: true
+            },
+            isDeleted: {
+                type: Boolean,
+                default: false
+            }
+        }
+    ],
+    parentId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Answer',
+        default: null
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
+}, { timestamps: true });
+
+
 const topicSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -12,12 +53,7 @@ const topicSchema = new mongoose.Schema({
         type: String,
         require: true
     },
-    answer: [
-        {
-            nutr_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Nutr' },
-            answer_detail: { type: String }
-        }
-    ],
+    answer: [answerSchema],
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
