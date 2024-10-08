@@ -49,8 +49,8 @@ function MenuScreen() {
                <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
                <h1>{item.menuName}</h1>
                <div className='layout'>
-                    <p className='purine'>พิวรีน: {item.purine}</p>
-                    <p className='uric'>กรดยูริก: {item.uric}</p>
+                    <p className='purine'>พิวรีน: {item.purine_total}</p>
+                    <p className='uric'>กรดยูริก: {item.uric_total}</p>
                </div>
           </div>
      );

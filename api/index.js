@@ -380,7 +380,7 @@ app.put("/ingr/:id", async (req, res) => {
     const { id } = req.params;
     const { name, purine, uric, ingr_type } = req.body;
 
-    await myIngr.findByIdAndUpdate(id, { name, purine, uric });
+    await myIngr.findByIdAndUpdate(id, { name, purine, uric, ingr_type });
 
     res.status(200).json({ message: "Update ingr successfully" });
   } catch (error) {
@@ -621,7 +621,10 @@ app.get("/topics", async (req, res) => {
       }
     ]);
 
-    console.log("Topics with user details:", topics);
+    if (topics.length === 0) {
+      return res.status(404).json({ message: "No topics found" });
+    }    
+    
     return res.json(topics);
   } catch (error) {
     console.error("Error fetching topics data", error);
@@ -639,7 +642,6 @@ app.get("/topic/:id", async (req, res) => {
     }
 
     const objectId = new mongoose.Types.ObjectId(id);
-    console.log("objectId: ", objectId)
 
     const topics = await myTopic.aggregate([
       {
@@ -728,18 +730,34 @@ app.put("/topic/answer/:id", async (req, res) => {
     const { id } = req.params;
     const { nutr_id, answer_detail } = req.body;
 
-    await myTopic.findByIdAndUpdate(id, { 
+    // ตรวจสอบความถูกต้องของ ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid topic ID" });
+    }
+
+    // ตรวจสอบค่าที่ส่งมา
+    if (!nutr_id || !answer_detail) {
+      return res.status(400).json({ message: "nutr_id and answer_detail are required" });
+    }
+
+    const updatedTopic = await myTopic.findByIdAndUpdate(id, { 
       $push: {
         answer: {
           nutr_id, 
-          answer_detail
+          answer_detail,
+          parentId: id, // เพื่อเชื่อมโยงการตอบกลับกับการตอบกลับของนักโภชนาการ
         }
       }
-    });
+    }, { new: true });
 
-    res.status(200).json({ message: "Answer added successfully" });
+    // ตรวจสอบว่ามีกระทู้ที่ถูกอัปเดตหรือไม่
+    if (!updatedTopic) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    res.status(200).json({ message: "Reply added successfully", topic: updatedTopic });
   } catch (error) {
-    console.log("Error adding answer to topic", error);
-    res.status(500).json({ message: "Error adding answer to topic" });
+    console.log("Error adding reply to topic", error);
+    res.status(500).json({ message: "Error adding reply to topic" });
   }
 });

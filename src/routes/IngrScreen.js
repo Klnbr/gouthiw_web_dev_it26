@@ -15,6 +15,9 @@ function IngrScreen() {
      const [type, setType] = useState("");
      const [currentItemId, setCurrentItemId] = useState(null);
 
+     const [dropdownVisible, setDropdownVisible] = useState(false);
+     const [selectedType, setSelectedType] = useState("ทั้งหมด");
+
      //set modal
      const [modal, setModal] = useState(false)
      const toggleModal = () => {
@@ -46,6 +49,11 @@ function IngrScreen() {
           fetchIngrData();
      }, []);
 
+     const filterIngrs = (selectedType === "ทั้งหมด") 
+          ? ingrs 
+          : ingrs.filter(item => item.ingr_type === selectedType);
+
+
      const handleSave = async () => {
           if (!name || !purine || !uric) {
                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
@@ -60,10 +68,13 @@ function IngrScreen() {
                isDeleted: false
           };
 
+
           try {
                if (currentItemId) {
                     await axios.put(`http://localhost:5500/ingr/${currentItemId}`, ingreData);
                     alert("แก้ไขสำเร็จ");
+
+                    console.log("Current Type handleSave:", type);
                } else {
                     await axios.post("http://localhost:5500/addIngr", ingreData);
                     alert("เพิ่มเข้าสำเร็จ");
@@ -75,7 +86,7 @@ function IngrScreen() {
                setType("");
                setModal(false);
                setCurrentItemId(null);
-
+               
                const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
                setIngrs(response.data);
           } catch (error) {
@@ -94,6 +105,8 @@ function IngrScreen() {
                setType(ingrData.ingr_type);
                setCurrentItemId(itemId);
                setModal(true);
+
+               console.log("Current Type handleItemPress : ", type);
           } catch (error) {
                console.log('Error fetching ingr data', error.message);
           }
@@ -139,7 +152,6 @@ function IngrScreen() {
                          <div className='nav'>
                               <Navbar />
                          </div>
-                         
                          <div className='main-content'>
                               <div className='ingr-manage'>
                                    <div className='ingr-search'>
@@ -152,6 +164,21 @@ function IngrScreen() {
                                         <i className="fa-solid fa-plus"> เพิ่มวัตถุดิบของคุณ</i>
                                    </button>
                               </div>
+
+                              {/* Dropdown สำหรับคัดกรองประเภทวัตถุดิบ */}
+                              <Select 
+                                   className='ingr-filter--select'
+                                   value={selectedType} 
+                                   onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                   options={[
+                                        { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                        { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
+                                        { value: "ผัก", label: "ผัก" },
+                                        { value: "ผลไม้", label: "ผลไม้" },
+                                        { value: "อื่น ๆ", label: "อื่น ๆ" },
+                                   ]}
+                              />
+
                               {modal && (
                                    <div className='modal'>
                                         <div className='modal-content'>
@@ -184,8 +211,8 @@ function IngrScreen() {
                                                             label: "ผลไม้"
                                                        },
                                                        {
-                                                            value: "---",
-                                                            label: "---"
+                                                            value: "อื่น ๆ",
+                                                            label: "อื่น ๆ"
                                                        },
                                                   ]}
                                              />
@@ -214,8 +241,8 @@ function IngrScreen() {
                                         </tr>
                                    </thead>
                                    <tbody>
-                                        {ingrs.length > 0 ? (
-                                             ingrs.map(item => renderItem(item))
+                                        {filterIngrs.length > 0 ? (
+                                             filterIngrs.map(item => renderItem(item))
                                         ) : (
                                              <tr>
                                                   <td colSpan="4">ยังไม่มีข้อมูลวัตถุดิบ</td>
