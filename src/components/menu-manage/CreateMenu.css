@@ -1,9 +1,10 @@
 .step-container {
      display: flex;
      flex-direction: column;
-     width: 60%;
+     width: 96%;
      margin-left: auto;
      margin-right: auto;
+     background-color: white;
 }
 
 .step-layout {
@@ -16,16 +17,22 @@
      align-items: center;
      padding-left: 24px;
      padding-right: 24px;
-     margin-top: 24px;
+     margin-top: 100px;
      margin-bottom: 24px;
+}
+
+.step-content {
+     margin-top: 20px;
 }
 
 .step-btn {
      display: flex;
      padding: 24px;
-     width: 100%;
+     width: 85%;
      gap: 40px;
      justify-content: space-between;
+     margin-left: auto;
+     margin-right: auto;
 }
 
 .step-btn-layout {
@@ -43,7 +50,6 @@
      font-size: 16px;
      line-height: 24px;
      font-weight: 500;
-
      color: red;
      background-color: #ffffff;
      border: 1px solid red;
@@ -59,7 +65,6 @@
      font-size: 16px;
      line-height: 24px;
      font-weight: 500;
-
      color: #19b46b;
      background-color: #ffffff;
      border: 1px solid #19b46b;
@@ -75,24 +80,43 @@
      font-size: 16px;
      line-height: 24px;
      font-weight: 500;
-
      color: #ffffff;
      background-color: #19b46b;
      border: 1px solid #19b46b;
 }
 
 .form--input {
-     width: 100%;
+     width: 80%;
+     margin-bottom: 30px;
+     margin-left: auto;
+     margin-right: auto;
 }
 
-.form--drop-pic {
-     width: 100%;
-     height: 200px;
-     border: 1px solid rgb(214, 214, 214);
-     border-radius: 10px;
+.form--input label {
+     margin-bottom: 80px;
 }
 
-.form--drop-pic i {
+.form--drop-pic-menu {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     border: 2px dashed #d9d9d9;
+     padding: 20px;
+     cursor: pointer;
+     position: relative;
+     height: 30vh;
+}
+
+.form--drop-pic-menu img {
+     max-width: 100%;
+     height: 25vh;
+}
+
+.form--drop-pic-menu input[type="file"] {
+     display: none;
+}
+
+.form--drop-pic-menu i {
      display: flex;
      height: 100%;
      justify-content: center;
@@ -102,6 +126,7 @@
 
 .form--input-1-col {
      width: 48%;
+     margin-bottom: 20px;
 }
 
 .form--select {
@@ -124,4 +149,149 @@
 .hr-line-full {
      width: 100%;
      margin-top: 8px;
+}
+
+.list-ingr-icon {
+     cursor: pointer;
+}
+
+.modal-ingr {
+     border: 1px solid black;
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     position: fixed;
+     background: rgba(0, 0, 0, 0.5);
+     z-index: 999;
+}
+
+.modal-ingr-content {
+     position: absolute;
+     top: 40%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     line-height: 1.4;
+     background: #f1f1f1;
+     padding: 22px 28px;
+     border-radius: 3px;
+     max-width: 800px;
+     min-width: 800px;
+}
+
+.modal-ingr-content h1 {
+     text-align: center;
+     font-size: 1.2rem;
+     margin-bottom: 20px;
+}
+
+.table-ingr-container {
+     max-height: 300px;
+     overflow-y: auto;
+     margin-top: 1em;
+}
+
+.table-ingr-container .table-ingr {
+     width: 100%;
+     border-collapse: collapse;
+}
+
+.table-ingr-container .table-ingr th {
+     position: sticky;
+     top: 0;
+     z-index: 1;
+}
+
+.form2-containner, .form3-containner {
+     width: 80%;
+     margin-left: auto;
+     margin-right: auto;
+     margin-bottom: 30px;
+}
+
+.ingr-head {
+     display: flex;
+     justify-content: space-between;
+     width: 50%;
+     margin-left: auto;
+     margin-right: auto;
+     margin-bottom: 50px;
+}
+
+.ingr-head h1 {
+     font-size: 1rem;
+}
+
+.ingr-head p {
+     font-size: 1.6rem;
+     text-align: center;
+}
+
+.ingr-head-l, .ingr-head-r {
+     background-color: antiquewhite;
+     width: 48%;
+     padding: 20px;
+     border-radius: 10px;
+}
+
+.ingr-head-l {
+     background-color: rgb(248, 246, 165);
+}
+
+.ingr-head-r {
+     background-color: rgb(245, 183, 161);
+}
+
+.form2--input {
+     display: flex;
+     margin-bottom: 20px;
+     justify-content: space-between;
+}
+
+.form2--input Input {
+     width: 97%;
+}
+
+.form2--input i {
+     width: 10%;
+     font-size: 1.5rem;
+     align-items: center;
+     color: gray;
+     margin-top: 2px;
+}
+
+.form2--input i:hover {
+     color: black;
+}
+
+.add-index-btn {
+     margin-left: 10%;
+     border: none;
+     background-color: lightgray;
+     padding: 10px 20px;
+     cursor: pointer;
+}
+
+.add-step-btn {
+     border: none;
+     background-color: lightgray;
+     padding: 10px 20px;
+     cursor: pointer;
+     margin-top: 30px;
+     margin-bottom: 50px;
+}
+
+.add-index-btn:hover {
+     background-color: rgb(192, 192, 192);
+}
+
+.form3--input {
+     display: flex;
+     justify-content: space-between;
+}
+
+.form3-containner TextArea {
+     margin-bottom: 20px;
 }

@@ -1,15 +1,45 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Input, Select } from "antd";
 import './CreateMenu.css';
 
-function Form1() {
+function Form1({ formData, setFormData }) {
+     useEffect(() => {
+          return () => {
+               if (formData.image && typeof formData.image !== 'string') {
+                    URL.revokeObjectURL(formData.image);
+               }
+          };
+          // ลบ URL ที่สร้างขึ้นจาก URL.revokeObjectURL หลังจากไม่ใช้งานแล้ว เพื่อป้องกันการใช้หน่วยความจำเกินความจำเป็น
+     }, [formData.image]);
+
+     const handleInputChange = (e) => {
+          const { name, value } = e.target;
+          setFormData({ ...formData, [name]: value });
+     };
+  
+     const handleSelectChange = (value) => {
+          setFormData({ ...formData, category: value });
+     };
+  
+     const handleImageChange = (e) => {
+          setFormData({ ...formData, image: e.target.files[0] });
+     };
+
+     const triggerFileInputClick = () => {
+          document.getElementById('imageUpload').click();
+     };
+
      return (
           <div>
                <div className='form--input'>
                     <label htmlFor='menu-name'>
                          ชื่ออาหาร
                     </label>
-                    <Input className='form--inputbox' />
+                    <Input 
+                         name="menuName"
+                         value={formData.menuName}
+                         onChange={handleInputChange}
+                         className='form--inputbox' />
                </div>
                <div className='form--input'>
                     <label htmlFor='menu-type'>
@@ -18,6 +48,8 @@ function Form1() {
                     <Select 
                          className='form--select'
                          placeholder="ระบุประเภทอาหาร"
+                         value={formData.category}
+                         onChange={handleSelectChange}
                          optionFilterProp="children"
                          options={[
                               {
@@ -43,8 +75,20 @@ function Form1() {
                     <label htmlFor='menu-name'>
                          ภาพประกอบ
                     </label>
-                    <div className='form--drop-pic'>
-                         <i class="fa-regular fa-images"></i>
+                    <div className='form--drop-pic-menu' onClick={triggerFileInputClick}>
+                         {formData.image ? (
+                              <img
+                                   className='form--pic'
+                                   alt={`url: ${formData.image.name}`}
+                                   src={typeof formData.image === 'string' ? formData.image : URL.createObjectURL(formData.image)}
+                              />
+                         ) : (
+                              <i className="fa-regular fa-images"></i>
+                         )}
+                         <input 
+                              type="file"
+                              id="imageUpload"
+                              onChange={handleImageChange} />
                     </div>
                </div>
           </div>
