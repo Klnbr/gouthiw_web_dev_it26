@@ -1,10 +1,8 @@
 .form-trivia {
-    /* text-align: center; */
-    padding: 50px;
-}
-
-.form-trivia h2 {
     text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
 }
 
 .hr-line-full {
@@ -27,7 +25,7 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    width: 90%;
+    width: 100%;
 }
 
 .btn-addtv, .btn-cancel {
@@ -54,24 +52,4 @@
 
 .btn-cancel:hover {
     background-color: #d32f2f;
-}
-
-.form-trivia .form--drop-pic {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #d9d9d9;
-    padding: 20px;
-    cursor: pointer;
-    position: relative;
-    height: 30vh;
-}
-
-.form-trivia .form--drop-pic img {
-    width: 100%;
-    height: 25vh;
-}
-
-.form-trivia .form--drop-pic input[type="file"] {
-    display: none;
 }
