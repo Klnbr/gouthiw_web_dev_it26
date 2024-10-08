@@ -1,60 +1,55 @@
-.web {
-    background-color: #FFA13F;
-    height: 100vh; /* Full viewport height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white; /* Text color for better contrast */
-    font-family: Arial, sans-serif;
+/* Login.css */
+.sign-in--container {
+    margin-top: -11vh;
+    background-color: #4AB4A2;
+    height: 111vh;
+    padding-top: 20vh;
 }
 
-.card {
+.signin-card {
     background-color: white;
-    width: 700px; /* Adjust the width as needed */
-    height: 80vh; /* Adjust the height as needed */
+    width: 30%;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px; /* Add padding inside the card */
-    margin-top: 5vh;
+    padding: 2% 3%;
+    margin: auto;
 }
 
-.card h1 , .card b{
-    color: black;
-    margin-top: 20px;
+.signin-card img {
+    width: 80px
 }
-.card b a{
-    color: #FFA13F;
-    text-decoration: none;
+
+.signin-card h1 {
+    font-size: 1.5rem;
 }
-.card .form label {
+
+.signin-form label {
     color: black;
     text-align: left;
     width: calc(100% - 40px);
-    display: block; /* Ensure label takes full width */
+    display: block;
     margin: 15px 0 5px 0;
 }
 
-.form {
-    margin-top: 20px;
-    width: 100%; /* Ensure the form takes full width */
-}
-
-input {
-    width: calc(100% - 40px); /* Adjust width to account for padding */
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background-color: #F2F2F2;
-    border-color: #F2F2F2;
-}
-
-.btn-login {
-    margin-top: 50px;
-    width: 30vh;
-    border-radius: 30px;
-    color: white;
+.signin-btn {
+    width: 100%;
     background-color: #4AB4A2;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.signin-form b {
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+.screen--btm {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
