@@ -109,7 +109,7 @@ function Form2({ formData, setFormData }) {
      const handleAddIngredient = () => {
           setFormData({
               ...formData,
-              ingredients: [...formData.ingredients, { ingr_id: '', qty: '', unit: '' }]
+              ingredients: [...formData.ingredients, { ingr_id: '', qty: '', unit: 'กรัม' }]
           });
 
           console.log("formData FORM2: ", formData)
@@ -241,7 +241,7 @@ function Form2({ formData, setFormData }) {
                                    </label>
                                    <Select 
                                         className='form--select'
-                                        placeholder="เลือกหน่วย"
+                                        defaultValue="กรัม"
                                         value={ingredient.unit}
                                         onChange={(value) => handleIngredientChange(index, 'unit', value)}
                                         optionFilterProp="children"

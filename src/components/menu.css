@@ -8,15 +8,6 @@
 
 .menu-search {
      width: 82%;
-     box-shadow: 0 2px 2px 1px lightgrey;
-}
- 
-.menu-search input {
-     width: 95%;
-     margin-left: auto;
-     margin-right: auto;
-     padding: 10px;
-     border: none;
 }
  
 .menu-search .search-menu-btn {
@@ -35,7 +26,8 @@
      padding: 10px;
      border: none;
      color: white;
-     background-color: #4AB4A2;
+     border-radius: 10px;
+     background-color: #FFA13F;
      cursor: pointer;
 }
 
@@ -47,6 +39,7 @@
      margin-left: auto;
      margin-right: auto;
      margin-top: 20px;
+     justify-content: space-between;
 }
  
 .menu-card {
@@ -161,3 +154,31 @@
      font-size: 0.75rem;
 }
  
+.menu-search-wrapper {
+     position: relative;
+     display: flex;
+     align-items: center;
+     background-color: white;
+     border-radius: 10px;
+}
+
+.menu-search-icon {
+     position: absolute;
+     left: 20px;
+     color: #FFA13F;
+}
+
+.menu-search-input {
+     padding-left: 50px;
+     width: 100%;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     font-size: 14px;
+     padding-top: 16px;
+     padding-bottom: 16px;
+     border-radius: 10px;
+}
+
+.menu-search-input::placeholder {
+     color: #999;
+}

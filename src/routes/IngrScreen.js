@@ -17,6 +17,9 @@ function IngrScreen() {
 
      const [dropdownVisible, setDropdownVisible] = useState(false);
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
+     const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
+
+     const [searchIngr, setSearchIngr] = useState('');
 
      //set modal
      const [modal, setModal] = useState(false)
@@ -49,10 +52,17 @@ function IngrScreen() {
           fetchIngrData();
      }, []);
 
-     const filterIngrs = (selectedType === "ทั้งหมด") 
-          ? ingrs 
-          : ingrs.filter(item => item.ingr_type === selectedType);
+     const filterIngrs = ingrs.filter(ingr => 
+          (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
+          ingr.name.includes(searchIngr)
+     );
 
+     // การกรองตามลำดับการแสดง
+     const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
+          ? filterIngrs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
+          : selectedDisplay === "top_purine"
+          ? filterIngrs.sort((a, b) => b.purine - a.purine) // เรียงจากมากไปน้อย
+          : filterIngrs.sort((a, b) => a.purine - b.purine); // เรียงจากน้อยไปมาก
 
      const handleSave = async () => {
           if (!name || !purine || !uric) {
@@ -153,31 +163,64 @@ function IngrScreen() {
                               <Navbar />
                          </div>
                          <div className='main-content'>
-                              <div className='ingr-manage'>
-                                   <div className='ingr-search'>
-                                        <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
-                                        <button className='ingr-search--btn'>
-                                             <i className="fa-solid fa-magnifying-glass"></i>
-                                        </button>
+                              <div className='ingr-content'>
+                                   <h1 className='head-content'>วัตถุดิบ</h1>
+                                   <div className='ingr-manage'>
+                                        <div className='ingr-search'>
+                                             <div className='ingr-search-wrapper'>
+                                                  <i className="fa-solid fa-magnifying-glass ingr-search-icon"></i>
+                                                  <input 
+                                                       type='text'
+                                                       placeholder='ค้นหาวัตถุดิบที่นี่' 
+                                                       onChange={(e) => setSearchIngr(e.target.value)} 
+                                                       className='ingr-search-input' />
+                                             </div>
+                                        </div>
+
+                                        <button className='add-ingr-btn' onClick={toggleModal}>
+                                             <i className="fa-solid fa-plus"> เพิ่มวัตถุดิบ</i>
+                                        </button> 
                                    </div>
-                                   <button className='add-ingr-btn' onClick={toggleModal}>
-                                        <i className="fa-solid fa-plus"> เพิ่มวัตถุดิบของคุณ</i>
-                                   </button>
+                                   
                               </div>
 
-                              {/* Dropdown สำหรับคัดกรองประเภทวัตถุดิบ */}
-                              <Select 
-                                   className='ingr-filter--select'
-                                   value={selectedType} 
-                                   onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                   options={[
-                                        { value: "ทั้งหมด", label: "ทั้งหมด" },
-                                        { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
-                                        { value: "ผัก", label: "ผัก" },
-                                        { value: "ผลไม้", label: "ผลไม้" },
-                                        { value: "อื่น ๆ", label: "อื่น ๆ" },
-                                   ]}
-                              />
+                              <div className='filter'>
+                                   <div className='ingr-filter'>
+                                        <p className='head-filter'>ประเภทวัตถุดิบ:</p>
+                                        <Select 
+                                             className='ingr-filter--select'
+                                             value={selectedType} 
+                                             onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                             options={[
+                                                  { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                                  { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
+                                                  { value: "ผัก", label: "ผัก" },
+                                                  { value: "ผลไม้", label: "ผลไม้" },
+                                                  { value: "อื่น ๆ", label: "อื่น ๆ" },
+                                             ]}
+                                        />
+                                   </div>
+
+                                   <div className='ingr-filter'>
+                                        <p className='head-filter'>ลำดับการแสดง:</p>
+                                        <Select 
+                                             className='ingr-filter--select'
+                                             value={selectedDisplay} 
+                                             onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                             options={[
+                                                  { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
+                                                  { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
+                                                  { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
+                                             ]}
+                                        />
+                                   </div>
+
+                                   {/* <div className='reset-filter'>
+                                        <i class="fa-solid fa-rotate-right"></i>
+                                        <p>ล้าง</p>
+                                   </div> */}
+                              </div>
+                              
 
                               {modal && (
                                    <div className='modal'>
@@ -241,8 +284,8 @@ function IngrScreen() {
                                         </tr>
                                    </thead>
                                    <tbody>
-                                        {filterIngrs.length > 0 ? (
-                                             filterIngrs.map(item => renderItem(item))
+                                        {filterDisplay.length > 0 ? (
+                                             filterDisplay.map(item => renderItem(item))
                                         ) : (
                                              <tr>
                                                   <td colSpan="4">ยังไม่มีข้อมูลวัตถุดิบ</td>

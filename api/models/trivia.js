@@ -11,6 +11,9 @@ const triviaSchema = new mongoose.Schema({
      content: {
           type: String
      },
+     trivia_type: {
+          type: String
+     },
      isDeleted: {
           type: Boolean,
           default: false, // Set a default value if needed

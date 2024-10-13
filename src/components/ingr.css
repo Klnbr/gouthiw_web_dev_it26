@@ -1,46 +1,34 @@
+.ingr-content {
+     margin-left: auto;
+     margin-right: auto;
+     width: 80%;
+}
+
 .ingr-manage {
      display: flex;
-     width: 80%; 
+     margin-top: 30px;
      margin-left: auto;
      margin-right: auto;
      justify-content: space-between;
 }
 
 .ingr-search {
-     width: 82%;
-     box-shadow: 0 2px 2px 1px lightgrey;
-}
- 
-.ingr-search input {
-     width: 95%;
-     margin-left: auto;
-     margin-right: auto;
-     padding: 10px;
-     border: none;
-}
- 
-.ingr-search .ingr-search--btn {
-     width: 5%;
-     padding: 10px;
-     margin-left: auto;
-     margin-right: auto;
-     border: none;
-     background-color: #FFA13F;
-     color: white;
-     cursor: pointer;
+     width: 85%;
+     /* box-shadow: 0 2px 2px 1px lightgrey; */
 }
 
 .ingr-manage .add-ingr-btn {
-     width: 17%;
+     width: 14%;
      padding: 10px;
      border: none;
      color: white;
-     background-color: #4AB4A2;
+     border-radius: 10px;
+     background-color: #FFA13F;
      cursor: pointer;
 }
  
 .ingr-add--btn {
-     width: 20%;
+     width: 5%;
      padding: 10px;
      margin-left: auto;
      margin-right: auto;
@@ -129,13 +117,67 @@
      border-radius: 5px;
      color: #4AB4A2;
 }
+.filter {
+     display: flex;
+     margin-left: 10%;
+}
 
 .ingr-filter--select {
-     margin-left: 10%;
      display: flex;
      border-radius: 10px;
      cursor: pointer;
      position: relative;
+     width: 100%;
+}
+
+.ingr-filter {
+     border-radius: 10px;
      width: 20%;
      margin-top: 1%;
+     margin-right: 1%;
+}
+
+.head-filter {
+     margin-bottom: 2%;
+     font-size: 14px;
+}
+
+.ingr-search-wrapper {
+     position: relative;
+     display: flex;
+     align-items: center;
+     background-color: white;
+     border-radius: 10px;
+}
+
+.ingr-search-icon {
+     position: absolute;
+     left: 20px;
+     color: #FFA13F;
+}
+
+.ingr-search-input {
+     padding-left: 50px;
+     width: 100%;
+     border: 1px solid #ccc;
+     border-radius: 4px;
+     font-size: 14px;
+     padding-top: 16px;
+     padding-bottom: 16px;
+     border-radius: 10px;
+}
+
+.ingr-search-input::placeholder {
+     color: #999;
+}
+
+.reset-filter {
+     display: flex;
+     margin-top: 30px;
+     margin-bottom: 8px;
+     background-color: #7e7e7e;
+}
+
+.reset-filter p {
+     margin-left: 5px;
 }

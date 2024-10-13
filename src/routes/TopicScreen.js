@@ -6,6 +6,20 @@ import axios from 'axios';
 import { useAuth } from '../middleware/Auth';
 import '../../src/components/topic.css'
 
+const optionsDMY = {
+     timeZone: "Asia/Bangkok",
+     year: 'numeric',
+     month: 'long',
+     day: 'numeric',
+};
+
+const optionsTime = {
+     timeZone: "Asia/Bangkok",
+     hour: 'numeric',
+     minute: 'numeric',
+     second: 'numeric'
+};
+
 function TopicScreen() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
@@ -41,7 +55,7 @@ function TopicScreen() {
           } else if (timeDiff < 24) {
                return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
           } else {
-               return `${Math.floor(timeDiff / 24)} วันที่แล้ว`;
+               return postTime.toLocaleString("th-TH", optionsDMY);
           }
      };
 

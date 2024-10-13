@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import './CreateTrivia.css';
-import { Input } from "antd";
+import { Input, Select } from "antd";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../middleware/Auth';
 import TextArea from 'antd/es/input/TextArea';
 import { firebase } from '../../firebase'
+import SideBar from '../SideBar/SideBar';
+import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 
 function CreateTrivia() {
@@ -14,6 +16,7 @@ function CreateTrivia() {
     const [head, setHead] = useState("")
     const [image, setImage] = useState(null)
     const [content, setContent] = useState("")
+    const [type, setType] = useState("")
 
     const handleAddTriv = async () => {
         try {
@@ -70,6 +73,7 @@ function CreateTrivia() {
                 head: head,
                 image: imageUrl,
                 content: content,
+                trivia_type: type,
                 isDeleted: false
             };
         
@@ -106,45 +110,88 @@ function CreateTrivia() {
 
     return (
         <>
-            <div className='form-trivia'>
-                <h2>เพิ่มเกร็ดความรู้</h2>
-                <div className='form--input'>
-                        <label htmlFor='menu-name'>ภาพประกอบ</label>
-                        <div className='form--drop-pic' onClick={triggerFileInputClick}>
-                            {image ? (
-                                <img
-                                    className='form--pic'
-                                    alt={`url: ${image.name}`}
-                                    src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+            <div className='container'>
+                <SideBar />
+                <div className='content'>
+                    <div className='nav'>
+                        <Navbar />
+                    </div>
+                    <div className='main-content'>
+                        <div className='form-trivia'>
+                            <h1>เพิ่มเกร็ดความรู้</h1>
+                            <div className='trivia-flex'>
+                                <Input 
+                                    className='trivia-form--input' 
+                                    value={head} 
+                                    onChange={(e) => setHead(e.target.value)} 
+                                    placeholder='หัวข้อเกร็ดความรู้'
                                 />
-                            ) : (
-                                <i className="fa-regular fa-images"></i>
-                            )}
-                            <input 
-                                type="file"
-                                id="imageUpload"
-                                onChange={handleImageChange} />
+                                <Select 
+                                    className='trivia-form--select'
+                                    placeholder="เลือกประเภท"
+                                    // value={type}
+                                    onChange={(value) => setType(value)}
+                                    optionFilterProp="children"
+                                    options={[
+                                        {
+                                            value: "อาหาร",
+                                            label: "อาหาร"
+                                        },
+                                        {
+                                            value: "โรค",
+                                            label: "เกี่ยวกับโรค"
+                                        },
+                                        {
+                                            value: "ออกกำลังกาย",
+                                            label: "ออกกำลังกาย"
+                                        },
+                                        {
+                                            value: "อื่น ๆ",
+                                            label: "อื่น ๆ"
+                                        },
+                                    ]}
+                                />
+                            </div>
+
+                            <TextArea 
+                                className='form--inputbox' 
+                                rows='6' 
+                                value={content} 
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder='รายละเอียด' 
+                            />
+
+                            <div className='form--drop-pic' onClick={triggerFileInputClick}>
+                                {image ? (
+                                    <img
+                                        className='form--pic'
+                                        alt={`url: ${image.name}`}
+                                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                                    />
+                                ) : (
+                                    <div>
+                                        <i className="fa-regular fa-images"></i>
+                                        <p>ภาพประกอบ</p>
+                                    </div>
+                                )}
+                                <input 
+                                    type="file"
+                                    id="imageUpload"
+                                    onChange={handleImageChange} />
+                            </div>
                         </div>
-                    </div>
-                <div>
-                    <div className='form--input'>
-                        <label htmlFor='menu-type'>
-                            หัวข้อ
-                        </label>
-                        <Input className='form--inputbox' value={head} onChange={(e) => setHead(e.target.value)} />
-                    </div>
-                    <div className='form--input'>
-                        <label htmlFor='menu-type'>
-                            เนื้อหา
-                        </label>
-                        <TextArea className='form--inputbox' rows='6' value={content} onChange={(e) => setContent(e.target.value)} />
-                    </div>
+                        
+                        <div className='form-group form-bt'>
+                            <button 
+                                className='btn-cancel' 
+                                onClick={() => navigate('/trivias')}>ยกเลิก</button>
+                            <button 
+                                className='btn-addtv' 
+                                onClick={handleAddTrivId}>บันทึกข้อมูล</button>
+                        </div>
+                    </div>     
                 </div>
-                <div className='form-group form-bt'>
-                        <button type='button' className='btn-cancel' onClick={() => navigate('/trivias')}>ยกเลิก</button>
-                        <button type='button' className='btn-addtv' onClick={handleAddTrivId}>บันทึกข้อมูล</button>
-                    </div>
-              
+                
             </div>
         </>
     )

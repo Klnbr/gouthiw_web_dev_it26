@@ -131,7 +131,7 @@ function CreateMenu() {
                          <div className='main-content'>
                               <div className='step-container'>
                                    <div className='step-layout'>
-                                        <Steps current={current} items={items} labelPlacement="vertical" />
+                                        <Steps current={current} items={items} labelPlacement="vertical" className='color-step' />
                                    </div>
                                    <div className='step-content'>{steps[current].content}</div>
 

@@ -13,6 +13,7 @@ function HomeScreen() {
     const [menus, setMenus] = useState([]);
     const [ingrs, setIngrs] = useState([]);
     const [trivs, setTrivs] = useState([]);
+    const [topics, setTopics] = useState([]);
 
     console.log("menus: ", menus);
 
@@ -28,9 +29,13 @@ function HomeScreen() {
                 const res_trivs = await axios.get("http://localhost:5500/trivias", {
                     timeout: 10000,
                 });
+                const res_topics = await axios.get("http://localhost:5500/topics", {
+                    timeout: 10000,
+                });
                 setMenus(res_menus.data);
                 setIngrs(res_ingrs.data);
                 setTrivs(res_trivs.data);
+                setTopics(res_topics.data);
             } catch (error) {
                 console.log("Error fetching data", error.message);
             }
@@ -104,7 +109,7 @@ function HomeScreen() {
                             </div>
                             <p>กระทู้</p>
                             <p>ตอบคำถามจากผู้ป่วยเพื่อให้ผู้ป่วยได้รับคำแนะนำที่ถูกต้องจากผู้เชี่ยวชาญ</p>
-                            <h2>67</h2>
+                            <h2>{topics.length}</h2>
                         </div>
                     </div>
                 </div>

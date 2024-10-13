@@ -1,5 +1,5 @@
 import React from 'react'
-import './MenuDetailScreen.css'
+import '../components/Detail.css'
 import { useLocation } from 'react-router-dom';
 
 function MenuDetailScreen() {
@@ -7,32 +7,38 @@ function MenuDetailScreen() {
      const { menuData } = location.state || {};
      return (
           <>
-               <div className='container'>
-                    <div className='menu-detail-card'>
-                         <div className='menu-detail-content'>
+               <div>
+                    <div className='menu-detail-content'>
+                         <div className='card-left'>
                               <div className='menu-detail-flex'>
-                                   <h1>เมนู: {menuData.menuName}</h1>
-                                   <h2>{menuData.category}</h2>
+                                   <h1>{menuData.menuName}</h1>
+                                   <h2>ประเภท: {menuData.category}</h2>
                               </div>
                               <img src={menuData.image} alt='' />
                               <div className='menu-detail-flex'>
-                                   <p>พิวรีน: {menuData.purine}</p>
-                                   <p>กรดยูริก: {menuData.uric}</p>
+                                   <p>พิวรีน (โดยเฉลี่ย) :</p>
+                                   <p>{menuData.purine_total} มิลลิกรัม</p>
                               </div>
+                              <div className='menu-detail-flex'>
+                                   <p>กรดยูริก (โดยเฉลี่ย) :</p>
+                                   <p>{menuData.uric_total} มิลลิกรัม</p>
+                              </div>
+                         </div>
+                         <div className='card-right'>
                               <div>
-                                   <h2>วัตถุดิบ:</h2>
+                                   <h3>วัตถุดิบ:</h3>
                                    <table>
-                                        {menuData.ingredients.map((item, index) => (
+                                        {menuData.ingredients.map((ingr, index) => (
                                              <tr key={index}>
-                                                  <td>{item.ingrName}</td>
-                                                  <td>{item.ingrQty}</td>
-                                                  <td>{item.ingrUnit}</td>
+                                                  <td>{menuData.ingrDetails[index]?.name}</td>
+                                                  <td>{ingr.qty}</td>
+                                                  <td>{ingr.unit}</td>
                                              </tr>
                                         ))}  
                                    </table>
                               </div>
                               <div>
-                                   <h2>วิธีทำ:</h2>
+                                   <h3>วิธีทำ:</h3>
                                    {menuData.method.map((step, index) => (
                                         <div className='menu-detail-method' key={index}>
                                              <p>{index+1}.</p>

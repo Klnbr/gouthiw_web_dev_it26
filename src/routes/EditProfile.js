@@ -27,7 +27,7 @@ function EditProfile() {
                setEmail(nutrData.email);
                setPassword(nutrData.password);
           }
-     }, [nutrData]);
+     }, []);
 
      const handleUpdateProfile = async () => {
           if (!nutrData || !nutrData._id) {
@@ -76,66 +76,89 @@ function EditProfile() {
                          </div>
                          <div className="main-content">
                               <div className="profile-card">
+                                   
                                    {nutrData && (
                                         <>
-                                             <h1>Profile</h1>
-                                             <div className="profile-content">
-                                                  <div className="profile-image">
-                                                       <img
-                                                            src={nutrData.image_profile}
-                                                            alt={`${nutrData.firstname} ${nutrData.lastname}`}
-                                                            />
-                                                       <p>ชื่อ:</p>
-                                                       <input
-                                                            name="firstname"
-                                                            value={firstname}
-                                                            onChange={(e) => setFirstname(e.target.value)}
-                                                            />
-                                                       <p>นามสกุล:</p>
-                                                       <input
-                                                            name="lastname"
-                                                            value={lastname}
-                                                            onChange={(e) => setLastname(e.target.value)}
-                                                            />
+                                             <div className="profile-content--edit">
+                                                  <h1>แก้ไขข้อมูลส่วนตัว</h1>
+                                                  <div className="profile--edit">
+                                                       <div className="profile-image--edit">
+                                                            <img
+                                                                 src={nutrData.image_profile}
+                                                                 alt={`${nutrData.firstname} ${nutrData.lastname}`}
+                                                                 />
+                                                            <button className="profile-image--upload">
+                                                                 อัปโหลดรูปโปรไฟล์
+                                                            </button>
+                                                            <button className="profile-image--remove">
+                                                                 นำรูปโปรไฟล์ออก
+                                                            </button>
+                                                       </div>
+                                                       
+                                                       <hr className="hr-line"/>
                                                   </div>
 
                                                   <div className="profile-data">
-                                                       <p>เลขใบประกอบวิชาชีพ:</p>
-                                                       <input
-                                                            name="license_number"
-                                                            value={license_number}
-                                                            onChange={(e) => setLicense_number(e.target.value)}
-                                                            />
+                                                       <div>
+                                                            <p>ชื่อ:</p>
+                                                            <input
+                                                                 name="firstname"
+                                                                 value={firstname}
+                                                                 onChange={(e) => setFirstname(e.target.value)}
+                                                                 />
+                                                       </div>
+                                                       <div>
+                                                            <p>นามสกุล:</p>
+                                                            <input
+                                                                 name="lastname"
+                                                                 value={lastname}
+                                                                 onChange={(e) => setLastname(e.target.value)}
+                                                                 />
+                                                       </div>
+                                                       
+                                                  </div>
 
-                                                       <p>เบอร์โทรศัพท์:</p>
-                                                       <input
-                                                            name="tel"
-                                                            value={tel}
-                                                            onChange={(e) => setTel(e.target.value)}
-                                                            />
+                                                  <div className="profile-data">
+                                                       <div>
+                                                            <p>เลขใบประกอบวิชาชีพ:</p>
+                                                            <input
+                                                                 name="license_number"
+                                                                 value={license_number}
+                                                                 onChange={(e) => setLicense_number(e.target.value)}
+                                                                 />
+                                                       </div>
+                                                       <div>
+                                                            <p>เบอร์โทรศัพท์:</p>
+                                                            <input
+                                                                 name="tel"
+                                                                 value={tel}
+                                                                 onChange={(e) => setTel(e.target.value)}
+                                                                 />  
+                                                       </div>
+                                                  </div>
 
+                                                  <div className="profile-data">
+                                                  <div>
                                                        <p>อีเมล:</p>
                                                        <input
                                                             name="email"
                                                             value={email}
                                                             onChange={(e) => setEmail(e.target.value)}
                                                             />
-
+                                                  </div>
+                                                  <div>
                                                        <p>รหัสผ่าน (ถ้าต้องการเปลี่ยน):</p>
                                                        <input
                                                             name="password"
                                                             type="password"
                                                             value={password}
                                                             onChange={(e) => setPassword(e.target.value)}
-                                                            />
+                                                       />
                                                   </div>
+                                                       
+                                                  </div>
+                                                  <button className="edt-profile-btn" onClick={handleUpdateProfile}>บันทึกข้อมูล</button>
                                              </div>
-                                             <button
-                                                  className="edt-profile-btn"
-                                                  onClick={handleUpdateProfile}
-                                             >
-                                                  บันทึก
-                                             </button>
                                         </>
                                    )}
                               </div>

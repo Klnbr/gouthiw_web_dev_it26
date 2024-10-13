@@ -13,6 +13,8 @@ function MenuScreen() {
      const [menus, setMenus] = useState([]);
      const [menusUser, setMenusUser] = useState([]);
 
+     const [searchMenu, setSearchMenu] = useState('');
+
      const [dropdownVisible, setDropdownVisible] = useState(null);
 
      const toggleDropdown = (menuId) => {
@@ -44,8 +46,25 @@ function MenuScreen() {
           }
      }, [nutrData])
 
+     const filteredMenus = menus.filter(menu => 
+          menu.menuName.includes(searchMenu)
+     );
+
+     const handleItemPress = async (itemId) => {
+          try {
+               console.log("Item ID:", itemId);
+               const response = await axios.get(`http://localhost:5500/menu/${itemId}`);
+               const menuData = response.data;
+
+               console.log("Fetched Menu Data:", menuData);
+               navigate('/menu-detail', { state: { menuData } });
+          } catch (error) {
+               console.log('Error fetching menu data', error.message);
+          }
+     };
+
      const renderItem = (item) => (
-          <div className='menu-card' key={item._id}>
+          <div className='menu-card' onClick={() => handleItemPress(item._id)} key={item._id}>
                <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
                <h1>{item.menuName}</h1>
                <div className='layout'>
@@ -66,10 +85,14 @@ function MenuScreen() {
                          <div className='main-content'>
                               <div className='menu-manage'>
                                    <div className='menu-search'>
-                                        <input type='text' placeholder='ค้นหาอาหารที่นี่' />
-                                        <button className='search-menu-btn'>
-                                             <i className="fa-solid fa-magnifying-glass"></i>
-                                        </button>
+                                        <div className='menu-search-wrapper'>
+                                             <i className="fa-solid fa-magnifying-glass menu-search-icon"></i>
+                                             <input 
+                                                  type='text' 
+                                                  placeholder='ค้นหาเมนูอาหารที่นี่' 
+                                                  onChange={(e) => setSearchMenu(e.target.value)}
+                                                  className='menu-search-input' />
+                                        </div> 
                                    </div>
                                    <button className='add-menu-btn' onClick={() => navigate('/menu')}>
                                         <i className="fa-solid fa-plus"> เพิ่มอาหารของคุณ</i>
@@ -77,8 +100,8 @@ function MenuScreen() {
                               </div>
                               
                               <div className='menu-content'>                              
-                                   {menus.length > 0 ? (
-                                        menus.map(item => renderItem(item))
+                                   {filteredMenus.length > 0 ? (
+                                        filteredMenus.map(item => renderItem(item))
                                    ) : (
                                         <h2>ยังไม่มีข้อมูลอาหาร</h2>
                                    )}

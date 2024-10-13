@@ -273,13 +273,50 @@ app.post("/menus/:id", async (req, res) => {
 //ดึงเมนูมา 1 เมนู
 app.get("/menu/:id", async (req, res) => {
   try {
-    const { id } = req.params;
-    const menus = await myMenu.findById(id);
-    console.log(menus);
-    res.status(200).json(menus);
+      const { id } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ message: "Invalid topic ID" });
+      }
+    
+      const objectId = new mongoose.Types.ObjectId(id);
+
+      const menus = await myMenu.aggregate([
+          {
+              $match: { _id: objectId }
+          },
+          {
+              $lookup: {
+                  from: "ingrs",
+                  localField: "ingredients.ingr_id",
+                  foreignField: "_id",
+                  as: "ingrDetails"
+              }
+          },
+          {
+              $project: {
+                  menuName: 1,
+                  category: 1,
+                  method: 1,
+                  purine_total: 1,
+                  uric_total: 1,
+                  image: 1,
+                  createdAt: 1,
+                  "ingrDetails.name": 1,
+                  "ingrDetails.purine": 1,
+                  "ingrDetails.uric": 1,
+                  "ingrDetails.ingr_type": 1,
+                  "ingredients.ingr_id": 1,
+                  "ingredients.qty": 1,
+                  "ingredients.unit": 1
+              }
+          }
+      ]);
+      
+      res.status(200).json(menus[0]);
   } catch (error) {
-    console.log("error fetching all the menus", error);
-    res.status(500).json({ message: "Error fetching all the menus" });
+      console.log("error fetching all the menus", error);
+      res.status(500).json({ message: "Error fetching all the menus" });
   }
 });
 
@@ -450,6 +487,9 @@ app.get("/trivias/auth/:id", async (req, res) => {
           head: "$triviaDetails.head",
           image: "$triviaDetails.image",
           content: "$triviaDetails.content",
+          trivia_type: "$triviaDetails.trivia_type",
+          createdAt: "$triviaDetails.createdAt",
+          updatedAt: "$triviaDetails.updatedAt",
         },
       },
     ]);
@@ -486,12 +526,13 @@ app.post("/addTrivia", upload.single("image"), async (req, res) => {
 app.post("/trivia/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
-    const { head, image, content, isDeleted } = req.body;
+    const { head, image, content, trivia_type, isDeleted } = req.body;
 
     const addTrivia = new myTrivia({
       head,
       image,
       content,
+      trivia_type,
       isDeleted,
     });
 

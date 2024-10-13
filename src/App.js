@@ -16,6 +16,7 @@ import ProfileScreen from './routes/ProfileScreen';
 import EditProfile from './routes/EditProfile';
 import MenuDetailScreen from './routes/MenuDetailScreen';
 import AnswerTopic from './routes/AnswerTopic';
+import TriviaDetailScreen from './routes/TriviaDetailScreen';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path='/topics' element={<TopicScreen />} />
           <Route path='/menu' element={<Menu />} />
           <Route path='/trivia' element={<Trivia />} />
+          <Route path='/trivia-detail' element={<TriviaDetailScreen />} />
           <Route path='/ingredients' element={<IngrScreen />} />
           <Route path='/profile' element={<ProfileScreen />} />
           <Route path='/profile-edit' element={<EditProfile />} />
