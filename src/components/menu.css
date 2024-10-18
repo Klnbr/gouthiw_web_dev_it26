@@ -1,56 +1,144 @@
+.menu-content {
+     margin-left: auto;
+     margin-right: auto;
+     width: 95%;
+}
+
+.menu-content .display-flex .breadcumb {
+     color: black;
+     width: 12%;
+}
+
+.menu-content .display-flex .divider {
+     height: 1px;
+     width: 73%;
+     background-color: #ccc;
+     margin: 0 10px;
+}
+
 .menu-manage {
      display: flex;
-     width: 80%; 
+     margin-top: 30px;
      margin-left: auto;
      margin-right: auto;
      justify-content: space-between;
 }
 
 .menu-search {
-     width: 82%;
-}
- 
-.menu-search .search-menu-btn {
-     width: 5%;
-     padding: 10px;
-     margin-left: auto;
-     margin-right: auto;
-     border: none;
-     background-color: #FFA13F;
-     color: white;
-     cursor: pointer;
-}
- 
-.menu-manage .add-menu-btn {
-     width: 16%;
-     padding: 10px;
-     border: none;
-     color: white;
-     border-radius: 10px;
-     background-color: #FFA13F;
-     cursor: pointer;
+     width: 100%;
+     display: flex;
+     justify-content: space-between;
 }
 
-.menu-content {
+.add-menu-btn {
+     width: 14%;
+     padding: 10px;
+     border: none;
+     color: white;
+     box-shadow: 1px 1px 2px gray;
+     background-color: #4AB4A2;
+     cursor: pointer;
+     /* display: flex; */
+     align-items: center;
+}
+
+.menu-search-wrapper {
+     position: relative;
      display: flex;
-     flex-wrap: wrap;
-     width: 80%;
-     gap: 10px;
+     align-items: center;
+     background-color: white;
+     /* border-radius: 10px; */
+     width: 70%;
+     border: 1px solid #ccc;
+}
+
+.menu-select-wrapper {
+     position: relative;
+     display: flex;
+     align-items: center;
+     background-color: white;
+     /* border-radius: 10px; */
+     width: 15%;
+     border: 1px solid #ccc;
+     border-left: none;
+}
+
+.menu-search-icon {
+     position: absolute;
+     left: 20px;
+     color: #FFA13F;
+}
+
+.menu-search-input {
+     padding-left: 50px;
+     width: 100%;
+     border: none;
+     font-size: 14px;
+     padding-top: 16px;
+     padding-bottom: 16px;
+     border-radius: 10px;
+}
+
+.menu-search-input:focus {
+     outline: none;
+}
+
+.menu-search-select {
+     padding-left: 40px;
+     width: 100%;
+     border-radius: 4px;
+     font-size: 14px;
+     padding-top: 10px;
+     padding-bottom: 10px;
+     border-radius: 10px;
+}
+
+.ant-select-single {
+     height: 52px;
+}
+
+.menu-select-wrapper .ant-select-selector {
+     border: none !important;
+     box-shadow: none !important;
+     padding-left: 30px;
+     background-color: #4AB4A2;
+}
+
+.menu-select-wrapper .ant-select-selection-item {
+     padding-top: 16px;
+     padding-bottom: 16px;
+}
+
+.menu-search-input::placeholder {
+     color: #999;
+}
+
+
+
+
+
+
+
+
+
+.menu-render{
+     width: 95%;
+     display: flex;
      margin-left: auto;
      margin-right: auto;
      margin-top: 20px;
-     justify-content: space-between;
 }
- 
+
 .menu-card {
      position: relative;
-     width: 19%;
-     height: 35vh;
+     width: 18%;
+     height: 34vh;
      padding: 13px;
      text-align: right;
      box-shadow: 0 2px 2px 1px lightgrey;
      cursor: pointer;
      background-color: white;
+     margin-right: 1%;
 }
  
 .menu-card i {
@@ -141,44 +229,15 @@
  
 .purine {
      text-align: left;
-     background-color: #FFA13F;
+     background-color: #4AB4A2;
      padding: 5px;
      color: white;
      font-size: 0.75rem;
 }
  
 .uric {
-     background-color: #7F1BFF;
+     background-color: #FFA13F;
      padding: 5px;
      color: white;
      font-size: 0.75rem;
-}
- 
-.menu-search-wrapper {
-     position: relative;
-     display: flex;
-     align-items: center;
-     background-color: white;
-     border-radius: 10px;
-}
-
-.menu-search-icon {
-     position: absolute;
-     left: 20px;
-     color: #FFA13F;
-}
-
-.menu-search-input {
-     padding-left: 50px;
-     width: 100%;
-     border: 1px solid #ccc;
-     border-radius: 4px;
-     font-size: 14px;
-     padding-top: 16px;
-     padding-bottom: 16px;
-     border-radius: 10px;
-}
-
-.menu-search-input::placeholder {
-     color: #999;
 }

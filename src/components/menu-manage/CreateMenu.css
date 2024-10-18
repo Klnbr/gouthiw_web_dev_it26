@@ -53,6 +53,7 @@
      color: red;
      background-color: #ffffff;
      border: 1px solid red;
+     cursor: pointer;
 }
 
 .step-btn--prev {
@@ -68,6 +69,7 @@
      color: #19b46b;
      background-color: #ffffff;
      border: 1px solid #19b46b;
+     cursor: pointer;
 }
 
 .step-btn--next {
@@ -83,7 +85,28 @@
      color: #ffffff;
      background-color: #19b46b;
      border: 1px solid #19b46b;
+     cursor: pointer;
 }
+.ant-steps .ant-steps-item-process .ant-steps-item-icon {
+     background-color: #FFA13F;
+     border-color: #FFA13F;
+}
+
+.ant-steps-icon .anticon {
+     color: #FFA13F;
+     background-color: #ffe6cc;
+}
+
+.ant-steps .ant-steps-item-finish .ant-steps-item-icon {
+     background-color: #ffe6cc;
+     border-color: #ffe6cc;
+}
+
+.ant-steps .ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-tail::after {
+     background-color: #FFA13F;
+}
+
+/* .anticon anticon-check ant-steps-finish-icon */
 
 .form--input {
      width: 80%;

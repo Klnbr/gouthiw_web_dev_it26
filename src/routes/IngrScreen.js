@@ -15,11 +15,11 @@ function IngrScreen() {
      const [type, setType] = useState("");
      const [currentItemId, setCurrentItemId] = useState(null);
 
-     const [dropdownVisible, setDropdownVisible] = useState(false);
+     const [searchIngr, setSearchIngr] = useState('');
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
      const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
 
-     const [searchIngr, setSearchIngr] = useState('');
+     const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
      //set modal
      const [modal, setModal] = useState(false)
@@ -33,6 +33,11 @@ function IngrScreen() {
                setCurrentItemId(null);
           }
      }
+
+     const [dropdownVisible, setDropdownVisible] = useState(false);
+     const toggleDropdown = (ingrId) => {
+          setDropdownVisible(dropdownVisible === ingrId ? null : ingrId);
+     };
 
      if (modal) {
           document.body.classList.add('active-modal')
@@ -141,15 +146,23 @@ function IngrScreen() {
                <td>{item.name}</td>
                <td>{item.purine}</td>
                <td>{item.uric}</td>
+               <td>นาตยา พลพาหะ</td>
                <td>
-                    <div className='ingr-btn--layout'>
+                    <i className="fa-solid fa-ellipsis-vertical" onClick={() => toggleDropdown(item._id)}></i>
+                    {dropdownVisible === item._id && (
+                         <div className='dropdown-ingr-card'>
+                              <button onClick={() => handleItemPress(item._id)}>แก้ไข</button>
+                              <button onClick={() => handleItemDelete(item._id)}>ลบ</button>
+                         </div>
+                    )}
+                    {/* <div className='ingr-btn--layout'>
                          <div className='ingr-btn' onClick={() => handleItemPress(item._id)}>
                               <i className="fa-solid fa-pen"></i>
                          </div>
                          <div className='ingr-btn' onClick={() => handleItemDelete(item._id)}>
                               <i className="fa-solid fa-trash-can"></i>
                          </div>
-                    </div>
+                    </div> */}
                </td>
           </tr>
      );
@@ -164,6 +177,17 @@ function IngrScreen() {
                          </div>
                          <div className='main-content'>
                               <div className='ingr-content'>
+                                   <div className='display-flex'>
+                                        <p className='breadcumb'>
+                                             <span className='press-to-back'>หน้าหลัก</span>
+                                             <span className='gray-color'> &#62;</span> วัตถุดิบ
+                                        </p>
+                                        <div className='divider' />
+                                        <button className='add-ingr-btn' onClick={toggleModal}>
+                                             <i className="fa-solid fa-plus"> เพิ่มวัตถุดิบ</i>
+                                        </button> 
+                                   </div>
+                                   
                                    <h1 className='head-content'>วัตถุดิบ</h1>
                                    <div className='ingr-manage'>
                                         <div className='ingr-search'>
@@ -175,52 +199,39 @@ function IngrScreen() {
                                                        onChange={(e) => setSearchIngr(e.target.value)} 
                                                        className='ingr-search-input' />
                                              </div>
+
+                                             <div className='ingr-select-wrapper'>
+                                                  <i className="fa-solid fa-filter ingr-search-icon"></i>
+                                                  <Select 
+                                                       className='ingr-search-select'
+                                                       value={selectedType} 
+                                                       onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                       options={[
+                                                            { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                                            { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
+                                                            { value: "ผัก", label: "ผัก" },
+                                                            { value: "ผลไม้", label: "ผลไม้" },
+                                                            { value: "อื่น ๆ", label: "อื่น ๆ" },
+                                                       ]}
+                                                  />
+                                             </div>
+
+                                             <div className='ingr-select-wrapper'>
+                                                  <i className="fa-solid fa-sort ingr-search-icon"></i>
+                                                  <Select 
+                                                       className='ingr-search-select'
+                                                       value={selectedDisplay} 
+                                                       onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                       options={[
+                                                            { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
+                                                            { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
+                                                            { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
+                                                       ]}
+                                                  />
+                                             </div>
                                         </div>
-
-                                        <button className='add-ingr-btn' onClick={toggleModal}>
-                                             <i className="fa-solid fa-plus"> เพิ่มวัตถุดิบ</i>
-                                        </button> 
                                    </div>
-                                   
                               </div>
-
-                              <div className='filter'>
-                                   <div className='ingr-filter'>
-                                        <p className='head-filter'>ประเภทวัตถุดิบ:</p>
-                                        <Select 
-                                             className='ingr-filter--select'
-                                             value={selectedType} 
-                                             onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                             options={[
-                                                  { value: "ทั้งหมด", label: "ทั้งหมด" },
-                                                  { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
-                                                  { value: "ผัก", label: "ผัก" },
-                                                  { value: "ผลไม้", label: "ผลไม้" },
-                                                  { value: "อื่น ๆ", label: "อื่น ๆ" },
-                                             ]}
-                                        />
-                                   </div>
-
-                                   <div className='ingr-filter'>
-                                        <p className='head-filter'>ลำดับการแสดง:</p>
-                                        <Select 
-                                             className='ingr-filter--select'
-                                             value={selectedDisplay} 
-                                             onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                             options={[
-                                                  { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
-                                                  { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
-                                                  { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
-                                             ]}
-                                        />
-                                   </div>
-
-                                   {/* <div className='reset-filter'>
-                                        <i class="fa-solid fa-rotate-right"></i>
-                                        <p>ล้าง</p>
-                                   </div> */}
-                              </div>
-                              
 
                               {modal && (
                                    <div className='modal'>
@@ -274,12 +285,31 @@ function IngrScreen() {
                                    </div>
                               )}
 
+                              <div className='above-table'>
+                                   <p>รวมทั้งหมด {ingrs.length} วัตถุดิบ</p>
+                                   <div className='switch-btn'>
+                                        <button 
+                                             onClick={() => setActiveButton('ทั้งหมด')}
+                                             style={{
+                                                  backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
+                                                  color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
+                                             }}>ทั้งหมด</button>
+                                        <button 
+                                             onClick={() => setActiveButton('ของฉัน')}
+                                             style={{
+                                                  backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
+                                                  color: activeButton === 'ของฉัน' ? 'white' : 'black'
+                                             }}>ของฉัน</button>
+                                   </div>
+                              </div>
+                              
                               <table className='table-ingr'>
                                    <thead>
                                         <tr>
                                              <th>ชื่อวัตถุดิบ</th>
-                                             <th>ค่าพิวรีน (โดยเฉลี่ย)</th>
-                                             <th>ค่ากรดยูริก (โดยเฉลี่ย)</th>
+                                             <th>ค่าพิวรีน (มิลลิกรัม)</th>
+                                             <th>ค่ากรดยูริก (มิลลิกรัม)</th>
+                                             <th>เพิ่มโดย</th>
                                              <th></th>
                                         </tr>
                                    </thead>
@@ -288,7 +318,7 @@ function IngrScreen() {
                                              filterDisplay.map(item => renderItem(item))
                                         ) : (
                                              <tr>
-                                                  <td colSpan="4">ยังไม่มีข้อมูลวัตถุดิบ</td>
+                                                  <td colSpan="5">ยังไม่มีข้อมูลวัตถุดิบ</td>
                                              </tr>
                                         )}
                                    </tbody>

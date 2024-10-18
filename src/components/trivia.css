@@ -1,45 +1,150 @@
+.trivia-content {
+     margin-left: auto;
+     margin-right: auto;
+     width: 95%;
+}
+
+.trivia-content .display-flex .breadcumb {
+     color: black;
+     width: 13%;
+}
+
+.trivia-content .display-flex .divider {
+     height: 1px;
+     width: 73%;
+     background-color: #ccc;
+     margin: 0 10px;
+}
+
 .trivia-manage {
      display: flex;
-     width: 80%; 
+     margin-top: 30px;
      margin-left: auto;
      margin-right: auto;
      justify-content: space-between;
 }
    
 .trivia-search {
-     width: 83%;
-}
-   
-.trivia-search .search-trivia-btn {
-     width: 5%;
-     padding: 10px;
-     margin-left: auto;
-     margin-right: auto;
-     border: none;
-     background-color: #FFA13F;
-     color: white;
-     cursor: pointer;
-}
-   
-.trivia-manage .add-trivia-btn {
-     width: 16%;
-     padding: 10px;
-     border: none;
-     color: white;
-     border-radius: 10px;
-     background-color: #FFA13F;
-     cursor: pointer;
-}
-   
-.trivia-content {
+     width: 100%;
      display: flex;
-     flex-wrap: wrap;
-     width: 80%;
-     align-items: center;
-     margin-left: auto;
-     margin-right: auto;
      justify-content: space-between;
 }
+
+.add-trivia-btn {
+     width: 14%;
+     padding: 10px;
+     border: none;
+     color: white;
+     box-shadow: 1px 1px 2px gray;
+     background-color: #4AB4A2;
+     cursor: pointer;
+     /* display: flex; */
+     align-items: center;
+}
+   
+.trivia-search-wrapper {
+     position: relative;
+     display: flex;
+     align-items: center;
+     background-color: white;
+     /* border-radius: 10px; */
+     width: 70%;
+     border: 1px solid #ccc;
+}
+
+.trivia-select-wrapper {
+     position: relative;
+     display: flex;
+     align-items: center;
+     background-color: white;
+     /* border-radius: 10px; */
+     width: 15%;
+     border: 1px solid #ccc;
+     border-left: none;
+}
+
+.trivia-search-icon {
+     position: absolute;
+     left: 20px;
+     color: #FFA13F;
+}
+
+.trivia-search-input {
+     padding-left: 50px;
+     width: 100%;
+     border: none;
+     font-size: 14px;
+     padding-top: 16px;
+     padding-bottom: 16px;
+     border-radius: 10px;
+}
+
+.trivia-search-input:focus {
+     outline: none;
+}
+
+.trivia-search-select {
+     padding-left: 40px;
+     width: 100%;
+     border-radius: 4px;
+     font-size: 14px;
+     padding-top: 10px;
+     padding-bottom: 10px;
+     border-radius: 10px;
+}
+
+.ant-select-single {
+     height: 52px;
+}
+
+.trivia-select-wrapper .ant-select-selector {
+     border: none !important;
+     box-shadow: none !important;
+     padding-left: 30px;
+     background-color: #4AB4A2;
+}
+
+.trivia-select-wrapper .ant-select-selection-item {
+     padding-top: 16px;
+     padding-bottom: 16px;
+}
+
+.trivia-search-input::placeholder {
+     color: #999;
+}
+
+
+.above-table {
+     width: 95%;
+     margin-left: auto;
+     margin-right: auto;
+     display: flex;
+     justify-content: space-between;
+     margin-top: 30px;
+     align-items: flex-end;
+}
+
+.above-table p {
+     color: gray;
+     font-size: 14px;
+}
+
+.switch-btn button {
+     padding: 5px 20px;
+     border: none;
+     cursor: pointer;
+     box-shadow: 1px 1px 2px gray;
+}
+
+
+
+
+
+
+
+
+
+
    
 .trivia-card {
      display: flex;
@@ -127,35 +232,6 @@
      color: #4AB4A2;
 }
 
-.trivia-search-wrapper {
-     position: relative;
-     display: flex;
-     align-items: center;
-     background-color: white;
-     border-radius: 10px;
-}
-
-.trivia-search-icon {
-     position: absolute;
-     left: 20px;
-     color: #FFA13F;
-}
-
-.trivia-search-input {
-     padding-left: 50px;
-     width: 100%;
-     border: 1px solid #ccc;
-     border-radius: 4px;
-     font-size: 14px;
-     padding-top: 16px;
-     padding-bottom: 16px;
-     border-radius: 10px;
-}
-
-.trivia-search-input::placeholder {
-     color: #999;
-}
-
 .triv-filter {
      margin-left: 10%;
      border-radius: 10px;
@@ -170,4 +246,11 @@
      cursor: pointer;
      position: relative;
      width: 100%;
+}
+
+.trivia-render {
+     width: 95%;
+     margin-left: auto;
+     margin-right: auto;
+     margin-top: 20px;
 }

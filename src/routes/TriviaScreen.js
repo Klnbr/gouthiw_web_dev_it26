@@ -32,6 +32,9 @@ function TriviaScreen() {
 
      const [searchTriv, setSearchTriv] = useState('');
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
+     const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
+
+     const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
      useEffect(() => {
           const fetchTriviaData = async () => {
@@ -56,6 +59,18 @@ function TriviaScreen() {
           }
      }, [nutrData])
 
+     const filteredTrivs = trivs.filter(triv => 
+          (selectedType === "ทั้งหมด" || triv.trivia_type === selectedType) &&
+          triv.head.includes(searchTriv)
+     );
+
+     // การกรองตามลำดับการแสดง
+     const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
+          ? filteredTrivs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
+          : selectedDisplay === "last_update"
+          ? filteredTrivs.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // เรียงตามวันที่อัปเดตล่าสุด
+          : filteredTrivs;
+
      const handleItemPress = async (itemId) => {
           try {
                const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
@@ -67,11 +82,6 @@ function TriviaScreen() {
                console.log('Error fetching trivia data', error.message);
           }
      };
-
-     const filteredTrivs = trivs.filter(triv => 
-          (selectedType === "ทั้งหมด" || triv.trivia_type === selectedType) &&
-          triv.head.includes(searchTriv)
-     );
 
      const renderItem = (item) => (
           <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
@@ -109,58 +119,90 @@ function TriviaScreen() {
                               <Navbar />
                          </div>
                          <div className='main-content'>
-                              <div className='trivia-manage'>
-                                   <div className='trivia-search'>
-                                        <div className='trivia-search-wrapper'>
-                                             <i className="fa-solid fa-magnifying-glass trivia-search-icon"></i>
-                                             <input 
-                                                  type='text' 
-                                                  placeholder='ค้นหาเกร็ดความรู้ที่นี่' 
-                                                  onChange={(e) => setSearchTriv(e.target.value)}
-                                                  className='trivia-search-input' />
-                                        </div>
+                              <div className='trivia-content'>
+                                   <div className='display-flex'>
+                                        <p className='breadcumb'>
+                                             <span className='press-to-back'>หน้าหลัก</span>
+                                             <span className='gray-color'> &#62;</span> เกร็ดความรู้
+                                        </p>
+                                        <div className='divider' />
+                                        <button className='add-trivia-btn' onClick={() => navigate('/trivia')}>
+                                             <i className="fa-solid fa-plus"> เพิ่มเกร็ดความรู้</i>
+                                        </button> 
                                    </div>
 
-                                   <button className='add-trivia-btn' onClick={() => navigate('/trivia')}>
-                                        <i className="fa-solid fa-plus"> เพิ่มเกร็ดความรู้</i>
-                                   </button>
+                                   <h1 className='head-content'>เกร็ดความรู้</h1>
+                                   <div className='trivia-manage'>
+                                        <div className='trivia-search'>
+                                             <div className='trivia-search-wrapper'>
+                                                  <i className="fa-solid fa-magnifying-glass trivia-search-icon"></i>
+                                                  <input 
+                                                       type='text'
+                                                       placeholder='ค้นหาเกร็ดความรู้ที่นี่' 
+                                                       onChange={(e) => setSearchTriv(e.target.value)} 
+                                                       className='trivia-search-input' />
+                                             </div>
+
+                                             <div className='trivia-select-wrapper'>
+                                                  <i className="fa-solid fa-filter trivia-search-icon"></i>
+                                                  <Select 
+                                                       className='trivia-search-select'
+                                                       value={selectedType} 
+                                                       onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                       options={[
+                                                            { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                                            { value: "อาหาร", label: "อาหาร" },
+                                                            { value: "โรค", label: "เกี่ยวกับโรค" },
+                                                            { value: "ออกกำลังกาย", label: "ออกกำลังกาย" },
+                                                            { value: "อื่น ๆ", label: "อื่น ๆ" },
+                                                       ]}
+                                                  />
+                                             </div>
+
+                                             <div className='trivia-select-wrapper'>
+                                                  <i className="fa-solid fa-sort trivia-search-icon"></i>
+                                                  <Select 
+                                                       className='trivia-search-select'
+                                                       value={selectedDisplay} 
+                                                       onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                       options={[
+                                                            { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
+                                                            { value: "last_update", label: "อัปเดตล่าสุด" }
+                                                       ]}
+                                                  />
+                                             </div>
+                                        </div>
+                                   </div>
                               </div>
 
-                              <div className='triv-filter'>
-                                   <p className='head-filter'>ประเภทเกร็ดความรู้:</p>
-                                   <Select 
-                                        className='triv-filter--select'
-                                        value={selectedType} 
-                                        onChange={(value) => setSelectedType(value)}
-                                        options={[
-                                             { value: "ทั้งหมด", label: "ทั้งหมด" },
-                                             { value: "อาหาร", label: "อาหาร" },
-                                             { value: "โรค", label: "เกี่ยวกับโรค" },
-                                             { value: "ออกกำลังกาย", label: "ออกกำลังกาย" },
-                                             { value: "อื่น ๆ", label: "อื่น ๆ" },
-                                        ]}
-                                   />
+                              <div className='above-table'>
+                                   <p>รวมทั้งหมด {trivs.length} เกร็ดความรู้</p>
+                                   <div className='switch-btn'>
+                                        <button 
+                                             onClick={() => setActiveButton('ทั้งหมด')}
+                                             style={{
+                                                  backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
+                                                  color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
+                                             }}>ทั้งหมด</button>
+                                        <button 
+                                             onClick={() => setActiveButton('ของฉัน')}
+                                             style={{
+                                                  backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
+                                                  color: activeButton === 'ของฉัน' ? 'white' : 'black'
+                                             }}>ของฉัน</button>
+                                   </div>
                               </div>
-                              <div className='trivia-content'>
-                                   {/* {nutrData && (
-                                       <div className='btn-switch'>
-                                             <button 
-                                                  onClick={() => setShowUserTrivias(false)}
-                                                  className={!showUserTrivias ? 'btn-switch-clicked' : 'btn-switch-noclick'}>ทั้งหมด</button>
-                                             <button 
-                                                  onClick={() => setShowUserTrivias(true)}
-                                                  className={showUserTrivias ? 'btn-switch-clicked' : 'btn-switch-noclick'}>เกร็ดความรู้ของฉัน</button>
-                                        </div>
-                                   )} */}
-                                   {showUserTrivias ? (
-                                        trivsUser.length > 0 ? (
-                                             trivsUser.map(item => renderItem(item))
+                              
+                              <div className='trivia-render'>
+                                   {activeButton === 'ทั้งหมด' ? (
+                                        filterDisplay.length > 0 ? (
+                                             filterDisplay.map(item => renderItem(item))
                                         ) : (
                                              <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
                                         )
                                    ) : (
-                                        filteredTrivs.length > 0 ? (
-                                             filteredTrivs.map(item => renderItem(item))
+                                        trivsUser.length > 0 ? (
+                                             trivsUser.map(item => renderItem(item))
                                         ) : (
                                              <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
                                         )

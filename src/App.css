@@ -34,6 +34,20 @@
     position: relative;
 }
 
+.display-flex {
+    display: flex;
+    align-items: center;
+}
+
+.press-to-back {
+    color: gray;
+    cursor: pointer;
+}
+
+.gray-color {
+    color: gray;
+}
+
 .image-home {
     height: 60vh;
     width: 100%;
@@ -106,6 +120,7 @@
 
 .head-content {
     font-weight: 500;
+    margin-top: 4%;
 }
 
 .home-text-description {

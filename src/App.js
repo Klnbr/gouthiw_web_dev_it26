@@ -17,6 +17,7 @@ import EditProfile from './routes/EditProfile';
 import MenuDetailScreen from './routes/MenuDetailScreen';
 import AnswerTopic from './routes/AnswerTopic';
 import TriviaDetailScreen from './routes/TriviaDetailScreen';
+import Jodit from './routes/Jodit';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path='/profile' element={<ProfileScreen />} />
           <Route path='/profile-edit' element={<EditProfile />} />
           <Route path='/topic-answer' element={<AnswerTopic />} />
+          <Route path='/jodit' element={<Jodit />} />
 
           <Route path='/signup' element={<RegisterScreen />} />
           <Route path='/signin' element={<LoginScreen />} />
