@@ -15,7 +15,6 @@
     margin-bottom: 20px;
 }
 
-
 .form-trivia Input,
 .form-trivia TextArea {
     margin-bottom: 20px;
@@ -70,6 +69,7 @@
     cursor: pointer;
     position: relative;
     height: 60vh;
+    margin-top: 20px;
 }
 
 .form-trivia .form--drop-pic img {
@@ -103,4 +103,8 @@
 
 .trivia-form--select {
     width: 20%;
+}
+
+.form--wysiwyg {
+    height: 300px;
 }

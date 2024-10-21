@@ -10,6 +10,7 @@ function EditProfile() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
 
+     const [user, setUser] = useState("");
      const [firstname, setFirstname] = useState("");
      const [lastname, setLastname] = useState("");
      const [license_number, setLicense_number] = useState("");
@@ -18,6 +19,15 @@ function EditProfile() {
      const [password, setPassword] = useState("");
 
      useEffect(() => {
+          const fetchUserData = async () => {
+               try {
+                    const response = await axios.get("http://localhost:5500/users", { timeout: 10000 });
+                    setUser(response.data);
+               } catch (error) {
+                    console.log("Error fetching menus data", error.message)
+               }
+          }
+
           if (nutrData) {
                console.log("nutrData: ", nutrData);
                setFirstname(nutrData.firstname);
@@ -27,6 +37,8 @@ function EditProfile() {
                setEmail(nutrData.email);
                setPassword(nutrData.password);
           }
+
+          fetchUserData()
      }, []);
 
      const handleUpdateProfile = async () => {
@@ -48,8 +60,7 @@ function EditProfile() {
                console.log("Updated User Data:", updateData);
           
                const response = await axios.put(
-                    `http://localhost:5500/user/${nutrData._id}`,
-                    updateData
+                    `http://localhost:5500/user/${nutrData._id}`, updateData
                );
           
                console.log("User updated", response.data);

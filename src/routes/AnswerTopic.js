@@ -80,11 +80,8 @@ function AnswerTopic() {
      return (
           <>
                <div className='container'>
-                    <SideBar />
-                    <div className='content'>
-                         <div className='nav'>
-                              <Navbar />
-                         </div>
+                    <Navbar />
+                    <div className='content-no-sidebar'>
                          <div className='main-content'>
                               <div className='topic-detail-card'>
                                    <div className='topic-detail-content'>

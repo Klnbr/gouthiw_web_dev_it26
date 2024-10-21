@@ -12,12 +12,14 @@
      box-shadow: 0 2px 2px 1px lightgrey;
      padding: 20px;
      width: 35%;
+     background-color: white;
 }
 
 .card-right {
      box-shadow: 0 2px 2px 1px lightgrey;
      padding: 20px 40px;
      width: 63%;
+     background-color: white;
 }
 
 .menu-detail-content img {

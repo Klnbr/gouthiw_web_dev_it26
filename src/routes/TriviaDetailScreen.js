@@ -48,9 +48,7 @@ function TriviaDetailScreen() {
                         <p>อัพเดตล่าสุด {calculateTimeAgo(triviaData.updatedAt)}</p>
                     </div>
                     <hr className='hr-line'/>
-                    <div className='triv-info'>
-                        {triviaData.content}
-                    </div>
+                    <div className='triv-info' dangerouslySetInnerHTML={{ __html: triviaData.content }}/>
                 </div>
             </div>
         </>

@@ -90,102 +90,103 @@ function MenuScreen() {
      return (
           <>
                <div className='container'>
-                    <SideBar />
-                    <div className='content'>
-                         <div className='nav'>
-                              <Navbar />
-                         </div>
-                         <div className='main-content'>
-                              <div className='menu-content'>
-                                   <div className='display-flex'>
-                                        <p className='breadcumb'>
-                                             <span className='press-to-back'>หน้าหลัก</span>
-                                             <span className='gray-color'> &#62;</span> เมนูอาหาร
-                                        </p>
-                                        <div className='divider' />
-                                        <button className='add-menu-btn' onClick={() => navigate('/menu')}>
-                                             <i className="fa-solid fa-plus"> เพิ่มอาหารของคุณ</i>
-                                        </button> 
-                                   </div>
-                                   
-                                   <h1 className='head-content'>เมนูอาหาร</h1>
-                                   <div className='menu-manage'>
-                                        <div className='menu-search'>
-                                             <div className='menu-search-wrapper'>
-                                                  <i className="fa-solid fa-magnifying-glass menu-search-icon"></i>
-                                                  <input 
-                                                       type='text'
-                                                       placeholder='ค้นหาวัตถุดิบที่นี่' 
-                                                       onChange={(e) => setSearchMenu(e.target.value)} 
-                                                       className='menu-search-input' />
-                                             </div>
+                    <Navbar />
+                    <div className='sidebar-content-wrapper'>
+                         <SideBar/>
+                         <div className='content'>
+                              <div className='main-content'>
+                                   <div className='menu-content'>
+                                        <div className='display-flex'>
+                                             <p className='breadcumb'>
+                                                  <span className='press-to-back'>หน้าหลัก</span>
+                                                  <span className='gray-color'> &#62;</span> เมนูอาหาร
+                                             </p>
+                                             <div className='divider' />
+                                             <button className='add-menu-btn' onClick={() => navigate('/menu')}>
+                                                  <i className="fa-solid fa-plus"> เพิ่มอาหารของคุณ</i>
+                                             </button> 
+                                        </div>
+                                        
+                                        <h1 className='head-content'>เมนูอาหาร</h1>
+                                        <div className='menu-manage'>
+                                             <div className='menu-search'>
+                                                  <div className='menu-search-wrapper'>
+                                                       <i className="fa-solid fa-magnifying-glass menu-search-icon"></i>
+                                                       <input 
+                                                            type='text'
+                                                            placeholder='ค้นหาวัตถุดิบที่นี่' 
+                                                            onChange={(e) => setSearchMenu(e.target.value)} 
+                                                            className='menu-search-input' />
+                                                  </div>
 
-                                             <div className='menu-select-wrapper'>
-                                                  <i className="fa-solid fa-filter menu-search-icon"></i>
-                                                  <Select 
-                                                       className='menu-search-select'
-                                                       value={selectedType} 
-                                                       onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                                       options={[
-                                                            { value: "ทั้งหมด", label: "ทั้งหมด" },
-                                                            { value: "ผัด", label: "ผัด" },
-                                                            { value: "แกง", label: "แกง" },
-                                                            { value: "ทอด", label: "ทอด" },
-                                                            { value: "ตุ๋น", label: "ตุ๋น" },
-                                                       ]}
-                                                  />
-                                             </div>
+                                                  <div className='menu-select-wrapper'>
+                                                       <i className="fa-solid fa-filter menu-search-icon"></i>
+                                                       <Select 
+                                                            className='menu-search-select'
+                                                            value={selectedType} 
+                                                            onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                            options={[
+                                                                 { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                                                 { value: "ผัด", label: "ผัด" },
+                                                                 { value: "แกง", label: "แกง" },
+                                                                 { value: "ทอด", label: "ทอด" },
+                                                                 { value: "ตุ๋น", label: "ตุ๋น" },
+                                                            ]}
+                                                       />
+                                                  </div>
 
-                                             <div className='menu-select-wrapper'>
-                                                  <i className="fa-solid fa-sort menu-search-icon"></i>
-                                                  <Select 
-                                                       className='menu-search-select'
-                                                       value={selectedDisplay} 
-                                                       onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                                       options={[
-                                                            { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
-                                                            { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
-                                                            { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
-                                                       ]}
-                                                  />
+                                                  <div className='menu-select-wrapper'>
+                                                       <i className="fa-solid fa-sort menu-search-icon"></i>
+                                                       <Select 
+                                                            className='menu-search-select'
+                                                            value={selectedDisplay} 
+                                                            onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                            options={[
+                                                                 { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
+                                                                 { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
+                                                                 { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
+                                                            ]}
+                                                       />
+                                                  </div>
                                              </div>
                                         </div>
                                    </div>
-                              </div>
-                              <div className='above-table'>
-                                   <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? menus.length : menusUser.length} เมนูอาหาร</p>
-                                   <div className='switch-btn'>
-                                        <button 
-                                             onClick={() => setActiveButton('ทั้งหมด')}
-                                             style={{
-                                                  backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
-                                                  color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
-                    }                        }>ทั้งหมด</button>
-                                        <button 
-                                             onClick={() => {setActiveButton('ของฉัน')}}
-                                             style={{
-                                                  backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
-                                                  color: activeButton === 'ของฉัน' ? 'white' : 'black'
-                                             }}>ของฉัน</button>
+                                   <div className='above-table'>
+                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? menus.length : menusUser.length} เมนูอาหาร</p>
+                                        <div className='switch-btn'>
+                                             <button 
+                                                  onClick={() => setActiveButton('ทั้งหมด')}
+                                                  style={{
+                                                       backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
+                                                       color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
+                         }                        }>ทั้งหมด</button>
+                                             <button 
+                                                  onClick={() => {setActiveButton('ของฉัน')}}
+                                                  style={{
+                                                       backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
+                                                       color: activeButton === 'ของฉัน' ? 'white' : 'black'
+                                                  }}>ของฉัน</button>
+                                        </div>
+                                   </div>
+                                   <div className='menu-render'>
+                                        {activeButton === 'ทั้งหมด' ? (
+                                             filterDisplay.length > 0 ? (
+                                                  filterDisplay.map(item => renderItem(item))
+                                             ) : (
+                                                  <h2>ยังไม่มีข้อมูลอาหาร</h2>
+                                             )
+                                        ) : (
+                                             menusUser.length > 0 ? (
+                                                  menusUser.map(item => renderItem(item))
+                                             ) : (
+                                                  <h2>ยังไม่มีข้อมูลอาหารของคุณ</h2>
+                                             )
+                                        )}
                                    </div>
                               </div>
-                              <div className='menu-render'>
-                                   {activeButton === 'ทั้งหมด' ? (
-                                        filterDisplay.length > 0 ? (
-                                             filterDisplay.map(item => renderItem(item))
-                                        ) : (
-                                             <h2>ยังไม่มีข้อมูลอาหาร</h2>
-                                        )
-                                   ) : (
-                                        menusUser.length > 0 ? (
-                                             menusUser.map(item => renderItem(item))
-                                        ) : (
-                                             <h2>ยังไม่มีข้อมูลอาหารของคุณ</h2>
-                                        )
-                                   )}
-                              </div>
-                         </div>
+                         </div>                         
                     </div>
+                    
                </div>
           </>
      )

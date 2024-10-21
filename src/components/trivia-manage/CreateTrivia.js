@@ -8,6 +8,7 @@ import { firebase } from '../../firebase'
 import SideBar from '../SideBar/SideBar';
 import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
+import Editor from 'react-simple-wysiwyg';
 
 function CreateTrivia() {
     const navigate = useNavigate();
@@ -111,11 +112,8 @@ function CreateTrivia() {
     return (
         <>
             <div className='container'>
-                <SideBar />
-                <div className='content'>
-                    <div className='nav'>
-                        <Navbar />
-                    </div>
+                <Navbar />
+                <div className='content-no-sidebar'>
                     <div className='main-content'>
                         <div className='form-trivia'>
                             <h1>เพิ่มเกร็ดความรู้</h1>
@@ -152,14 +150,19 @@ function CreateTrivia() {
                                     ]}
                                 />
                             </div>
-
-                            <TextArea 
+                            
+                            <Editor
+                                value={content}
+                                onChange={(e) => setContent(e.target.value)}
+                                placeholder='รายละเอียด'
+                                />
+                            {/* <TextArea 
                                 className='form--inputbox' 
                                 rows='6' 
                                 value={content} 
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder='รายละเอียด' 
-                            />
+                            /> */}
 
                             <div className='form--drop-pic' onClick={triggerFileInputClick}>
                                 {image ? (
