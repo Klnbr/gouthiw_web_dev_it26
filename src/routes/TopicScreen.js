@@ -94,28 +94,28 @@ function TopicScreen() {
      return (
           <>
                <div className='container'>
-                    <SideBar />
-                    <div className='content'>
-                         <div className='nav'>
-                              <Navbar />
-                         </div>
-                         <div className='main-content'>
-                              <div className='topic-option'>
-                                   <i className="fa-solid fa-angle-down"></i>
-                                   <p>เรียงจากล่าสุด</p>
-                              </div>
-                              {/* แสดงข้อความขณะโหลดหรือเมื่อมี error */}
-                              {loading ? (
-                                   <h2>กำลังโหลด...</h2>
-                              ) : error ? (
-                                   <h2>{error}</h2>
-                              ) : (
-                                   topics.length > 0 ? (
-                                        topics.map(item => renderItem(item))
+                    <Navbar />
+                    <div className='sidebar-content-wrapper'>
+                         <SideBar/>
+                         <div className='content'>
+                              <div className='main-content'>
+                                   <div className='topic-option'>
+                                        <i className="fa-solid fa-angle-down"></i>
+                                        <p>เรียงจากล่าสุด</p>
+                                   </div>
+                                   {/* แสดงข้อความขณะโหลดหรือเมื่อมี error */}
+                                   {loading ? (
+                                        <h2>กำลังโหลด...</h2>
+                                   ) : error ? (
+                                        <h2>{error}</h2>
                                    ) : (
-                                        <h2>ยังไม่มีกระทู้</h2>
-                                   )
-                              )}   
+                                        topics.length > 0 ? (
+                                             topics.map(item => renderItem(item))
+                                        ) : (
+                                             <h2>ยังไม่มีกระทู้</h2>
+                                        )
+                                   )}   
+                              </div>
                          </div>
                     </div>
                </div>

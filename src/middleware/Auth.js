@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -7,13 +8,13 @@ export const useAuth = () => useContext(AuthContext);
 
 function AuthProvider({ children }) {
      const navigate = useNavigate();
-
      const [token, setToken] = useState(null);
      const [nutrData, setNutrData] = useState(null);
      const [isAuthenticated, setIsAuthenticated] = useState(false);
      const storedData = JSON.parse(localStorage.getItem('nutr_data'))
 
      useEffect(() => {
+         
           if (storedData) {
                const { nutrToken, nutr } = storedData;
                setToken(nutrToken);

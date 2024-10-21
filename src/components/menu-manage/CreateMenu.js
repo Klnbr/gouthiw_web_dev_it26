@@ -123,11 +123,8 @@ function CreateMenu() {
      return (
           <>
                <div className='container'>
-                    <SideBar />
-                    <div className='content'>
-                         <div className='nav'>
-                              <Navbar />
-                         </div>
+                    <Navbar />
+                    <div className='content-no-sidebar'>
                          <div className='main-content'>
                               <div className='step-container'>
                                    <div className='step-layout'>

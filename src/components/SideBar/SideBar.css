@@ -1,17 +1,20 @@
 .side-bar--container {
      background-color: #4AB4A2;
      min-width: 248px;
-     position: relative;
+     height: 100vh; 
+     /* position: relative; */
+     position: fixed; /* Fix the sidebar position */
+     top: 0; /* Align to the top */
+     left: 0; /* Align to the left */
+     z-index: 1000; /* Make sure it's above other elements */
 }
 
 .side-bar--content {
      display: flex;
      flex-direction: column;
-     align-items: center;
-     position: absolute;
-     top: 52px;
-     left: 20px;
-     gap: 16px;
+     /* align-items: center; */
+     /* position: absolute; */
+     /* top: 10px; */
 }
 
 .side-bar--logo {
@@ -24,7 +27,7 @@
      flex-direction: column;
      gap: 8px;
      position: absolute;
-     top: 200px;
+     top: 60px;
 }
 
 .side-bar--btm {
@@ -78,8 +81,8 @@
 
 .side-bar--item i {
      position: absolute;
-     top: 18px;
-     left: 18px;
+     padding-top: 18px;
+     padding-left: 18px;
      width: 232px;
      height: 56px;
      border-top-right-radius: 32px;
@@ -118,12 +121,71 @@
      color: white;
 }
 
-@media screen and (max-width: 850px) {
-     .Nav-container {
-          z-index: 99;
+.collapsed .side-bar--menu {
+     display: none;
+}
+ 
+.menu-icons {
+     display: none;
+}
+ 
+.hidden {
+     display: none;
+}
+
+@media screen and (max-width: 1024px) {
+     .side-bar--container {
+          min-width: 180px;
      }
 
-     .Nav-menu {
+     .side-bar--focus,
+     .side-bar--item i,
+     .side-bar--links {
+          width: 160px;
+     }
+}
+ 
+@media screen and (max-width: 850px) {
+     .side-bar--container {
+          background-color: #4AB4A2;
+          min-width: 100%;
+          position: relative;
+          height: 50px;
+     }
+
+     .side-bar--content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          /* position: absolute; */
+          top: 0;
+          left: 0;
+          gap: 8px;
+          width: 100%;
+          padding: 10px 0;
+     }
+
+     .side-bar--menu {
+          display: flex;
+          flex-direction: row;
+          gap: 8px;
+          position: relative;
+          top: 0;
+          width: 100%;
+          justify-content: center;
+     }
+
+     .side-bar--btm,
+     .side-bar--logo {
+          display: none;
+     }
+
+     .menu-icons {
+          display: block; /* Make the toggle icon visible on mobile */
+          cursor: pointer;
+     }
+
+     /* .Nav-menu {
           display: flex;
           flex-direction: column;
           justify-content: flex-start;
@@ -188,5 +250,5 @@
      .menu-icons i {
           font-size: 1.2rem;
           color: black;
-     }
+     } */
 }

@@ -165,6 +165,22 @@ app.get("/users", async (req, res) => {
   }
 });
 
+app.get("/user/:userId", (req,res)=>{
+  try{
+    const loggedInuser = req.param.userId;
+
+    myUser.findOne({_id:loggedInuser})
+    .then((user) => {
+      if (!user){
+        return res.status(404).json({message:"User not found"});
+      }
+      res.status(200).json(user);
+    })
+  }catch (error){
+    res.status(500).json({messagge:"Error getting user"})
+  }
+});
+
 //ดึงเมนูมาแสดง
 app.get("/menus", async (req, res) => {
   try {
@@ -375,8 +391,9 @@ app.get("/ingrs", async (req, res) => {
 });
 
 //เพิ่มวัตถุดิบ
-app.post("/addIngr", async (req, res) => {
+app.post("/ingr/:id", async (req, res) => {
   try {
+    const { id } = req.params;
     const { name, purine, uric, ingr_type, isDeleted } = req.body;
 
     const newIngre = new myIngr({
@@ -388,6 +405,10 @@ app.post("/addIngr", async (req, res) => {
     });
 
     await newIngre.save();
+
+    await myNutr.findByIdAndUpdate(id, {
+      $push: { ingr_owner: { ingr_id: newIngre._id } },
+    });
 
     res
       .status(201)
@@ -500,28 +521,6 @@ app.get("/trivias/auth/:id", async (req, res) => {
   }
 });
 
-//เพิ่มเกร็ดความรู้
-app.post("/addTrivia", upload.single("image"), async (req, res) => {
-  try {
-    const { head, image, content, isDeleted } = req.body;
-
-    const addTrivia = new myTrivia({
-      head,
-      image,
-      content,
-      isDeleted,
-    });
-    await addTrivia.save();
-
-    res
-      .status(201)
-      .json({ message: "Trivia created successfully", trivia: addTrivia });
-  } catch (error) {
-    console.log("error creating the trivia", error);
-    res.status(500).json({ message: "Error creating the trivia" });
-  }
-});
-
 //เพิ่มเกร็ดความรู้ (Auth)
 app.post("/trivia/:id", upload.single("image"), async (req, res) => {
   try {
@@ -603,7 +602,9 @@ app.put("/user/:id", async (req, res) => {
      try {
        const { id } = req.params;
        const { firstname, lastname, license_number, tel, email, password } = req.body;
-   
+      
+       console.log("Received ID:", id);
+     
        // ตรวจสอบข้อมูล
        console.log("Update Data:", { firstname, lastname, license_number, tel, email, password });
    
@@ -618,7 +619,7 @@ app.put("/user/:id", async (req, res) => {
        };
    
        // อัปเดตข้อมูลในฐานข้อมูล
-       const updatedUser = await myUser.findByIdAndUpdate(id, updateData, { new: true });
+       const updatedUser = await myNutr.findByIdAndUpdate(id, {firstname, lastname, license_number, tel, email, password});
    
        // ตรวจสอบว่าผู้ใช้ถูกอัปเดต
        if (!updatedUser) {

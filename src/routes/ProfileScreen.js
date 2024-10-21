@@ -17,6 +17,7 @@ function ProfileScreen() {
     const toggleDropdown = (menuId) => {
         setDropdownVisible(dropdownVisible === menuId ? null : menuId);
     };
+    const [user, setUser] = useState("");
 
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
@@ -26,6 +27,15 @@ function ProfileScreen() {
     const [password, setPassword] = useState("");
 
     useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                 const response = await axios.get("http://localhost:5500/users", { timeout: 10000 });
+                 setUser(response.data);
+            } catch (error) {
+                 console.log("Error fetching menus data", error.message)
+            }
+       }
+
         const fetchMenuDataUser = async () => {
              try {
                   const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
@@ -37,6 +47,7 @@ function ProfileScreen() {
              }
         }
         fetchMenuDataUser();
+        fetchUserData();
     }, [nutrData])
 
     const renderItem = (item) => (
@@ -83,11 +94,11 @@ function ProfileScreen() {
     return (
         <>
             <div className="container">
-            <SideBar />
-                <div className="content">
-                    <div className="nav">
-                        <Navbar />
-                    </div>
+                <Navbar />
+                <div className="content-no-sidebar">
+                    <button className="btn-goback" onClick={() => navigate(-1)}>
+                        <i className="fa-solid fa-angle-left"></i>
+                    </button>
                     <div className="profile-image-background">
                         <img
                             src={nutrData.image_background}

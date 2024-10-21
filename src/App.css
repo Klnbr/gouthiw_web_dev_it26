@@ -23,11 +23,21 @@
     margin-bottom: 5px;
 }
 
-.container {
+/* .container {
     display: flex;
     flex-direction: row;
     min-height: 100vh;
     width: 100%;
+} */
+
+.container {
+    display: flex;
+    flex-direction: column; /* ทำให้ Navbar อยู่บนสุดเสมอ */
+}
+
+.sidebar-content-wrapper {
+    display: flex;
+    flex-direction: row; /* Sidebar และ Content จะอยู่ในแนวนอนในหน้าจอใหญ่ */
 }
 
 .head-content--home {
@@ -107,8 +117,18 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 20px;
+    /* gap: 20px; */
     background-color: #efefef;
+    margin-left: 248px;
+    margin-top: 60px;
+}
+
+.content-no-sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #efefef;
+    margin-top: 60px;
 }
 
 .main-content {
@@ -239,11 +259,6 @@
     margin-right: 30px;
 }
 
-/* .content {
-  width: 100%;
-  background-image: url("./images/homebanner.jpg");
-} */
-
 .banner-img img {
     height: 400px;
     width: 100%;
@@ -259,4 +274,32 @@
 .hr-line-80 {
     width: 80%;
     margin: 14px auto;
+}
+
+@media screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+
+    .content {
+        width: 100%; /* ขยาย content ให้เต็มพื้นที่หน้าจอ */
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    .content {
+        width: 100%; /* ขยาย content ให้เต็มพื้นที่หน้าจอ */
+    }
 }

@@ -43,6 +43,11 @@ const nutrSchema = new mongoose.Schema({
                triv_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Trivia' }
           }
      ],
+     ingr_owner: [
+          {
+               ingr_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingr' }
+          }
+     ],
      isDeleted: {
           type: Boolean,
           default: false

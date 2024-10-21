@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react'
 import './Navbar.css'
 import { useAuth } from '../../middleware/Auth';
 import { Link, useNavigate } from 'react-router-dom';
+import LogoGouthiw from '../../images/gouthiw-logo.png';
 
 function Navbar() {
      const navigate = useNavigate();
@@ -19,6 +20,9 @@ function Navbar() {
 
      return (
           <div className='nav--container'>
+               <div className='nav--logo'>
+                    <img alt='' src={LogoGouthiw} />
+               </div>
                {nutrData ? (
                     <div className='nav--username' onClick={toggleDropdown}>
                          <p>{nutrData.firstname} {nutrData.lastname}</p>
