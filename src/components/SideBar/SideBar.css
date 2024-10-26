@@ -17,6 +17,15 @@
      /* top: 10px; */
 }
 
+
+.side-bar--content .logo {
+     font-size: 30px;
+     text-align: center;
+     margin-top: 80px;
+     font-weight: bold;
+     color: white;
+}
+
 .side-bar--logo {
      width: 200px;
      height: 180px;
@@ -27,7 +36,8 @@
      flex-direction: column;
      gap: 8px;
      position: absolute;
-     top: 60px;
+     top: 200px;
+     /* align-items: center; */
 }
 
 .side-bar--btm {

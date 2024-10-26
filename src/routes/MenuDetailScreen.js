@@ -10,7 +10,7 @@ function MenuDetailScreen() {
           <>
                <div className='container'>
                     <Navbar />
-                    <div className='content'>
+                    <div className='content-no-sidebar'>
                          <div className='menu-detail-content'>
                               <div className='card-left'>
                                    <div className='menu-detail-flex'>
