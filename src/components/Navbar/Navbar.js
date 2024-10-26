@@ -21,7 +21,7 @@ function Navbar() {
      return (
           <div className='nav--container'>
                <div className='nav--logo'>
-                    <img alt='' src={LogoGouthiw} />
+                    <div className='logo'>GOUTHIW</div>
                </div>
                {nutrData ? (
                     <div className='nav--username' onClick={toggleDropdown}>

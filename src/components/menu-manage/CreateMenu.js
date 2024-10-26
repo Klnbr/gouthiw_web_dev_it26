@@ -85,6 +85,12 @@ function CreateMenu() {
       
 
      const handleSave = async () => {
+          const { menuName, category, ingredients, method, image } = formData;
+    
+          if (!menuName || !category || !image || !method[0] || ingredients.some(ingredient => !ingredient.ingr_id || !ingredient.qty || !ingredient.unit)) {
+               alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+               return;
+          }
           try {
                const storageRef = firebase.storage().ref();
                const imageRef = storageRef.child(`images/${formData.image.name}`);
@@ -92,7 +98,7 @@ function CreateMenu() {
                const imageUrl = await imageRef.getDownloadURL();
                console.log("Image uploaded successfully. URL:", imageUrl);
 
-               const menuData = {
+               const menuData = { 
                     menuName: formData.menuName,
                     category: formData.category,
                     ingredients: formData.ingredients,

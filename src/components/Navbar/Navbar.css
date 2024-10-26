@@ -14,6 +14,13 @@
      width: 150px;
 }
 
+.nav--logo .logo {
+     font-size: 30px;
+     text-align: center;
+     font-weight: bold;
+     color: #4AB4A2;
+}
+
 .nav--logo img {
      width: 100%;
      height: 50px;
