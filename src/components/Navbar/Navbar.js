@@ -21,7 +21,11 @@ function Navbar() {
      return (
           <div className='nav--container'>
                <div className='nav--logo'>
-                    <p>GOUTHIW</p>
+
+                    {/* <p>GOUTHIW</p> */}
+
+                    <div className='logo'>GOUTHIW</div>
+
                </div>
                {nutrData ? (
                     <div className='nav--username' onClick={toggleDropdown}>

@@ -16,8 +16,12 @@ function SideBar() {
     return (
         <div className={`side-bar--container ${isOpen ? '' : 'collapsed'}`}>
             <div className='side-bar--content'>
-                <p className='app-logo'>GOUTHIW</p>
+
+                {/* <p className='app-logo'>GOUTHIW</p> */}
                 {/* <img className='side-bar--logo' alt='' src={SidebarLogo} /> */}
+
+                <div className='logo'>GOUTHIW</div>
+
 
                 {/* Toggle button for mobile view */}
                 <div className='menu-icons' onClick={handleToggle}>

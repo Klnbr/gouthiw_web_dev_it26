@@ -1,6 +1,7 @@
 import React from 'react'
 import '../components/Detail.css'
 import { useLocation } from 'react-router-dom';
+import Navbar from '../components/Navbar/Navbar'
 
 const options = {
     timeZone: "Asia/Bangkok",
@@ -51,9 +52,22 @@ function TriviaDetailScreen() {
                             {triviaData.head}
                         </div> */}
                         <p>อัพเดตล่าสุด {calculateTimeAgo(triviaData.updatedAt)}</p>
+
+            {/* <div className='container'>
+                <Navbar />
+                <div className='content-no-sidebar'>
+                    <div className='triv-detail-content'>
+                        <div className='triv-detail'>
+                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
+                            <div className='triv-detail-flex'>
+                                <h1>{triviaData.head}</h1>
+                                <p>อัพเดตล่าสุด {calculateTimeAgo(triviaData.updatedAt)}</p>
+                            </div>
+                            <hr className='hr-line'/>
+                            <div className='triv-info' dangerouslySetInnerHTML={{ __html: triviaData.content }}/>
+                        </div> */}
+
                     </div>
-                    <hr className='hr-line'/>
-                    <div className='triv-info' dangerouslySetInnerHTML={{ __html: triviaData.content }}/>
                 </div>
             </div>
         </>
