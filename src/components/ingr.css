@@ -134,12 +134,12 @@
  
 .table-ingr th, .table-ingr td {
      padding: 6px;
-     width: 15%;
+     width: 25%;
 }
 
 .table-ingr th:first-child, 
 .table-ingr td:first-child {
-     width: 30%;
+     width: 20%;
 }
 
 .table-ingr th:last-child, 

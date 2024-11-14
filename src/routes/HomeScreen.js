@@ -67,7 +67,7 @@ function HomeScreen() {
                                 เพื่อควบคุมอาการของโรค 
                             </p>
                             <div className="btn-over-image">
-                                <button>สร้างเมนูของคุณ</button>
+                                <button onClick={() => navigate('/menu')}>สร้างเมนูของคุณ</button>
                             </div>
                         </div>
 

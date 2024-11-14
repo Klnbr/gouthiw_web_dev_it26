@@ -9,6 +9,7 @@ import { useAuth } from '../middleware/Auth';
 
 function IngrScreen() {
      const [ingrs, setIngrs] = useState([]);
+     const [ingrsNutr, setIngrsNutr] = useState([]);
      const { nutrData } = useAuth();
 
      const [name, setName] = useState("");
@@ -56,8 +57,19 @@ function IngrScreen() {
                     console.log("Error fetching ingrs data", error.message)
                }
           }
+          const fetchIngrNutrData = async () => {
+               try {
+                    const response = await axios.get(`http://localhost:5500/ingrs/${nutrData._id}`, { timeout: 10000 });
+                    setIngrsNutr(response.data);
+               } catch (error) {
+                    console.log("Error fetching ingrs data", error.message)
+               }
+          }
           fetchIngrData();
-     }, []);
+          fetchIngrNutrData();
+     }, [nutrData]);
+
+     console.log("object: ", ingrs)
 
      const filterIngrs = ingrs.filter(ingr => 
           (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
@@ -148,7 +160,7 @@ function IngrScreen() {
                <td>{item.name}</td>
                <td>{item.purine}</td>
                <td>{item.uric}</td>
-               <td>นาตยา พลพาหะ</td>
+               <td>{item.owner_name || nutrData.firstname + ' ' + nutrData.lastname}</td>
                <td>
                     <i className="fa-solid fa-ellipsis-vertical" onClick={() => toggleDropdown(item._id)}></i>
                     {dropdownVisible === item._id && (
@@ -308,19 +320,29 @@ function IngrScreen() {
                                         <thead>
                                              <tr>
                                                   <th>ชื่อวัตถุดิบ</th>
-                                                  <th>ค่าพิวรีน (มิลลิกรัม)</th>
-                                                  <th>ค่ากรดยูริก (มิลลิกรัม)</th>
+                                                  <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
+                                                  <th>ค่ากรดยูริก (มิลลิกรัม / 100 กรัม)</th>
                                                   <th>เพิ่มโดย</th>
                                                   <th></th>
                                              </tr>
                                         </thead>
                                         <tbody>
-                                             {filterDisplay.length > 0 ? (
-                                                  filterDisplay.map(item => renderItem(item))
+                                             {activeButton === 'ทั้งหมด' ? (
+                                                  filterDisplay.length > 0 ? (
+                                                       filterDisplay.map(item => renderItem(item))
+                                                  ) : (
+                                                       <tr>
+                                                            <td colSpan="5">ยังไม่มีข้อมูลวัตถุดิบ</td>
+                                                       </tr>
+                                                  )
                                              ) : (
-                                                  <tr>
-                                                       <td colSpan="5">ยังไม่มีข้อมูลวัตถุดิบ</td>
-                                                  </tr>
+                                                  ingrsNutr.length > 0 ? (
+                                                       ingrsNutr.map(item => renderItem(item))
+                                                  ) : (
+                                                       <tr>
+                                                            <td colSpan="5">คุณยังไม่ได้เพิ่มวัตถุดิบ</td>
+                                                       </tr>
+                                                  )
                                              )}
                                         </tbody>
                                    </table>

@@ -16,6 +16,7 @@ function SideBar() {
     return (
         <div className={`side-bar--container ${isOpen ? '' : 'collapsed'}`}>
             <div className='side-bar--content'>
+                <p className='app-logo'>GOUTHIW</p>
                 {/* <img className='side-bar--logo' alt='' src={SidebarLogo} /> */}
 
                 {/* Toggle button for mobile view */}

@@ -27,7 +27,7 @@
      flex-direction: column;
      gap: 8px;
      position: absolute;
-     top: 60px;
+     top: 190px;
 }
 
 .side-bar--btm {
@@ -131,6 +131,14 @@
  
 .hidden {
      display: none;
+}
+
+.app-logo {
+     text-align: center;
+     color: white;
+     font-weight: bold;
+     font-size: 30px;
+     margin-top: 80px;
 }
 
 @media screen and (max-width: 1024px) {

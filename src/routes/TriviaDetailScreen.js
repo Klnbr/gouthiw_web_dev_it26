@@ -24,6 +24,8 @@ function TriviaDetailScreen() {
     const location = useLocation();
     const { triviaData } = location.state || {};
 
+    console.log("triviaData: ", triviaData)
+
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date();
         const postTime = new Date(createdAt);
@@ -45,6 +47,9 @@ function TriviaDetailScreen() {
                     <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
                     <div className='triv-detail-flex'>
                         <h1>{triviaData.head}</h1>
+                        {/* <div>
+                            {triviaData.head}
+                        </div> */}
                         <p>อัพเดตล่าสุด {calculateTimeAgo(triviaData.updatedAt)}</p>
                     </div>
                     <hr className='hr-line'/>

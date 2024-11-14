@@ -105,6 +105,7 @@ app.post("/signup", async (req, res) => {
       image_background,
       menu_owner: [],
       triv_owner: [],
+      ingr_owner: [],
       isDeleted,
     });
 
@@ -382,8 +383,75 @@ app.delete("/menu/:id", async (req, res) => {
 //ดึงวัตถุดิบมาแสดง
 app.get("/ingrs", async (req, res) => {
   try {
-    const ingrs = await myIngr.find({ isDeleted: false });
+    const ingrs = await myIngr.aggregate([
+      { 
+        $match: { isDeleted: false }  // Filter out deleted ingredients
+      },
+      {
+        $lookup: {
+          from: 'nutrs',              // Collection name for nutritionists
+          localField: '_id',          // Ingredient's ID
+          foreignField: 'ingr_owner.ingr_id', // Field in nutritionist collection that references ingredient ID
+          as: 'owners'
+        }
+      },
+      {
+        $unwind: '$owners'             // Unwind to get individual nutritionist-owner details
+      },
+      {
+        $project: {
+          name: 1,                     // Ingredient name
+          purine: 1,                   // Purine level
+          uric: 1,                     // Uric level
+          ingr_type: 1,                // Ingredient type
+          "owner_name": { 
+            $concat: ['$owners.firstname', ' ', '$owners.lastname']  // Concatenate first and last names
+          }
+        }
+      }
+    ])
     res.status(200).json(ingrs);
+  } catch (error) {
+    console.error("Error fetching ingrs data", error);
+    res.status(500).json({ message: "Failed to retrieve the ingrs" });
+  }
+});
+
+app.get("/ingrs/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
+    const ingrs = await myIngr.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      {
+        $unwind: "$ingr_owner",
+      },
+      {
+        $lookup: {
+          from: "ingrs",
+          localField: "ingr_owner.ingr_id",
+          foreignField: "_id",
+          as: "ingrDetails",
+        },
+      },
+      {
+        $unwind: "$ingrDetails",
+      },
+      {
+        $project: {
+          _id: "$ingrDetails._id",
+          name: "$ingrDetails.name",
+          purine: "$ingrDetails.purine",
+          uric: "$ingrDetails.uric",
+          ingr_type: "$ingrDetails.ingr_type"
+        },
+      },
+    ]);
+    return res.json(ingrs);
   } catch (error) {
     console.error("Error fetching ingrs data", error);
     res.status(500).json({ message: "Failed to retrieve the ingrs" });
@@ -401,7 +469,7 @@ app.post("/ingr/:id", async (req, res) => {
       purine,
       uric,
       ingr_type,
-      isDeleted,
+      isDeleted
     });
 
     await newIngre.save();

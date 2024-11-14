@@ -14,6 +14,10 @@ function Form2({ formData, setFormData }) {
 
      const { ingredients } = formData;
 
+     const [searchIngr, setSearchIngr] = useState('');
+     const [selectedType, setSelectedType] = useState("ทั้งหมด");
+     const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
+
      const toggleModal = () => {
           setModal(!modal);
      }
@@ -23,6 +27,18 @@ function Form2({ formData, setFormData }) {
      } else {
           document.body.classList.remove('active-modal')
      }
+
+     const filterIngrs = ingrs.filter(ingr => 
+          (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
+          ingr.name.includes(searchIngr)
+     );
+
+     // การกรองตามลำดับการแสดง
+     const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
+          ? filterIngrs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
+          : selectedDisplay === "top_purine"
+          ? filterIngrs.sort((a, b) => b.purine - a.purine) // เรียงจากมากไปน้อย
+          : filterIngrs.sort((a, b) => a.purine - b.purine); // เรียงจากน้อยไปมาก
 
      useEffect(() => {
           const fetchIngrData = async () => {
@@ -174,11 +190,45 @@ function Form2({ formData, setFormData }) {
                               <h1>รายชื่อวัตถุดิบ</h1>
 
                               <div className='ingr-search'>
-                                   <input type='text' placeholder='ค้นหาวัตถุดิบที่นี่' />
-                                   <button className='ingr-search--btn'>
-                                        <i className="fa-solid fa-magnifying-glass"></i>
-                                   </button>
-                              </div>
+                                                  <div className='ingr-search-wrapper'>
+                                                       <i className="fa-solid fa-magnifying-glass ingr-search-icon"></i>
+                                                       <input 
+                                                            type='text'
+                                                            placeholder='ค้นหาวัตถุดิบที่นี่' 
+                                                            onChange={(e) => setSearchIngr(e.target.value)} 
+                                                            className='ingr-search-input' />
+                                                  </div>
+
+                                                  <div className='ingr-select-wrapper'>
+                                                       <i className="fa-solid fa-filter ingr-search-icon"></i>
+                                                       <Select 
+                                                            className='ingr-search-select'
+                                                            value={selectedType} 
+                                                            onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                            options={[
+                                                                 { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                                                 { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
+                                                                 { value: "ผัก", label: "ผัก" },
+                                                                 { value: "ผลไม้", label: "ผลไม้" },
+                                                                 { value: "อื่น ๆ", label: "อื่น ๆ" },
+                                                            ]}
+                                                       />
+                                                  </div>
+
+                                                  <div className='ingr-select-wrapper'>
+                                                       <i className="fa-solid fa-sort ingr-search-icon"></i>
+                                                       <Select 
+                                                            className='ingr-search-select'
+                                                            value={selectedDisplay} 
+                                                            onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                            options={[
+                                                                 { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
+                                                                 { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
+                                                                 { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
+                                                            ]}
+                                                       />
+                                                  </div>
+                                             </div>
                               <div className='table-ingr-container'>
                                    <table className='table-ingr'>
                                         <thead>
@@ -189,8 +239,8 @@ function Form2({ formData, setFormData }) {
                                              </tr>
                                         </thead>
                                         <tbody>
-                                             {ingrs.length > 0 ? (
-                                                  ingrs.map(item => renderItem(item))
+                                             {filterDisplay.length > 0 ? (
+                                                  filterDisplay.map(item => renderItem(item))
                                              ) : (
                                                   <tr>
                                                        <td colSpan="3">ยังไม่มีข้อมูลวัตถุดิบ</td>
