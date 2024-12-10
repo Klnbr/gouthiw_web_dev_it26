@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar/Navbar'
-import SideBar from '../components/SideBar/SideBar'
+import Navbar from '../../components/Navbar/Navbar'
+import SideBar from '../../components/SideBar/SideBar'
 import { Input, Select } from "antd";
-import '.././App.css'
+import '../../App.css'
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../middleware/Auth';
+import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
-import '../../src/components/trivia.css'
+import '../../components/trivia.css'
 
 const optionsDMY = {
      timeZone: "Asia/Bangkok",

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar/Navbar'
-import SideBar from '../components/SideBar/SideBar'
+import Navbar from '../../components/Navbar/Navbar'
+import SideBar from '../../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../middleware/Auth';
-import '../../src/components/topic.css'
+import { useAuth } from '../../middleware/Auth';
+import '../../components/topic.css'
 
 const optionsDMY = {
      timeZone: "Asia/Bangkok",

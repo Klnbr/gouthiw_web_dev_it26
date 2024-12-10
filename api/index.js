@@ -158,6 +158,17 @@ app.post("/signin", async (req, res) => {
 //ดึงuserมาแสดง
 app.get("/users", async (req, res) => {
   try {
+    const users = await myUser.find({ isDeleted: false });
+    return res.json(users);
+  } catch (error) {
+    console.error("Error fetching users data", error);
+    res.status(500).json({ message: "Failed to retrieve the users" });
+  }
+});
+
+//ดึงuserมาแสดง
+app.get("/nutrs", async (req, res) => {
+  try {
     const users = await myNutr.find({ isDeleted: false });
     return res.json(users);
   } catch (error) {

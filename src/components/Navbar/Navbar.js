@@ -22,9 +22,9 @@ function Navbar() {
           <div className='nav--container'>
                <div className='nav--logo'>
 
-                    {/* <p>GOUTHIW</p> */}
+                    <p>GOUTHIW</p>
 
-                    <div className='logo'>GOUTHIW</div>
+                    {/* <div className='logo'>GOUTHIW</div> */}
 
                </div>
                {nutrData ? (

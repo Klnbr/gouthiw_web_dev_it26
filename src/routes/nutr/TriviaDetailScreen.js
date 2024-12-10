@@ -1,7 +1,7 @@
 import React from 'react'
-import '../components/Detail.css'
+import '../../components/Detail.css'
 import { useLocation } from 'react-router-dom';
-import Navbar from '../components/Navbar/Navbar'
+import Navbar from '../../components/Navbar/Navbar'
 
 const options = {
     timeZone: "Asia/Bangkok",

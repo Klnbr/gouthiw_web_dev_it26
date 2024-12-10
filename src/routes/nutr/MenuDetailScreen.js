@@ -1,16 +1,49 @@
-import React from 'react'
-import '../components/Detail.css'
+import React, { useEffect, useState } from 'react'
+import '../../components/Detail.css'
 import { useLocation } from 'react-router-dom';
-import Navbar from '../components/Navbar/Navbar'
+import Navbar from '../../components/Navbar/Navbar'
+import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../middleware/Auth';
+import axios from 'axios';
+import { Button } from 'antd';
 
 function MenuDetailScreen() {
+     const navigate = useNavigate();
+     const { nutrData } = useAuth();
      const location = useLocation();
      const { menuData } = location.state || {};
+     const [menu, setMenu] = useState([])
+     const [editButton, setEditButton] = useState(false)
+
+     useEffect(() => {
+          const fetchMenu = async () => {
+               try {
+                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                    setMenu(response.data)
+
+                    if (menuData && response.data.some((menuItem) => menuItem._id === menuData._id)) {
+                         setEditButton(true);
+                    }
+               } catch (error) {
+                    console.log("Error fetching menus data", error.message)
+               }
+          }
+          fetchMenu()
+     })
+
      return (
           <>
                <div className='container'>
                     <Navbar />
                     <div className='content-no-sidebar'>
+                         <button className="btn-goback" onClick={() => navigate(-1)}>
+                              <i className="fa-solid fa-angle-left"></i>
+                              {editButton && (
+                                   <button >
+                                        แก้ไข
+                                   </button>
+                              )}
+                         </button>
                          <div className='menu-detail-content'>
                               <div className='card-left'>
                                    <div className='menu-detail-flex'>

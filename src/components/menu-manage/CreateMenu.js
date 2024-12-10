@@ -81,8 +81,7 @@ function CreateMenu() {
      //      } catch (error) {
      //          console.error("Error submitting menu", error);
      //      }
-     // };
-      
+     // };    
 
      const handleSave = async () => {
           const { menuName, category, ingredients, method, image } = formData;

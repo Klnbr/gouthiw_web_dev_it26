@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../middleware/Auth";
+import { useAuth } from "../../middleware/Auth";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar/Navbar";
-import SideBar from "../components/SideBar/SideBar";
+import Navbar from "../../components/Navbar/Navbar";
+import SideBar from "../../components/SideBar/SideBar";
 import axios from "axios";
-import '../../src/components/profile.css'
+import '../../components/profile.css'
 
 function ProfileScreen() {
     const navigate = useNavigate();

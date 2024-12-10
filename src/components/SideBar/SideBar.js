@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SideBar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { MenuItems } from './MenuItems';
+import { MenuAdmin } from './MenuAdmin';
 import SidebarLogo from '../../images/logo_temporary.png';
 import SidebarBottom from '../../images/bottom_nav2.png';
 

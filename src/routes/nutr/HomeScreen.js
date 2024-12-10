@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
-import SideBar from "../components/SideBar/SideBar";
-import "../App.css";
-import { useAuth } from "../middleware/Auth";
+import Navbar from "../../components/Navbar/Navbar";
+import SideBar from "../../components/SideBar/SideBar";
+import "../../App.css";
+import { useAuth } from "../../middleware/Auth";
 import { useNavigate } from "react-router-dom";
-import HomeBanner from "../images/homebanner.jpg";
+// import HomeBanner from "../images/homebanner.jpg";
 import axios from "axios";
 
 function HomeScreen() {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import Navbar from '../components/Navbar/Navbar'
-import SideBar from '../components/SideBar/SideBar'
-import { useAuth } from '../middleware/Auth';
+import Navbar from '../../components/Navbar/Navbar'
+import SideBar from '../../components/SideBar/SideBar'
+import { useAuth } from '../../middleware/Auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Input } from "antd";
 import axios from 'axios';

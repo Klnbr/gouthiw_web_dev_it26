@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar/Navbar'
-import SideBar from '../components/SideBar/SideBar'
+import Navbar from '../../components/Navbar/Navbar'
+import SideBar from '../../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../middleware/Auth';
+import { useAuth } from '../../middleware/Auth';
 import { Input, Select } from "antd";
 import axios from 'axios';
-import '../../src/components/menu.css'
+import '../../../src/components/menu.css'
 
 function MenuScreen() {
      const navigate = useNavigate();
@@ -108,6 +108,8 @@ function MenuScreen() {
                                         </div>
                                         
                                         <h1 className='head-content'>เมนูอาหาร</h1>
+
+                                        {/* search engine */}
                                         <div className='menu-manage'>
                                              <div className='menu-search'>
                                                   <div className='menu-search-wrapper'>
@@ -151,6 +153,8 @@ function MenuScreen() {
                                              </div>
                                         </div>
                                    </div>
+
+                                   {/* switch role */}
                                    <div className='above-table'>
                                         <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? menus.length : menusUser.length} เมนูอาหาร</p>
                                         <div className='switch-btn'>
@@ -159,7 +163,7 @@ function MenuScreen() {
                                                   style={{
                                                        backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
                                                        color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
-                         }                        }>ทั้งหมด</button>
+                                                  }}>ทั้งหมด</button>
                                              <button 
                                                   onClick={() => {setActiveButton('ของฉัน')}}
                                                   style={{
@@ -168,6 +172,8 @@ function MenuScreen() {
                                                   }}>ของฉัน</button>
                                         </div>
                                    </div>
+
+                                   {/* data rendering */}
                                    <div className='menu-render'>
                                         {activeButton === 'ทั้งหมด' ? (
                                              filterDisplay.length > 0 ? (

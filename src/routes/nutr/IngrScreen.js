@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import '../../src/components/ingr.css'
-import '../components/Modal.css'
-import Navbar from '../components/Navbar/Navbar'
-import SideBar from '../components/SideBar/SideBar'
+import '../../components/ingr.css'
+import '../../components/Modal.css'
+import Navbar from '../../components/Navbar/Navbar'
+import SideBar from '../../components/SideBar/SideBar'
 import { Input, Select } from "antd";
 import axios from 'axios';
-import { useAuth } from '../middleware/Auth';
+import { useAuth } from '../../middleware/Auth';
 
 function IngrScreen() {
      const [ingrs, setIngrs] = useState([]);
