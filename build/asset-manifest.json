@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.66cc8cde.css",
+    "main.js": "/static/js/main.808116d1.js",
+    "static/media/bottom_screen.png": "/static/media/bottom_screen.d3f6daf33ae61a3e256d.png",
+    "static/media/bottom_nav2.png": "/static/media/bottom_nav2.ad15063d7bff4bc1e178.png",
+    "static/media/gouthiw-logo.png": "/static/media/gouthiw-logo.441b6c69212b7444a51f.png",
+    "static/media/logo_temporary.png": "/static/media/logo_temporary.4055be521792e7cbcd49.png",
+    "index.html": "/index.html",
+    "main.66cc8cde.css.map": "/static/css/main.66cc8cde.css.map",
+    "main.808116d1.js.map": "/static/js/main.808116d1.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.66cc8cde.css",
+    "static/js/main.808116d1.js"
+  ]
+}
