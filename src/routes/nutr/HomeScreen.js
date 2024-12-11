@@ -57,7 +57,7 @@ function HomeScreen() {
                                 alt="head image"
                                 />
                             <div className="text-over-image">
-                                สร้างเมนูอาหารที่ปลอดภัยมั้ง
+                                สร้างเมนูอาหารที่ปลอดภัย
                                 <br />
                                 ต่อผู้ป่วยโรคเกาต์
                             </div>
