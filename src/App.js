@@ -24,6 +24,7 @@ import Jodit from './routes/Jodit';
 //admin
 import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportScreen';
+import UserInformation from './routes/admin/UserInformation';
 
 function App() {
   return (
@@ -45,9 +46,10 @@ function App() {
           <Route path='/topic-answer' element={<AnswerTopic />} />
           <Route path='/jodit' element={<Jodit />} />
 
-          {/* nutr */}
+          {/* admin */}
           <Route path='/admin/home' element={<AdminHome />} />
           <Route path='/admin/report' element={<ReportScreen />} />
+          <Route path='/admin/information' element={<UserInformation />} />
 
           <Route path='/signup' element={<RegisterScreen />} />
           <Route path='/signin' element={<LoginScreen />} />

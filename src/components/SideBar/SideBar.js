@@ -30,7 +30,7 @@ function SideBar() {
                 </div>
 
                 <div className={`side-bar--menu ${isOpen ? '' : 'hidden'}`}>
-                    {MenuItems.map((item, index) => {
+                    {MenuAdmin.map((item, index) => {
                         return (
                             <li
                                 className={location.pathname === item.url ? 'side-bar--focus' : 'side-bar--links'}

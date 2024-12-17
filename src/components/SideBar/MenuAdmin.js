@@ -1,7 +1,7 @@
-export const MenuManages = [
+export const MenuAdmin = [
      {
           title: "หน้าหลัก",
-          url: "/",
+          url: "/admin/home",
           icon: "fa-solid fa-house"
      },
      {
@@ -23,6 +23,11 @@ export const MenuManages = [
           title: "กระทู้คำถาม",
           url: "/topics",
           icon: "fa-solid fa-question"
+     },
+     {
+          title: "การรายงาน",
+          url: "/admin/report",
+          icon: "fa-solid fa-circle-exclamation"
      }
      // {
      //      title: "Sign up",

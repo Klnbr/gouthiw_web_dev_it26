@@ -88,8 +88,13 @@ app.post("/signup", async (req, res) => {
     } = req.body;
     const nutr = await myNutr.findOne({ email });
 
-    if (nutr) {
-      return res.status(409).send("This email is already exist");
+    if (!firstname || !lastname || !password || !email) {
+      return res.status(400).json({ message: "กรุณาใส่ข้อมูลให้ครบถ้วน" });
+    }
+
+    const existingNutr = await myNutr.findOne({ email: email.toLowerCase() });
+    if (existingNutr) {
+      return res.status(409).json({ message: "อีเมลนี้ถูกใช้ไปแล้ว" });
     }
 
     let hashPassword = await bcrypt.hash(password, 10);
@@ -116,12 +121,12 @@ app.post("/signup", async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Signed up successfully",
+      message: "ลงทะเบียนสำเร็จ",
       token,
     });
   } catch (error) {
     console.error("Sign up Error: ", error);
-    res.status(500).json({ message: "Failed to sign up" });
+    res.status(500).json({ message: "ลงทะเบียนไม่สำเร็จ" });
   }
 });
 
@@ -129,15 +134,20 @@ app.post("/signup", async (req, res) => {
 app.post("/signin", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const nutr = await myNutr.findOne({ email });
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "จำเป็นต้องมีอีเมลและรหัสผ่าน" });
+    }
+
+    const nutr = await myNutr.findOne({ email: email.toLowerCase() });
 
     if (!nutr) {
-      return res.status(404).send("User not found!");
+      return res.status(404).send("ไม่พบผู้ใช้");
     }
 
     const checkPass = await bcrypt.compare(password, nutr.password);
     if (!checkPass) {
-      return res.status(401).send("Invalid email or password");
+      return res.status(401).send("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
     }
 
     const token = jwt.sign({ _id: nutr._id }, "secretkey123", {
@@ -145,17 +155,17 @@ app.post("/signin", async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Signed in successfully",
+      message: "เข้าสู่ระบบสำเร็จ",
       token,
       nutr,
     });
   } catch (error) {
     console.error("Sign up Error: ", error);
-    res.status(500).json({ message: "Failed to sign up" });
+    res.status(500).json({ message: "เข้าสู่ระบบไม่สำเร็จ" });
   }
 });
 
-//ดึงuserมาแสดง
+//ดึง users มาแสดง
 app.get("/users", async (req, res) => {
   try {
     const users = await myUser.find({ isDeleted: false });
@@ -166,7 +176,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
-//ดึงuserมาแสดง
+//ดึง nutrs มาแสดง
 app.get("/nutrs", async (req, res) => {
   try {
     const users = await myNutr.find({ isDeleted: false });
@@ -174,6 +184,29 @@ app.get("/nutrs", async (req, res) => {
   } catch (error) {
     console.error("Error fetching users data", error);
     res.status(500).json({ message: "Failed to retrieve the users" });
+  }
+});
+
+//ดึง id มา 1 id
+app.get("/admin/:role/:id", async (req, res) => {
+  try {
+    const { id, role } = req.params;
+
+    let res_info = null
+    if (role == 0) {
+      res_info = await myUser.findById(id);
+    } else if (role == 1) {
+      res_info = await myNutr.findById(id);
+    }
+    
+    if (!res_info) {
+      return res.status(404).json({ message: "ไม่พบข้อมูล" });
+    }
+
+    res.status(200).json(res_info);
+  } catch (error) {
+    console.log("ไม่พบข้อมูลของผู้ใช้ id ดังกล่าว", error);
+    res.status(500).json({ message: "ไม่พบข้อมูลของผู้ใช้ id ดังกล่าว" });
   }
 });
 

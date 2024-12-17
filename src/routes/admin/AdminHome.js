@@ -1,52 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import SideBar from "../../components/SideBar/SideBar";
 import Navbar from "../../components/Navbar/Navbar";
+import { useNavigate } from 'react-router-dom';
 import '../../components/adminHome.css'
 import axios from 'axios';
 
 function AdminHome() {
-     const dashItem = [
-          {
-               title: "บัญชีผู้ใช้ทั้งหมด",
-               icon: "fa-solid fa-users",
-               color: "#FFA13F",
-               count: 32
-          },
-          {
-               title: "บัญชีผู้ป่วยโรคเกาต์",
-               icon: "fa-solid fa-user",
-               color: "#FF4B3F",
-               count: 29
-          },
-          {
-               title: "บัญชีนักโภชนาการ",
-               icon: "fa-solid fa-user-nurse",
-               color: "#1BA0FF",
-               count: 3
-          },
-          {
-               title: "บัญชีผู้ใช้ใหม่เดือนนี้",
-               icon: "fa-solid fa-chart-line",
-               color: "#7F1BFF",
-               count: 4
-          },
-     ]
-
+     const navigate = useNavigate();
      const [data, setData] = useState([])
+     const [user, setUser] = useState([])
+     const [nutr, setNutr] = useState([])
+     const [newRegis, setNewRegis] = useState([])
 
      useEffect(() => {
           const fetchData = async () => {
                try {
                     const resUser = await axios.get("http://localhost:5500/users", { timeout: 10000 });
+                    setUser(resUser.data)
                     const usersData = resUser.data.map((user) => ({
                          id: user._id,
                          name: user.name,
                          email: user.email,
                          role: "ผู้ป่วยโรคเกาต์",
-                         createdAt: user.createdAt,
+                         createdAt: user.createdAt
                     }))
                     
                     const resNutr = await axios.get("http://localhost:5500/nutrs", { timeout: 10000 });
+                    setNutr(resNutr.data)
                     const nutrsData = resNutr.data.map((nutr) => ({
                          id: nutr._id,
                          name: `${nutr.firstname} ${nutr.lastname}`,
@@ -60,12 +40,70 @@ function AdminHome() {
                     );
 
                     setData(dataJoined);
+
+                    // dataJoined.map((t) => {
+                    //      const date = new Date(t.createdAt);
+                    //      console.log("date: ", date)
+
+                    //      const monthFromData = date.getMonth();
+                    //      const currentMonth = 10;
+
+                    //      console.log("monthFromData:", monthFromData, "currentMonth", currentMonth)
+
+                    //      if (monthFromData = currentMonth) {
+                    //           setNewRegis(t)
+                    //      }
+                    // })
+
+                    const newRegisData = dataJoined.filter((t) => {
+                         const date = new Date(t.createdAt);
+                         const monthFromData = date.getMonth();
+                         const currentMonth = new Date().getMonth();
+                         return monthFromData === currentMonth;
+                    });
+                    setNewRegis(newRegisData);
+                       
                } catch (error) {
                     console.log("ไม่สามารถโหลดข้อมูลได้", error.message)
                }
           }
           fetchData()
      }, [])
+
+     const dashItem = [
+          {
+               title: "บัญชีผู้ใช้ทั้งหมด",
+               icon: "fa-solid fa-users",
+               color: "#FFA13F",
+               count: data.length
+          },
+          {
+               title: "บัญชีผู้ป่วยโรคเกาต์",
+               icon: "fa-solid fa-user",
+               color: "#FF4B3F",
+               count: user.length
+          },
+          {
+               title: "บัญชีนักโภชนาการ",
+               icon: "fa-solid fa-user-nurse",
+               color: "#1BA0FF",
+               count: nutr.length
+          },
+          {
+               title: "บัญชีผู้ใช้ใหม่เดือนนี้",
+               icon: "fa-solid fa-chart-line",
+               color: "#7F1BFF",
+               count: newRegis.length
+          },
+     ]
+
+     const handleMoreInfo = async (itemId, role) => {
+          try {
+               navigate('/admin/information', { state: { itemId, role } });
+          } catch (error) {
+               console.log('เกิดข้อผิดพลาดในการแสดงข้อมูล', error.message);
+          }
+     }
      
      return (
           <>
@@ -113,17 +151,23 @@ function AdminHome() {
                                         <tr>
                                              <th>ชื่อ-นามสกุล</th>
                                              <th>อีเมล</th>
-                                             <th>บทบาท</th>
-                                             <th>วันที่สร้างบัญชี</th>
+                                             <th>สถานะ</th>
+                                             <th colSpan={2}>วันที่สร้างบัญชี</th>
                                         </tr>
                                    </thead>
                                    <tbody>
                                         {data.map((item, index) => (
-                                             <tr key={index}>
+                                             <tr key={index} >
                                                   <td>{item.name}</td>
                                                   <td>{item.email}</td>
                                                   <td>{item.role}</td>
                                                   <td>{new Date(item.createdAt).toLocaleDateString("th-TH")}</td>
+                                                  <td 
+                                                       className='info-btn' 
+                                                       onClick={() => handleMoreInfo(item.id, item.role === "ผู้ป่วยโรคเกาต์" ? 0 : 1)} 
+                                                       key={item._id}>
+                                                       <i className="fa-solid fa-circle-info"></i>
+                                                  </td>
                                              </tr>
                                         ))}
                                    </tbody>

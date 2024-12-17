@@ -51,7 +51,7 @@
 .dash--search-input {
      width: 100%;
      border: none;
-     padding-left: 40px;
+     padding-left: 26px;
      color: #4AB4A2;
 }
 
@@ -69,7 +69,7 @@
      padding: 10px 26px;
      color: #ca7d2a;
      justify-content: space-between;
-     font-size: 16px;
+     font-size: 12px;
 }
 
 .dash--table {
@@ -81,7 +81,7 @@
 }
 
 .dash--table thead {
-     background-color: rgb(236, 233, 233);
+     background-color: rgb(226, 226, 226);
      border-bottom: 2px solid lightgray;
      font-size: 1rem;
 }
@@ -96,4 +96,72 @@
      padding: 10px;
      text-align: start;
      border: none;
+}
+
+.dash--table tbody tr:hover {
+     background-color: rgb(244, 244, 244);
+}
+
+.info-btn i {
+     cursor: pointer;
+     padding: 5px;
+}
+
+
+/* ยืมที่หน่อยคับพรี่ */
+.content--info {
+     background-color: rgb(231, 231, 231);
+     margin-top: 60px;
+}
+
+.content--info-card {
+     background-color: white;
+     width: 70%;
+     margin: 4% auto;
+     border-radius: 10px;
+     padding: 40px;
+}
+
+.info-detail {
+     margin-top: 60px;
+     text-align: center;
+     margin-bottom: 20px;
+}
+
+.content--info-image {
+     width: 200px;
+     height: 200px;
+     object-fit: cover;
+     border-radius: 100%;
+     display: flex;
+     margin-left: auto;
+     margin-right: auto;
+}
+
+.info--name {
+     font-size: 20px;
+     font-weight: bold;
+     margin-top: 20px;
+     margin-bottom: 10px;
+}
+
+.info-more-detail {
+     margin-top: 20px;
+     margin-bottom: 20px;
+     display: flex;
+}
+
+.info-more-detail div {
+     width: 50%;
+}
+
+.info-more-detail p {
+     margin-bottom: 10px;
+}
+
+.info-head {
+     font-size: 18px;
+     font-weight: bold;
+     color:#ca7d2a;
+     margin-bottom: 20px;
 }
