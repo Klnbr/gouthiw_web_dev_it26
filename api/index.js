@@ -107,6 +107,7 @@ app.post("/signup", async (req, res) => {
       tel,
       email: email.toLowerCase(),
       image_profile,
+      role: '0',
       image_background,
       menu_owner: [],
       triv_owner: [],

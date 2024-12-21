@@ -11,10 +11,10 @@ function AuthProvider({ children }) {
      const [token, setToken] = useState(null);
      const [nutrData, setNutrData] = useState(null);
      const [isAuthenticated, setIsAuthenticated] = useState(false);
-     const storedData = JSON.parse(localStorage.getItem('nutr_data'))
+     
 
      useEffect(() => {
-         
+          const storedData = JSON.parse(localStorage.getItem('nutr_data'))
           if (storedData) {
                const { nutrToken, nutr } = storedData;
                setToken(nutrToken);
@@ -22,6 +22,27 @@ function AuthProvider({ children }) {
                setIsAuthenticated(true);
           }
      }, [])
+
+     const handleSignin = async ({ email, password }) => {
+          try {
+              const response = await axios.post("http://localhost:5500/signin", { email, password });
+              if (response.status === 201) {
+                  login(response.data.token, response.data.nutr);
+                  alert("เข้าสู่ระบบสำเร็จ");
+                  if (response.data.nutr.role === '0') {
+                    navigate('/home'); // ไปยังหน้า nutr
+                  } else if (response.data.nutr.role === '1') {
+                    navigate('/admin/home'); // ไปยังหน้า admin
+                  }
+              }
+          } catch (error) {
+              alert("เข้าสู่ระบบไม่สำเร็จ");
+              console.log("error logging in", error);
+              if (error.response) {
+                  console.log("Error response data:", error.response.data);
+              }
+          }
+     };
 
      const login = (newToken, newData) => {
           localStorage.setItem(
@@ -43,7 +64,7 @@ function AuthProvider({ children }) {
      }
 
      return (
-          <AuthContext.Provider value={{token, isAuthenticated, login, logout, nutrData}}>
+          <AuthContext.Provider value={{token, isAuthenticated, login, logout, nutrData, handleSignin }}>
                {children}
           </AuthContext.Provider>
      )

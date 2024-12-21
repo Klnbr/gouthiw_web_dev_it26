@@ -3,16 +3,22 @@ import './SideBar.css';
 import { Link, useLocation } from 'react-router-dom';
 import { MenuItems } from './MenuItems';
 import { MenuAdmin } from './MenuAdmin';
+import { useAuth } from '../../middleware/Auth';
 import SidebarLogo from '../../images/logo_temporary.png';
 import SidebarBottom from '../../images/bottom_nav2.png';
 
 function SideBar() {
     const location = useLocation();
+    const { nutrData, logout } = useAuth();
     const [isOpen, setIsOpen] = useState(true); // State to manage sidebar toggle
 
     const handleToggle = () => {
         setIsOpen(!isOpen); // Toggle the sidebar open/close state
     };
+
+    console.log("nutrData:", nutrData)
+
+    const menuRender = nutrData.role === '1' ? MenuAdmin : MenuItems;
 
     return (
         <div className={`side-bar--container ${isOpen ? '' : 'collapsed'}`}>
@@ -30,7 +36,7 @@ function SideBar() {
                 </div>
 
                 <div className={`side-bar--menu ${isOpen ? '' : 'hidden'}`}>
-                    {MenuAdmin.map((item, index) => {
+                    {menuRender.map((item, index) => {
                         return (
                             <li
                                 className={location.pathname === item.url ? 'side-bar--focus' : 'side-bar--links'}

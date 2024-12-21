@@ -1,3 +1,4 @@
+const { type } = require('@testing-library/user-event/dist/type');
 const mongoose = require('mongoose');
 
 const nutrSchema = new mongoose.Schema({
@@ -32,6 +33,10 @@ const nutrSchema = new mongoose.Schema({
      password: {
           type: String,
           required: true
+     },
+     role: {
+          type: String,
+          default: '0'
      },
      menu_owner: [
           {

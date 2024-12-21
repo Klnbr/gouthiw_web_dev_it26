@@ -1,7 +1,7 @@
 export const MenuItems = [
      {
           title: "หน้าหลัก",
-          url: "/",
+          url: "/home",
           icon: "fa-solid fa-house"
      },
      {

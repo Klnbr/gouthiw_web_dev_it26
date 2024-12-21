@@ -1,10 +1,15 @@
 // import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
-import AuthProvider from './middleware/Auth';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import AuthProvider, { useAuth }  from './middleware/Auth';
 
 import RegisterScreen from './routes/RegisterScreen';
 import LoginScreen from './routes/LoginScreen';
+import Welcome from './routes/Welcome';
+
+import Jodit from './routes/Jodit';
+import Unauthorized from './routes/Unauthorized';
 
 //nutr
 import HomeScreen from './routes/nutr/HomeScreen';
@@ -19,40 +24,86 @@ import EditProfile from './routes/nutr/EditProfile';
 import MenuDetailScreen from './routes/nutr/MenuDetailScreen';
 import AnswerTopic from './routes/nutr/AnswerTopic';
 import TriviaDetailScreen from './routes/nutr/TriviaDetailScreen';
-import Jodit from './routes/Jodit';
 
 //admin
 import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportScreen';
 import UserInformation from './routes/admin/UserInformation';
 
+
+function ProtectedRoute({ children, allowedRole }) {
+  const { isAuthenticated, nutrData } = useAuth();
+
+  // ตรวจสอบว่าผู้ใช้เข้าสู่ระบบแล้วและมี role ตรงตามที่กำหนด
+  if (!isAuthenticated) {
+    return <Navigate to="/signin" />;
+  }
+
+  if (nutrData.role !== allowedRole) {
+    return <Navigate to="/unauthorized" />; // ถ้า role ไม่ตรงให้กลับไปที่หน้าอื่น
+  }
+
+  return children;
+}
+
+const nutrRoutes = [
+  { path: '/home', component: <HomeScreen /> },
+  { path: '/menus', component: <MenuScreen /> },
+  { path: '/menu-detail', component: <MenuDetailScreen /> },
+  { path: '/trivias', component: <TriviaScreen /> },
+  { path: '/topics', component: <TopicScreen /> },
+  { path: '/menu', component: <Menu /> },
+  { path: '/trivia', component: <Trivia /> },
+  { path: '/trivia-detail', component: <TriviaDetailScreen /> },
+  { path: '/ingredients', component: <IngrScreen /> },
+  { path: '/profile', component: <ProfileScreen /> },
+  { path: '/profile-edit', component: <EditProfile /> },
+  { path: '/topic-answer', component: <AnswerTopic /> },
+];
+
+const adminRoutes = [
+  { path: '/admin/home', component: <AdminHome /> },
+  { path: '/admin/report', component: <ReportScreen /> },
+  { path: '/admin/information', component: <UserInformation /> },
+];
+
 function App() {
   return (
     <AuthProvider>
       <div className="App">
         <Routes>
-          {/* nutr */}
-          <Route path='/' element={<HomeScreen />} />
-          <Route path='/menus' element={<MenuScreen />} />
-          <Route path='/menu-detail' element={<MenuDetailScreen />} />
-          <Route path='/trivias' element={<TriviaScreen />} />
-          <Route path='/topics' element={<TopicScreen />} />
-          <Route path='/menu' element={<Menu />} />
-          <Route path='/trivia' element={<Trivia />} />
-          <Route path='/trivia-detail' element={<TriviaDetailScreen />} />
-          <Route path='/ingredients' element={<IngrScreen />} />
-          <Route path='/profile' element={<ProfileScreen />} />
-          <Route path='/profile-edit' element={<EditProfile />} />
-          <Route path='/topic-answer' element={<AnswerTopic />} />
-          <Route path='/jodit' element={<Jodit />} />
-
-          {/* admin */}
-          <Route path='/admin/home' element={<AdminHome />} />
-          <Route path='/admin/report' element={<ReportScreen />} />
-          <Route path='/admin/information' element={<UserInformation />} />
-
+          <Route path='/' element={<Welcome />} />
           <Route path='/signup' element={<RegisterScreen />} />
           <Route path='/signin' element={<LoginScreen />} />
+          <Route path='/unauthorized' element={<Unauthorized />} />
+          <Route path='/jodit' element={<Jodit />} />
+
+          {/* nutr routes */}
+          {nutrRoutes.map(({ path, component }) => (
+            <Route 
+              key={path} 
+              path={path} 
+              element={
+                <ProtectedRoute allowedRole="0">
+                  {component}
+                </ProtectedRoute>
+              }
+            />
+          ))}
+
+          {/* admin routes */}
+          {adminRoutes.map(({ path, component }) => (
+            <Route 
+              key={path} 
+              path={path} 
+              element={
+                <ProtectedRoute allowedRole="1">
+                  {component}
+                </ProtectedRoute>
+              }
+            />
+          ))}
+          
         </Routes>
       </div>
     </AuthProvider> 
