@@ -667,9 +667,57 @@ app.post("/trivia/:id", upload.single("image"), async (req, res) => {
 app.get("/trivia/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const trivias = await myTrivia.findById(id);
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid trivia ID" });
+    }
+
+    const objectId = new mongoose.Types.ObjectId(id);
+
+    const trivias = await myTrivia.aggregate([
+      {
+        $match: { _id: objectId  }
+      },
+      {
+        $lookup: {
+          from: "nutrs",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
+          localField: "_id",  // ฟิลด์ใน collection trivias ที่เชื่อมโยงกับ nutrs
+          foreignField: "triv_owner.triv_id",  // ฟิลด์ใน collection users ที่เป็น _id
+          as: "creatorDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
+        }
+      },
+      {
+        $unwind: {
+          path: "$creatorDetails", // แปลง array เป็น object เดี่ยว
+          preserveNullAndEmptyArrays: false // ไม่เอา trivia ที่ไม่มี creator
+        }
+      },
+      {
+        $project: {
+          _id: 1, // ดึงไอดีของ trivia
+          head: 1, // หัวข้อเกร็ดความรู้
+          image: 1, // รูปภาพ
+          content: 1, // เนื้อหา
+          trivia_type: 1, // ประเภทของ trivia
+          createdAt: 1, // วันที่สร้าง
+          updatedAt: 1, // วันที่อัปเดต
+          creator: {
+            _id: "$creatorDetails._id", // ไอดีของผู้สร้าง
+            firstname: "$creatorDetails.firstname", // ชื่อผู้สร้าง
+            lastname: "$creatorDetails.lastname", // นามสกุลผู้สร้าง
+            email: "$creatorDetails.email", // อีเมลผู้สร้าง
+            tel: "$creatorDetails.tel" // เบอร์โทรผู้สร้าง
+          }
+        }
+      }
+    ]);
+
+    // ตรวจสอบว่าพบข้อมูลหรือไม่
+    if (trivias.length === 0) {
+      return res.status(404).json({ message: "Trivia not found" });
+    }
     console.log(trivias);
-    res.status(200).json(trivias);
+    res.status(200).json(trivias[0]);
   } catch (error) {
     console.log("error fetching all the trivias", error);
     res.status(500).json({ message: "Error fetching all the trivias" });

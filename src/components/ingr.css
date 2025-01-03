@@ -201,8 +201,6 @@
 
 .dropdown-ingr-card {
      position: absolute;
-     top: 42px;
-     right: 28px;
      background-color: white;
      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
      border: 1px solid #ccc;

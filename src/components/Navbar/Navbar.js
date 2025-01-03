@@ -25,25 +25,28 @@ function Navbar() {
                     <p>GOUTHIW</p>
 
                     {/* <div className='logo'>GOUTHIW</div> */}
-
+                    
                </div>
-               {nutrData ? (
-                    <div className='nav--username' onClick={toggleDropdown}>
-                         <p>{nutrData.firstname} {nutrData.lastname}</p>
-                         <i className="fa-solid fa-angle-down"></i>
-                         {dropdownVisible && (
-                              <div className='dropdown-menu'>
-                                   <button onClick={() => navigate('/profile')}>My profile</button>
-                                   <button onClick={handleLogout}>Log out</button>
-                              </div>
-                         )}
-                    </div>    
-               ) : (
-                    <div className='nav-btn'>
-                         <button className='nav--signin' onClick={() => navigate('/signin')}>Signin</button>
-                         <button className='nav--signup' onClick={() => navigate('/signup')}>Signup</button>
-                    </div>
-               )} 
+               <div className='flex'>
+                    <i className="fa-regular fa-bell"></i>
+                    {nutrData ? (
+                         <div className='nav--username' onClick={toggleDropdown}>
+                              <p>{nutrData.firstname} {nutrData.lastname}</p>
+                              <i className="fa-solid fa-angle-down"></i>
+                              {dropdownVisible && (
+                                   <div className='dropdown-menu'>
+                                        <button onClick={() => navigate('/profile')}>My profile</button>
+                                        <button onClick={handleLogout}>Log out</button>
+                                   </div>
+                              )}
+                         </div>    
+                    ) : (
+                         <div className='nav-btn'>
+                              <button className='nav--signin' onClick={() => navigate('/signin')}>Signin</button>
+                              <button className='nav--signup' onClick={() => navigate('/signup')}>Signup</button>
+                         </div>
+                    )}
+               </div>
           </div>
      )
 }

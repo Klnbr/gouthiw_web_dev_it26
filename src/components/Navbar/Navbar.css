@@ -144,6 +144,11 @@
      background-color: #f1f1f1;
 }
 
+.nav--container .flex > i {
+     margin-right: 25px;
+     align-content: center;
+}
+
 @media screen and (max-width: 850px) {
      .nav-container {
           display: none;

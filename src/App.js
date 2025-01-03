@@ -24,12 +24,30 @@ import EditProfile from './routes/nutr/EditProfile';
 import MenuDetailScreen from './routes/nutr/MenuDetailScreen';
 import AnswerTopic from './routes/nutr/AnswerTopic';
 import TriviaDetailScreen from './routes/nutr/TriviaDetailScreen';
+import Report from './routes/nutr/Report';
 
 //admin
 import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportScreen';
 import UserInformation from './routes/admin/UserInformation';
 
+function RedirectBasedOnRole() {
+  const { isAuthenticated, nutrData } = useAuth();
+
+  if (!isAuthenticated) {
+    return <Welcome />;
+  }
+
+  if (nutrData.role === '0') {
+    return <Navigate to="/home" />;
+  }
+
+  if (nutrData.role === '1') {
+    return <Navigate to="/admin/home" />;
+  }
+
+  return <Navigate to="/unauthorized" />;
+}
 
 function ProtectedRoute({ children, allowedRole }) {
   const { isAuthenticated, nutrData } = useAuth();
@@ -59,6 +77,7 @@ const nutrRoutes = [
   { path: '/profile', component: <ProfileScreen /> },
   { path: '/profile-edit', component: <EditProfile /> },
   { path: '/topic-answer', component: <AnswerTopic /> },
+  { path: '/report', component: <Report /> },
 ];
 
 const adminRoutes = [
@@ -72,7 +91,7 @@ function App() {
     <AuthProvider>
       <div className="App">
         <Routes>
-          <Route path='/' element={<Welcome />} />
+          <Route path='/' element={<RedirectBasedOnRole />} />
           <Route path='/signup' element={<RegisterScreen />} />
           <Route path='/signin' element={<LoginScreen />} />
           <Route path='/unauthorized' element={<Unauthorized />} />
