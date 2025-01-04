@@ -15,9 +15,6 @@ const reportSchema = new mongoose.Schema({
      status: {
           type: Number,
           default: 0
-          // 0 = ส่งให้แล้ว แต่ยังไม่มีอะไรเกิดขึ้น
-          // 1 = แอดมินได้รับแล้ว
-          // 2 = แอดมินตอบกลับแล้ว
      }
 },{ timestamps: true })
 

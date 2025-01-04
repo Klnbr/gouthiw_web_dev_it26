@@ -16,7 +16,7 @@ const triviaSchema = new mongoose.Schema({
      },
      isDeleted: {
           type: Boolean,
-          default: false, // Set a default value if needed
+          default: false
      },
 }, { timestamps: true });
 

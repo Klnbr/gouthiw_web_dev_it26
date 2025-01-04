@@ -70,6 +70,7 @@ const myMenu = require("./models/menu");
 const myNutr = require("./models/nutr");
 const myTopic = require("./models/topic");
 const myUser = require("./models/user");
+const myReport = require("./models/report");
 
 
 //signup
@@ -962,5 +963,211 @@ app.put("/topic/answer/:id", async (req, res) => {
   } catch (error) {
     console.log("Error adding reply to topic", error);
     res.status(500).json({ message: "Error adding reply to topic" });
+  }
+});
+
+// ดึงการรายงานมาแสดง
+app.get("/reports", async (req, res) => {
+  try {
+    const reports = await myReport.aggregate([
+      {
+        $lookup: { // โฟกัสที่ nutr_id เพื่อไปดึงข้อมูลจาก nutr มา join
+          from: "nutrs", // เปิดประตู nutrs
+          localField: "nutr_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน nutrs
+          as: "nutrDetails", // nutrs ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$nutrDetails", // แตกก้อน nutrs
+      },
+      {
+        $lookup: { // โฟกัสที่ triv_id เพื่อไปดึงข้อมูลจาก trivias มา join
+          from: "trivias", // เปิดประตู trivias
+          localField: "triv_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน trivias
+          as: "triviaDetails", // trivias ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$triviaDetails", // แตกก้อน trivias
+      },
+      {
+        $project: { // เปิดการมองเห็นข้อมูลใน reports ทั้งหมดรวมถึงข้อมูลที่ join มา
+          _id: 1,
+          triv_id: 1,
+          nutr_id: 1,
+          note: 1,
+          status: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          "nutrDetails.firstname": 1,
+          "nutrDetails.lastname": 1,
+          "nutrDetails.email": 1,
+          "nutrDetails.image_profile": 1,
+          "triviaDetails.head": 1,
+          "triviaDetails.image": 1,
+          "triviaDetails.content": 1,
+          "triviaDetails.trivia_type": 1,
+        },
+      },
+    ]);
+    return res.json(reports);
+  } catch (error) {
+    console.log("error fetching all the reports", error);
+    res.status(500).json({ message: "Error fetching all the reports" });
+  }
+});
+
+// เพิ่มการรายงาน
+app.post("/report", async (req, res) => {
+  try {
+    const { triv_id, nutr_id, note } = req.body;
+
+    const newReport = new myReport({
+      triv_id,
+      nutr_id,
+      note,
+      status: 0,
+    });
+
+    await newReport.save();
+
+    res
+      .status(201)
+      .json({ message: "Report created successfully", report: newReport });
+  } catch (error) {
+    console.log("error creating the report", error);
+    res.status(500).json({ message: "Error creating the report" });
+  }
+});
+
+// ดึงการรายงานมาแสดง (Auth)
+app.get("/report/:nutrId", async (req, res) => {
+  try {
+    const { nutrId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(nutrId)) {
+      return res.status(400).json({ message: "Invalid nutr ID" });
+    }
+
+    const reports = await myReport.aggregate([
+      { 
+        $match: { // เป็นการดึงเอา id ที่เราส่งมาพร้อม path มาเทียบกับอะไรสักอย่างใน myReport
+          nutr_id: new mongoose.Types.ObjectId(nutrId) 
+        } 
+      },
+      // ขั้นตอนนี้คือได้ก้อน report ทั้งหลายที่มี nutr_id ตรงกันแล้ว
+      {
+        $lookup: { // โฟกัสที่ nutr_id เพื่อไปดึงข้อมูลจาก nutr มา join
+          from: "nutrs", // เปิดประตู nutrs
+          localField: "nutr_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน nutrs
+          as: "nutrDetails", // nutrs ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$nutrDetails", // แตกก้อน nutrs
+      },
+      {
+        $lookup: { // โฟกัสที่ triv_id เพื่อไปดึงข้อมูลจาก trivias มา join
+          from: "trivias", // เปิดประตู trivias
+          localField: "triv_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน trivias
+          as: "triviaDetails", // trivias ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$triviaDetails", // แตกก้อน trivias
+      },
+      {
+        $project: { // เปิดการมองเห็นข้อมูลใน reports ทั้งหมดรวมถึงข้อมูลที่ join มา
+          _id: 1,
+          triv_id: 1,
+          nutr_id: 1,
+          note: 1,
+          status: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          "nutrDetails.firstname": 1,
+          "nutrDetails.lastname": 1,
+          "nutrDetails.email": 1,
+          "nutrDetails.image_profile": 1,
+          "triviaDetails.head": 1,
+          "triviaDetails.image": 1,
+          "triviaDetails.content": 1,
+          "triviaDetails.trivia_type": 1,
+        },
+      },
+    ]);
+    return res.json(reports);
+  } catch (error) {
+    console.error("Error fetching reports data", error);
+    res.status(500).json({ message: "Failed to retrieve the reports" });
+  }
+});
+
+// ดึงการรายงานมาแสดง 1 การรายงาน (Auth)
+app.get("/report/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid report ID" });
+    }
+
+    const reports = await myReport.aggregate([
+      { 
+        $match: { // เป็นการดึงเอา id ที่เราส่งมาพร้อม path มาเทียบกับอะไรสักอย่างใน myReport
+          _id: new mongoose.Types.ObjectId(id) 
+        } 
+      },
+      // ขั้นตอนนี้คือได้ก้อน report 1 ก้อน ที่มี id ตรงกันแล้ว
+      {
+        $lookup: { // โฟกัสที่ nutr_id เพื่อไปดึงข้อมูลจาก nutr มา join
+          from: "nutrs", // เปิดประตู nutrs
+          localField: "nutr_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน nutrs
+          as: "nutrDetails", // nutrs ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$nutrDetails", // แตกก้อน nutrs
+      },
+      {
+        $lookup: { // โฟกัสที่ triv_id เพื่อไปดึงข้อมูลจาก trivias มา join
+          from: "trivias", // เปิดประตู trivias
+          localField: "triv_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน trivias
+          as: "triviaDetails", // trivias ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$triviaDetails", // แตกก้อน trivias
+      },
+      {
+        $project: { // เปิดการมองเห็นข้อมูลใน reports ทั้งหมดรวมถึงข้อมูลที่ join มา
+          _id: 1,
+          triv_id: 1,
+          nutr_id: 1,
+          note: 1,
+          status: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          "nutrDetails.firstname": 1,
+          "nutrDetails.lastname": 1,
+          "nutrDetails.email": 1,
+          "nutrDetails.image_profile": 1,
+          "triviaDetails.head": 1,
+          "triviaDetails.image": 1,
+          "triviaDetails.content": 1,
+          "triviaDetails.trivia_type": 1,
+        },
+      },
+    ]);
+    return res.json(reports[0]); //กำกับว่าเอามาแค่ก้อนเดียว
+  } catch (error) {
+    console.error("Error fetching reports data", error);
+    res.status(500).json({ message: "Failed to retrieve the reports" });
   }
 });

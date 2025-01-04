@@ -12,6 +12,32 @@ function Report() {
      const { nutrData } = useAuth();
 
      const [note, setNote] = useState("")
+
+     const handleReport = async () => {
+          try {
+               const reportData = {
+                    triv_id: triviaData._id,
+                    nutr_id: nutrData._id,
+                    note: note
+               };
+          
+               console.log("Report Data:", reportData);
+               
+               const response = await axios.post(`http://localhost:5500/report`, reportData);
+               console.log("Response from server:", response);
+               
+               if (response.status === 201) {
+                    alert("ส่งรายงานสำเร็จ");
+                    navigate('/report-history');
+               }
+          } catch (error) {
+               alert("เพิ่มเข้าไม่สำเร็จ");
+               console.log("error creating trivia", error);
+               if (error.response) {
+                    console.log("Error response data:", error.response.data);
+               }
+          }
+     };
      
      return (
           <>
@@ -35,13 +61,12 @@ function Report() {
                               </div>
                               
                               <div className='form-group form-bt'>
-                                   <button type='button' className='btn-addtv'>ส่งรายงาน</button>
+                                   <button type='button' className='btn-addtv' onClick={handleReport}>ส่งรายงาน</button>
                                    {/* <button type='button' className='btn-cancel' onClick={() => navigate('/trivias')}>ยกเลิก</button> */}
                               </div>
                          </div>
                     </div>
                </div>
-               
           </>
      )
 }

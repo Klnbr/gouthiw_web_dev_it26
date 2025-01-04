@@ -24,11 +24,12 @@ import EditProfile from './routes/nutr/EditProfile';
 import MenuDetailScreen from './routes/nutr/MenuDetailScreen';
 import AnswerTopic from './routes/nutr/AnswerTopic';
 import TriviaDetailScreen from './routes/nutr/TriviaDetailScreen';
-import Report from './routes/nutr/Report';
+import Report from './routes/nutr/ReportScreen';
+import ReportHistory from './routes/nutr/ReportHistory';
 
 //admin
 import AdminHome from './routes/admin/AdminHome';
-import ReportScreen from './routes/admin/ReportScreen';
+import ReportScreen from './routes/admin/ReportManage';
 import UserInformation from './routes/admin/UserInformation';
 
 function RedirectBasedOnRole() {
@@ -78,6 +79,7 @@ const nutrRoutes = [
   { path: '/profile-edit', component: <EditProfile /> },
   { path: '/topic-answer', component: <AnswerTopic /> },
   { path: '/report', component: <Report /> },
+  { path: '/report-history', component: <ReportHistory /> },
 ];
 
 const adminRoutes = [
