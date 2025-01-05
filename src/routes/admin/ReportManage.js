@@ -29,11 +29,10 @@ function ReportManage() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`http://localhost:5500/report/${itemId}`);
+               const response = await axios.get(`http://localhost:5500/report-detail/${itemId}`);
                const reportData = response.data;
-
-               // console.log("triviaData: ", triviaData)
-               // navigate('/trivia-detail', { state: { triviaData } });
+               console.log("reportData sent: ", reportData)
+               navigate('/admin/report-detail', { state: { reportData } });
           } catch (error) {
                console.log('Error fetching report data', error.message);
           }
@@ -72,7 +71,7 @@ function ReportManage() {
                     <div className='sidebar-content-wrapper'>
                          <SideBar/>
                          <div className='content'>
-                              <div className='trivia-render'>
+                              <div className='report-render'>
                                    {reports.length > 0 ? (
                                         reports.map(item => renderItem(item))
                                    ) : (

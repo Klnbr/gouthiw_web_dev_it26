@@ -276,6 +276,13 @@
     margin: 14px auto;
 }
 
+.hr-line-100 {
+    width: 100%;
+    margin: 14px auto;
+    /* align-self:center; */
+}
+
+
 @media screen and (max-width: 1024px) {
     .container {
         flex-direction: column;

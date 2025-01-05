@@ -159,7 +159,7 @@ function IngrScreen() {
           <tr key={item._id}>
                <td>{item.name}</td>
                <td>{item.purine}</td>
-               <td>{item.uric}</td>
+              
                <td>{item.owner_name || nutrData.firstname + ' ' + nutrData.lastname}</td>
                <td>
                     <i className="fa-solid fa-ellipsis-vertical" onClick={() => toggleDropdown(item._id)}></i>
@@ -321,7 +321,7 @@ function IngrScreen() {
                                              <tr>
                                                   <th>ชื่อวัตถุดิบ</th>
                                                   <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
-                                                  <th>ค่ากรดยูริก (มิลลิกรัม / 100 กรัม)</th>
+                                             
                                                   <th>เพิ่มโดย</th>
                                                   <th></th>
                                              </tr>

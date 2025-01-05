@@ -82,7 +82,7 @@ function MenuScreen() {
                <h1>{item.menuName}</h1>
                <div className='layout'>
                     <p className='purine'>พิวรีน: {item.purine_total}</p>
-                    <p className='uric'>กรดยูริก: {item.uric_total}</p>
+                   
                </div>
           </div>
      );

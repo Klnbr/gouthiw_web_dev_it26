@@ -1,0 +1,52 @@
+/* readmore.css */
+.read-more-container {
+     position: relative;
+     max-width: 100%;
+     margin: 0 auto;
+   }
+   
+   .text {
+     overflow: hidden;
+     display: -webkit-box;
+     -webkit-line-clamp: 5; /* แสดง 3 บรรทัดแรก */
+     -webkit-box-orient: vertical;
+     text-overflow: ellipsis;
+     transition: max-height 0.3s ease-out;
+     position: relative;
+   }
+   
+   .text.collapsed::after {
+     content: "";
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     height: 1.5em; /* ความสูงของแถบเลือน */
+     background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #f8f5f5);
+   }
+   
+   
+   .text.expanded {
+     max-height: none;
+     -webkit-line-clamp: unset;
+     background: none;
+   }
+   
+   .read-more-button {
+     width: 15%;
+     font-size: 0.9vw;
+     padding: 10px;
+     border: none;
+     color: white;
+     background-color: #63b7a9;
+     cursor: pointer;
+     align-items: center;
+     margin-top: 10px;
+     border-radius: 20px;
+   }
+   
+   .read-more-button:hover {
+     text-decoration: none;
+   }
+
+  

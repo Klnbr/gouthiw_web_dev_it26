@@ -1043,7 +1043,7 @@ app.post("/report", async (req, res) => {
 });
 
 // ดึงการรายงานมาแสดง (Auth)
-app.get("/report/:nutrId", async (req, res) => {
+app.get("/reports/:nutrId", async (req, res) => {
   try {
     const { nutrId } = req.params;
 
@@ -1108,7 +1108,7 @@ app.get("/report/:nutrId", async (req, res) => {
 });
 
 // ดึงการรายงานมาแสดง 1 การรายงาน (Auth)
-app.get("/report/:id", async (req, res) => {
+app.get("/report-detail/:id", async (req, res) => {
   try {
     const { id } = req.params;
 

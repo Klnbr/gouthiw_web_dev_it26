@@ -1,0 +1,136 @@
+.report-detail-content {
+  box-shadow: 0 2px 2px 1px lightgrey;
+  padding: 20px;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  padding: 50px;
+  background-color: white;
+}
+
+.report {
+  background-color: tomato;
+  width: 80%;
+  height: 90%;
+}
+
+.report-render {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
+.report-card {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90%;
+  height: 150%;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 2px 1px lightgrey;
+  background-color: white;
+  padding: 30px;
+  margin-left: 45px;
+}
+
+.content-rp {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 250%;
+  /* gap: 20px; */
+  background-color: #efefef;
+  margin-left: 248px;
+  margin-top: 60px;
+  justify-content: center;
+}
+
+.report-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.report-details {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  height: 150%;
+}
+
+.report-details img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.report-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.report-date {
+  font-size: 0.8rem;
+  color: gray;
+  /* text-align: right; */
+  margin-left: -50px;
+  width: 15%;
+}
+
+.rp-dt {
+  /* display: flex; */
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 2px 2px 1px lightgrey;
+  background-color: rgb(244, 239, 239);
+  padding: 30px;
+  margin-left: 30px;
+  margin-top: 30px;
+}
+.tv-rp {
+  width: 90%;
+  height: 90%;
+  box-shadow: 0 2px 2px 1px #efefef;
+  background-color: white;
+  padding: 26px;
+  margin-left: 45px;
+  margin-top: 10px;
+}
+.report-info .btn-goback {
+  width: 40px;
+  padding: 5px;
+  font-size: 20px;
+  background-color: white;
+  border: none;
+  box-shadow: 2px 2px 2px gray;
+  border-radius: 10px;
+  position: absolute;
+  /* margin-top: 10px; */
+  margin-left: 10px;
+  cursor: pointer;
+  justify-content: space-between;
+}
+.report-info .btn-goback {
+  justify-content: space-between;
+}
+.rp-note {
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+@media (max-width: 768px) {
+  .report-flex {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .report-date {
+    text-align: left; /* แสดงเวลาชิดซ้ายในหน้าจอเล็ก */
+    margin-top: 0.5rem;
+  }
+}

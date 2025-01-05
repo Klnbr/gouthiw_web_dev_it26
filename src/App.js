@@ -31,7 +31,7 @@ import ReportHistory from './routes/nutr/ReportHistory';
 import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportManage';
 import UserInformation from './routes/admin/UserInformation';
-
+import ReportDetail from './routes/admin/ReportDetail'
 function RedirectBasedOnRole() {
   const { isAuthenticated, nutrData } = useAuth();
 
@@ -86,6 +86,7 @@ const adminRoutes = [
   { path: '/admin/home', component: <AdminHome /> },
   { path: '/admin/report', component: <ReportScreen /> },
   { path: '/admin/information', component: <UserInformation /> },
+  { path: '/admin/report-detail', component: <ReportDetail /> },
 ];
 
 function App() {
