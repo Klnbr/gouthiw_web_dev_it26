@@ -50,9 +50,10 @@ function Report() {
                          <div className='form-trivia'>
                               <h2>รายงาน</h2>
                               <div>
-                                   หัวข้อ: {triviaData.head}
+                                   หัวข้อ: {triviaData.head}{" "} <br />
                                    ผู้เขียน: {triviaData.creator.firstname} {triviaData.creator.lastname}
                               </div>
+                              <br />
                               <div className='form--input'>
                                    <label htmlFor='menu-type'>
                                         หมายเหตุ

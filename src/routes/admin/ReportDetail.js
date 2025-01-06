@@ -40,12 +40,12 @@ function ReportDetail() {
           <SideBar />
           <div className="content-rp">
             <div className="report-render">
-              <div className="report-card">
-                <div className="report-info">
-                  <button className="btn-goback" onClick={() => navigate(-1)}>
+            <button className="btn-goback" onClick={() => navigate(-1)}>
                     <i className="fa-solid fa-angle-left"></i>
                   </button>
-                  <h3>[รายงาน] กระทู้ | {reportData.triviaDetails.head}</h3>
+              <div className="report-card">
+                <div className="report-info">
+                  <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
                   <hr className="hr-line-100" />
                   <div className="report-flex">
                     <div className="report-details">
@@ -68,15 +68,30 @@ function ReportDetail() {
 
                   <div className="report-details">
                     <div className="rp-dt">
-                      <b>กระทู้ที่ถูกรายงาน: </b>
+                      <b>เกร็ดความรู้ที่ถูกรายงาน: </b>
                       <div className="tv-rp">
                         <h4>{reportData.triviaDetails.head}</h4>
                         <hr className="hr-line-90" />
-                        <ReadMore text={reportData.triviaDetails.content} />
-                      </div>
-                      <div className="rp-note"></div>
-                      <p>หมายเหตุ: </p>
+                        <div className="img-rp">
+                         <img className="img-tv"
+                          src={reportData.triviaDetails.image}
+                          alt={reportData.triviaDetails.head}
+                        /> 
+                        </div>
+                        
+                        <ReadMore text={reportData.triviaDetails.content} 
+                          dangerouslySetInnerHTML={{ __html: reportData.triviaDetails.content }}/>
+                   
+                      </div> 
+                      <div className="ps">
+                         <p>หมายเหตุ: </p> 
+                          <div className="rp-note">
                       <p>{reportData.note || "ไม่มีรายละเอียด"}</p>
+                      </div>
+                      </div>
+                     
+                     
+                      
                     </div>
                   </div>
                 </div>

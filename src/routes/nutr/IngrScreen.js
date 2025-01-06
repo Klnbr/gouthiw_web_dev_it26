@@ -140,20 +140,26 @@ function IngrScreen() {
                console.log('Error fetching ingr data', error.message);
           }
      };
-
      const handleItemDelete = async (itemId) => {
-          try {
-               const response = await axios.delete(`http://localhost:5500/ingr/${itemId}`);
-
-               if (response.status === 200) {
-                    alert("ลบสำเร็จ");
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
-                    setIngrs(response.data);
-               }
-          } catch (error) {
-               console.log('Error deleting ingr', error);
+          const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
+          if (!confirmDelete) {
+              return; // ถ้าไม่ยืนยัน จะไม่ทำการลบ
           }
-     };
+      
+          try {
+              const response = await axios.delete(`http://localhost:5500/ingr/${itemId}`);
+      
+              if (response.status === 200) {
+                  alert("ลบสำเร็จ");
+                  // โหลดข้อมูลใหม่หลังจากลบสำเร็จ
+                  const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+                  setIngrs(response.data);
+              }
+          } catch (error) {
+              console.log('Error deleting ingr', error);
+          }
+      };
+      
 
      const renderItem = (item) => (
           <tr key={item._id}>
@@ -162,21 +168,15 @@ function IngrScreen() {
               
                <td>{item.owner_name || nutrData.firstname + ' ' + nutrData.lastname}</td>
                <td>
-                    <i className="fa-solid fa-ellipsis-vertical" onClick={() => toggleDropdown(item._id)}></i>
-                    {dropdownVisible === item._id && (
-                         <div className='dropdown-ingr-card'>
-                              <button onClick={() => handleItemPress(item._id)}>แก้ไข</button>
-                              <button onClick={() => handleItemDelete(item._id)}>ลบ</button>
-                         </div>
-                    )}
-                    {/* <div className='ingr-btn--layout'>
+     
+                    <div className='ingr-btn--layout'>
                          <div className='ingr-btn' onClick={() => handleItemPress(item._id)}>
                               <i className="fa-solid fa-pen"></i>
                          </div>
                          <div className='ingr-btn' onClick={() => handleItemDelete(item._id)}>
                               <i className="fa-solid fa-trash-can"></i>
                          </div>
-                    </div> */}
+                    </div>
                </td>
           </tr>
      );

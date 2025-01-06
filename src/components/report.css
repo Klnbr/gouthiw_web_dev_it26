@@ -23,11 +23,11 @@
 }
 
 .report-card {
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
   width: 90%;
-  height: 150%;
-  margin-bottom: 20px;
+  height: 200%;
+  margin-bottom:90px;
   box-shadow: 0 2px 2px 1px lightgrey;
   background-color: white;
   padding: 30px;
@@ -56,7 +56,7 @@
 .report-details {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   width: 100%;
   height: 150%;
 }
@@ -84,44 +84,56 @@
 
 .rp-dt {
   /* display: flex; */
-  width: 100%;
-  height: 100%;
+  width: 110%;
+  height: 105%;
   box-shadow: 0 2px 2px 1px lightgrey;
   background-color: rgb(244, 239, 239);
   padding: 30px;
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 .tv-rp {
   width: 90%;
-  height: 90%;
+  height: 65%;
   box-shadow: 0 2px 2px 1px #efefef;
   background-color: white;
-  padding: 26px;
+  padding: 40px;
   margin-left: 45px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
-.report-info .btn-goback {
+.report-render .btn-goback {
   width: 40px;
-  padding: 5px;
+  /* padding: 5px; */
   font-size: 20px;
   background-color: white;
-  border: none;
   box-shadow: 2px 2px 2px gray;
   border-radius: 10px;
-  position: absolute;
-  /* margin-top: 10px; */
-  margin-left: 10px;
   cursor: pointer;
   justify-content: space-between;
+  margin-left: -15px;
 }
-.report-info .btn-goback {
-  justify-content: space-between;
-}
+
 .rp-note {
   margin-top: 20px;
   margin-left: 50px;
 }
+
+.ps{
+  margin-top: 20px;
+}
+
+/* .img-rp {
+  width: 100%;
+} */
+
+.img-rp img{
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: '100%';
+}
+
+
 
 @media (max-width: 768px) {
   .report-flex {

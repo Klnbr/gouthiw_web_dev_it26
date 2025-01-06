@@ -21,7 +21,7 @@ function ReportHistory() {
      useEffect(() => {
           const fetchReportData = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/report/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/reports/${nutrData._id}`, { timeout: 10000 });
                     setReports(response.data);
                } catch (error) {
                     console.log("Error fetching report data", error.message)
@@ -46,7 +46,7 @@ function ReportHistory() {
           <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
                <div className='trivia-info'>
                     <h1>{item.triviaDetails.head}</h1>
-                    <p className='trivia-date'>อัพเดตล่าสุด {calculateTimeAgo(item.updatedAt)}</p>
+                    <p className='trivia-date'>รายงานเมื่อ {calculateTimeAgo(item.updatedAt)}</p>
                     <div className='trivia-des'>
                          <p>{item.note}</p>
                     </div>

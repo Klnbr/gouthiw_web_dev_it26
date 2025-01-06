@@ -1019,6 +1019,61 @@ app.get("/reports", async (req, res) => {
   }
 });
 
+// ดึงการรายงานกระทู้มาแสดง  ยังทำไม่เสร็จจจจจ
+app.get("/report/topics", async (req, res) => {
+  try {
+    const reports = await myReport.aggregate([
+      {
+        $lookup: { // โฟกัสที่ nutr_id เพื่อไปดึงข้อมูลจาก nutr มา join
+          from: "users", // เปิดประตู nutrs
+          localField: "user_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน nutrs
+          as: "userDetails", // nutrs ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$userDetails", // แตกก้อน nutrs
+      },
+      {
+        $lookup: { // โฟกัสที่ triv_id เพื่อไปดึงข้อมูลจาก trivias มา join
+          from: "topics", // เปิดประตู trivias
+          localField: "topic_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          foreignField: "_id", // ตัวรับเทียบใน trivias
+          as: "topicDetails", // trivias ส่งข้อมูลก้อนกลับมา
+        },
+      },
+      {
+        $unwind: "$topicDetails", // แตกก้อน trivias
+      },
+      {
+        $project: { // เปิดการมองเห็นข้อมูลใน reports ทั้งหมดรวมถึงข้อมูลที่ join มา
+          _id: 1,
+         user_id: 1,
+          topic_id: 1,
+          note: 1,
+          status: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          "userDetails.name": 1,
+          "userDetails.email": 1,
+          // "userDetails.image_profile": 1,
+          "topicDetails.head": 1,
+          "topicDetails.image": 1,
+          "topicDetails.content": 1,
+          // ไม่แน่จายยย
+          "topicDetails.anwer_detail": 1,
+          "topicDetails.replies": 1,
+        },
+      },
+    ]);
+    return res.json(reports);
+  } catch (error) {
+    console.log("error fetching all the reports", error);
+    res.status(500).json({ message: "Error fetching all the reports" });
+  }
+});
+
+
 // เพิ่มการรายงาน
 app.post("/report", async (req, res) => {
   try {
