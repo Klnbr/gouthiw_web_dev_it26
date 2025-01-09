@@ -7,7 +7,7 @@ import { Input, Select } from "antd";
 import axios from 'axios';
 import '../../../src/components/menu.css'
 
-function MenuScreen() {
+function MenuScreenAdmin() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
 
@@ -198,4 +198,4 @@ function MenuScreen() {
      )
 }
 
-export default MenuScreen
+export default MenuScreenAdmin

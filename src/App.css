@@ -282,6 +282,16 @@
     /* align-self:center; */
 }
 
+.content-rph {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    /* gap: 20px; */
+    background-color: #efefef;
+    margin-left: 248px;
+    margin-top: 60px;
+}
+
 
 @media screen and (max-width: 1024px) {
     .container {

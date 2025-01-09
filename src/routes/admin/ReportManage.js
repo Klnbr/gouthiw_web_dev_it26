@@ -42,10 +42,13 @@ function ReportManage() {
           <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
                <div className='trivia-info'>
                     <h1>{item.triviaDetails.head}</h1>
-                    <p className='trivia-date'>อัพเดตล่าสุด {calculateTimeAgo(item.updatedAt)}</p>
+                    <p className='trivia-date'>รายงานเมื่อ {calculateTimeAgo(item.updatedAt)}</p>
                     <div className='trivia-des'>
                          <p>{item.note}</p>
                     </div>
+                   <div className='detail-rp'>
+                   <p>ผู้รายงาน:{item.nutrDetails.firstname} {item.nutrDetails.lastname}</p>
+                   </div>
                </div>
           </div>
      );

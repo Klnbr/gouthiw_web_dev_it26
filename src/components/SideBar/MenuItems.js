@@ -23,6 +23,11 @@ export const MenuItems = [
           title: "กระทู้คำถาม",
           url: "/topics",
           icon: "fa-solid fa-question"
+     },
+     {
+          title: "ประวัติการรายงาน",
+          url: "/report-history",
+          icon: "fa-solid fa-clock-rotate-left"
      }
      // {
      //      title: "Sign up",

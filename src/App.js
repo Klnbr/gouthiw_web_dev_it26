@@ -26,12 +26,13 @@ import AnswerTopic from './routes/nutr/AnswerTopic';
 import TriviaDetailScreen from './routes/nutr/TriviaDetailScreen';
 import Report from './routes/nutr/ReportScreen';
 import ReportHistory from './routes/nutr/ReportHistory';
-
+import ReportHistoryDetail from './routes/nutr/HistoryReportDetail';
 //admin
 import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportManage';
 import UserInformation from './routes/admin/UserInformation';
 import ReportDetail from './routes/admin/ReportDetail'
+
 function RedirectBasedOnRole() {
   const { isAuthenticated, nutrData } = useAuth();
 
@@ -80,6 +81,7 @@ const nutrRoutes = [
   { path: '/topic-answer', component: <AnswerTopic /> },
   { path: '/report', component: <Report /> },
   { path: '/report-history', component: <ReportHistory /> },
+  { path: '/report-history/detail', component: <ReportHistoryDetail /> },
 ];
 
 const adminRoutes = [
@@ -87,6 +89,7 @@ const adminRoutes = [
   { path: '/admin/report', component: <ReportScreen /> },
   { path: '/admin/information', component: <UserInformation /> },
   { path: '/admin/report-detail', component: <ReportDetail /> },
+  { path: '/admin/menus', component: <Menu /> },
 ];
 
 function App() {
