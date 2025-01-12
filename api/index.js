@@ -1226,3 +1226,56 @@ app.get("/report-detail/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to retrieve the reports" });
   }
 });
+
+//อัปเดตสถานะของรายงาน
+app.put("/reports/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!['กำลังดำเนินการ', 'ดำเนินการเสร็จสิ้น', 'การรายงานถูกปฏิเสธ'].includes(status)) {
+    return res.status(400).json({ error: 'สถานะไม่ถูกต้อง' });
+  }
+
+  try {
+    const report = await Report.findByIdAndUpdate(
+      id,
+      { status, updatedAt: new Date() },
+      { new: true }
+    );
+
+    if (!report) {
+      return res.status(404).json({ error: 'ไม่พบรายงาน' });
+    }
+
+    res.json({ message: 'สถานะอัปเดตเรียบร้อย', report });
+  } catch (error) {
+    res.status(500).json({ error: 'เกิดข้อผิดพลาดขณะอัปเดตสถานะ' });
+  }
+});
+
+//แจ้งเตือนสถานะรายงาน
+app.post('/reports/:id/notify', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const report = await Report.findById(id);
+
+    if (!report) {
+      return res.status(404).json({ error: 'ไม่พบรายงาน' });
+    }
+
+    // ตัวอย่างการแจ้งเตือน (อาจใช้ Nodemailer หรือ Firebase Cloud Messaging)
+    const notificationMessage = `
+      เรียนคุณ ${report.reporter.name},
+      สถานะของรายงานของคุณได้รับการอัปเดตเป็น: ${report.status}.
+    `;
+    console.log('Sending notification:', notificationMessage);
+
+    // TODO: ส่งอีเมลหรือ Push Notification ตามระบบที่ใช้งาน
+
+    res.json({ message: 'การแจ้งเตือนส่งเรียบร้อย' });
+  } catch (error) {
+    res.status(500).json({ error: 'เกิดข้อผิดพลาดขณะส่งการแจ้งเตือน' });
+  }
+});
+

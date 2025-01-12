@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import "../../App.css";
@@ -31,6 +31,37 @@ function ReportDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { reportData } = location.state || {}; // ดึงค่าจาก state
+  const [status, setStatus] = useState(reportData.status || "กำลังดำเนินการ");
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "ดำเนินการเสร็จสิ้น":
+        return "#28a745"; // เขียว
+      case "กำลังดำเนินการ":
+        return "#ffc107"; // เหลือง
+      case "การรายงานถูกปฏิเสธ":
+        return "#dc3545"; // แดง
+      default:
+        return "#6c757d"; // เทา
+    }
+  };
+
+  const handleStatusChange = (newStatus) => {
+    if (newStatus === status) return;
+    fetch(`/api/reports/${reportData.id}/status`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    })
+      .then((response) => response.json())
+      .then(() => {
+        alert("สถานะอัปเดตเรียบร้อย!");
+        setStatus(newStatus);
+        fetch(`/api/reports/${reportData.id}/notify`, { method: "POST" });
+      })
+      .catch((error) => console.error("Error updating status:", error));
+  };
+
 
   return (
     <>
@@ -45,8 +76,15 @@ function ReportDetail() {
                   </button>
               <div className="report-card">
                 <div className="report-info">
-                  <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
-                  <h4>สถานะ: {reportData.status}</h4>
+                <div className="report-header">
+      <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
+      <div
+        className="status-bar"
+        style={{ backgroundColor: getStatusColor(status) }}
+      >
+        <p className="status-text">{status}</p>
+      </div>
+    </div>
                   <hr className="hr-line-100" />
                   <div className="report-flex">
                     <div className="report-details">
@@ -91,7 +129,8 @@ function ReportDetail() {
                       </div>
                       </div>
                      
-                    
+                     
+                      
                     </div>
                   </div>
                 </div>

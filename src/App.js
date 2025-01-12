@@ -90,6 +90,8 @@ const adminRoutes = [
   { path: '/admin/information', component: <UserInformation /> },
   { path: '/admin/report-detail', component: <ReportDetail /> },
   { path: '/admin/menus', component: <Menu /> },
+  { path: '/admin/trivias', component: <Trivia /> },
+  { path: '/admin/trivia-detail', component: <TriviaDetailScreen /> },
 ];
 
 function App() {
