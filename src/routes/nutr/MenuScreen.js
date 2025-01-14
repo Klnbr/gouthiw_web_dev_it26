@@ -173,7 +173,7 @@ function MenuScreen() {
                                         </div>
                                    </div>
 
-                                  a {/* data rendering */}
+                                   {/* data rendering */}
                                    <div className='menu-render'>
                                         {activeButton === 'ทั้งหมด' ? (
                                              filterDisplay.length > 0 ? (

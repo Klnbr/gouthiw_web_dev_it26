@@ -70,7 +70,7 @@ function MenuScreenAdmin() {
                const menuData = response.data;
 
                console.log("Fetched Menu Data:", menuData);
-               navigate('/menu-detail', { state: { menuData } });
+               navigate('/admin/menu-detail', { state: { menuData } });
           } catch (error) {
                console.log('Error fetching menu data', error.message);
           }
@@ -173,7 +173,7 @@ function MenuScreenAdmin() {
                                         </div>
                                    </div>
 
-                                  a {/* data rendering */}
+                                   {/* data rendering */}
                                    <div className='menu-render'>
                                         {activeButton === 'ทั้งหมด' ? (
                                              filterDisplay.length > 0 ? (

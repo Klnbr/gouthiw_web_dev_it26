@@ -6,22 +6,22 @@ export const MenuAdmin = [
      },
      {
           title: "อาหาร",
-          url: "/menus",
+          url: "/admin/menus",
           icon: "fa-solid fa-burger"
      },
      {
           title: "วัตถุดิบ",
-          url: "/ingredients",
+          url: "/admin/ingredients",
           icon: "fa-solid fa-shrimp"
      },
      {
           title: "เกร็ดความรู้",
-          url: "/trivias",
+          url: "/admin/trivias",
           icon: "fa-solid fa-book"
      },
      {
           title: "กระทู้คำถาม",
-          url: "/topics",
+          url: "/admin/topics",
           icon: "fa-solid fa-question"
      },
      {

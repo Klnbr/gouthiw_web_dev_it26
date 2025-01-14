@@ -55,10 +55,10 @@ function MenuDetailScreen() {
                                         <p>พิวรีน (โดยเฉลี่ย) :</p>
                                         <p>{menuData.purine_total} มิลลิกรัม</p>
                                    </div>
-                                   <div className='menu-detail-flex'>
+                                   {/* <div className='menu-detail-flex'>
                                         <p>กรดยูริก (โดยเฉลี่ย) :</p>
                                         <p>{menuData.uric_total} มิลลิกรัม</p>
-                                   </div>
+                                   </div> */}
                               </div>
                               <div className='card-right'>
                                    <div>

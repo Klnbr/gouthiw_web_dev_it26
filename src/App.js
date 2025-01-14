@@ -32,7 +32,11 @@ import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportManage';
 import UserInformation from './routes/admin/UserInformation';
 import ReportDetail from './routes/admin/ReportDetail'
-
+import TopicScreenAd from './routes/admin/TopicScreenAd'
+import TopicDetail from './routes/admin/TopicDetail';
+import MenuScreenAdmin from './routes/admin/MenuScreenAdmin';
+import TriviaScreenAd from './routes/admin/TriviaAdmin';
+import TriviaDetailAdmin from './routes/admin/TriviaDetailAdmin';
 function RedirectBasedOnRole() {
   const { isAuthenticated, nutrData } = useAuth();
 
@@ -89,9 +93,13 @@ const adminRoutes = [
   { path: '/admin/report', component: <ReportScreen /> },
   { path: '/admin/information', component: <UserInformation /> },
   { path: '/admin/report-detail', component: <ReportDetail /> },
-  { path: '/admin/menus', component: <Menu /> },
-  { path: '/admin/trivias', component: <Trivia /> },
-  { path: '/admin/trivia-detail', component: <TriviaDetailScreen /> },
+  { path: '/admin/menus', component: <MenuScreenAdmin />  },
+  { path: '/admin/menu-detail', component: <MenuDetailScreen /> },
+  { path: '/admin/trivias', component: <TriviaScreenAd /> },
+  { path: '/admin/trivia-detail', component: <TriviaDetailAdmin /> },
+  { path: '/admin/ingredients', component: <IngrScreen /> },
+  { path: '/admin/topics', component: <TopicScreenAd /> },
+  { path: '/admin/topic-detail', component:<TopicDetail /> },
 ];
 
 function App() {

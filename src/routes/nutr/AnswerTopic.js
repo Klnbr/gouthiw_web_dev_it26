@@ -6,6 +6,21 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Input } from "antd";
 import axios from 'axios';
 
+const optionsDMY = {
+     timeZone: "Asia/Bangkok",
+     year: 'numeric',
+     month: 'long',
+     day: 'numeric',
+ };
+ 
+ const optionsTime = {
+     timeZone: "Asia/Bangkok",
+     hour: 'numeric',
+     minute: 'numeric',
+     second: 'numeric'
+ };
+ 
+ 
 function AnswerTopic() {
      const navigate = useNavigate();
      
@@ -27,7 +42,7 @@ function AnswerTopic() {
           } else if (timeDiff < 24) {
                return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
           } else {
-               return `${Math.floor(timeDiff / 24)} วันที่แล้ว`;
+               return postTime.toLocaleString("th-TH", optionsDMY);
           }
      };
 
