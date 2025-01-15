@@ -1,0 +1,75 @@
+.edit-trivia-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-trivia-title {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.edit-trivia-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.edit-trivia-field label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.edit-trivia-input,
+.edit-trivia-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.edit-trivia-image-upload {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #f0f0f0;
+}
+
+.edit-trivia-preview {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 4px;
+}
+
+.edit-trivia-placeholder {
+    font-size: 16px;
+    color: #aaa;
+}
+
+.edit-trivia-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.edit-trivia-btn {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    
+}

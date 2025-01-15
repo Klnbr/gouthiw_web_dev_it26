@@ -84,7 +84,7 @@ function IngrScreen() {
           : filterIngrs.sort((a, b) => a.purine - b.purine); // เรียงจากน้อยไปมาก
 
      const handleSave = async () => {
-          if (!name || !purine || !uric) {
+          if (!name || !purine ) {
                alert("กรุณากรอกข้อมูลให้ครบถ้วน");
                return;
           }
@@ -287,8 +287,8 @@ function IngrScreen() {
                                                   <label htmlFor='ingr-purine'>พิวรีน (มิลลิกรัม)</label>
                                                   <Input className='modal--input' value={purine} onChange={(e) => setPurine(e.target.value)} />
 
-                                                  <label htmlFor='ingr-uric'>ยูริก (มิลลิกรัม)</label>
-                                                  <Input className='modal--input' value={uric} onChange={(e) => setUric(e.target.value)} />
+                                                  {/* <label htmlFor='ingr-uric'>ยูริก (มิลลิกรัม)</label>
+                                                  <Input className='modal--input' value={uric} onChange={(e) => setUric(e.target.value)} /> */}
                                                   
                                                   <button className='ingr-save--btn' onClick={handleSave}>
                                                        <i className="fa-solid fa-floppy-disk"></i>

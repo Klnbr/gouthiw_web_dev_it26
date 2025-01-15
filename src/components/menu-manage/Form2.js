@@ -8,7 +8,7 @@ function Form2({ formData, setFormData }) {
      const [selectedIndex, setSelectedIndex] = useState(null);
 
      const [totalPurine, setTotalPurine] = useState(0);
-     const [totalUric, setTotalUric] = useState(0);
+     // const [totalUric, setTotalUric] = useState(0);
 
      const [modal, setModal] = useState(false);
 
@@ -57,8 +57,6 @@ function Form2({ formData, setFormData }) {
           switch (unit) {
                case 'กิโลกรัม':
                     return quantity * 1000; // 1 กิโลกรัม = 1000 กรัม
-               case 'ขีด':
-                    return quantity * 100; // 1 ขีด = 100 กรัม
                default:
                     return quantity; // กรัม
           }
@@ -74,10 +72,10 @@ function Form2({ formData, setFormData }) {
           return ingr ? ingr.purine : 0;
      };
       
-      const getUricValue = (ingr_id) => {
-          const ingr = ingrs.find(item => item._id === ingr_id);
-          return ingr ? ingr.uric : 0;
-     };
+     //  const getUricValue = (ingr_id) => {
+     //      const ingr = ingrs.find(item => item._id === ingr_id);
+     //      return ingr ? ingr.uric : 0;
+     // };
 
      useEffect(() => {
           const newTotalPurine = ingredients.reduce((total, ingredient) => {
@@ -88,21 +86,21 @@ function Form2({ formData, setFormData }) {
                return total + purine;
           }, 0);
        
-          const newTotalUric = ingredients.reduce((total, ingredient) => {
-               const quantity = parseFloat(ingredient.qty) || 0;
-               const unit = ingredient.unit;
-               const uricPerUnit = parseFloat(getUricValue(ingredient.ingr_id)) || 0;
-               const uric = convertToGrams(quantity, unit) * uricPerUnit / 100;
-               return total + uric;
-          }, 0);
+          // const newTotalUric = ingredients.reduce((total, ingredient) => {
+          //      const quantity = parseFloat(ingredient.qty) || 0;
+          //      const unit = ingredient.unit;
+          //      const uricPerUnit = parseFloat(getUricValue(ingredient.ingr_id)) || 0;
+          //      const uric = convertToGrams(quantity, unit) * uricPerUnit / 100;
+          //      return total + uric;
+          // }, 0);
        
           setTotalPurine(newTotalPurine);
-          setTotalUric(newTotalUric);
+          // setTotalUric(newTotalUric);
 
           setFormData((prevFormData) => ({
                ...prevFormData,
                purine_total: newTotalPurine,
-               uric_total: newTotalUric
+               // uric_total: newTotalUric
           }));
 
      }, [setFormData, ingredients]);
@@ -165,7 +163,7 @@ function Form2({ formData, setFormData }) {
           <tr key={item._id} onClick={() => handleSelectIngr(item._id)}>
                <td>{item.name}</td>
                <td>{item.purine}</td>
-               <td>{item.uric}</td>
+               {/* <td>{item.uric}</td> */}
           </tr>
      );
 
@@ -176,10 +174,10 @@ function Form2({ formData, setFormData }) {
                          <h1>รวมพิวรีน: </h1>
                          <p>{totalPurine.toFixed(2)} mg</p>
                     </div>
-                    <div className='ingr-head-r'>
+                    {/* <div className='ingr-head-r'>
                          <h1>รวมยูริก: </h1>
                          <p>{totalUric.toFixed(2)} mg</p>
-                    </div>
+                    </div> */}
                </div>
                {modal && (
                     <div className='modal-ingr'>
@@ -324,7 +322,7 @@ function Form2({ formData, setFormData }) {
                                         readOnly
                                         />
                               </div>
-                              <div className='form--input-1-col'>
+                              {/* <div className='form--input-1-col'>
                                    <label htmlFor='ingr-uric'>
                                         กรดยูริก
                                    </label>
@@ -334,7 +332,7 @@ function Form2({ formData, setFormData }) {
                                         value={getUricValue(ingredient.ingr_id).toFixed(2)}
                                         readOnly
                                         />
-                              </div>
+                              </div> */}
                          </div>
                     </div>
                ))}

@@ -9,6 +9,8 @@ import SideBar from '../SideBar/SideBar';
 import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 import Editor from 'react-simple-wysiwyg';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 function CreateTrivia() {
     const navigate = useNavigate();
@@ -26,24 +28,25 @@ function CreateTrivia() {
                 return;
             }
 
-            const storageRef = firebase.storage().ref();
-            const imageRef = storageRef.child(`images/${image.name}`);
-            await imageRef.put(image);
-            const imageUrl = await imageRef.getDownloadURL();
+            const storage = getStorage();
+            const storageRef = ref(storage, `images/${image.name}`);
+            await uploadBytes(storageRef, image);
+
+            // ดึง URL ของภาพที่อัปโหลด
+            const imageUrl = await getDownloadURL(storageRef);
             console.log("Image uploaded successfully. URL:", imageUrl);
-        
             const trivData = {
                 head: head,
                 image: imageUrl,
                 content: content,
                 isDeleted: false
             };
-        
+
             console.log("Triv Data:", trivData);
-        
+
             const response = await axios.post("http://localhost:5500/addTrivia", trivData);
             console.log("Response from server:", response);
-        
+
             if (response.status === 201) {
                 alert("เพิ่มเข้าสำเร็จ");
                 navigate('/trivias');
@@ -64,12 +67,14 @@ function CreateTrivia() {
                 return;
             }
 
-            const storageRef = firebase.storage().ref();
-            const imageRef = storageRef.child(`images/${image.name}`);
-            await imageRef.put(image);
-            const imageUrl = await imageRef.getDownloadURL();
+            const storage = getStorage();
+            const storageRef = ref(storage, `images/${image.name}`);
+            await uploadBytes(storageRef, image);
+
+            // ดึง URL ของภาพที่อัปโหลด
+            const imageUrl = await getDownloadURL(storageRef);
             console.log("Image uploaded successfully. URL:", imageUrl);
-        
+
             const trivData = {
                 head: head,
                 image: imageUrl,
@@ -77,12 +82,12 @@ function CreateTrivia() {
                 trivia_type: type,
                 isDeleted: false
             };
-        
+
             console.log("Triv Data:", trivData);
-        
+
             const response = await axios.post(`http://localhost:5500/trivia/${nutrData._id}`, trivData);
             console.log("Response from server:", response);
-        
+
             if (response.status === 201) {
                 alert("เพิ่มเข้าสำเร็จ");
                 navigate('/trivias');
@@ -118,13 +123,13 @@ function CreateTrivia() {
                         <div className='form-trivia'>
                             <h1>เพิ่มเกร็ดความรู้</h1>
                             <div className='trivia-flex'>
-                                <Input 
-                                    className='trivia-form--input' 
-                                    value={head} 
-                                    onChange={(e) => setHead(e.target.value)} 
+                                <Input
+                                    className='trivia-form--input'
+                                    value={head}
+                                    onChange={(e) => setHead(e.target.value)}
                                     placeholder='หัวข้อเกร็ดความรู้'
                                 />
-                                <Select 
+                                <Select
                                     className='trivia-form--select'
                                     placeholder="เลือกประเภท"
                                     // value={type}
@@ -150,12 +155,12 @@ function CreateTrivia() {
                                     ]}
                                 />
                             </div>
-                            
+
                             <Editor
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder='รายละเอียด'
-                                />
+                            />
                             {/* <TextArea 
                                 className='form--inputbox' 
                                 rows='6' 
@@ -177,24 +182,24 @@ function CreateTrivia() {
                                         <p>ภาพประกอบ</p>
                                     </div>
                                 )}
-                                <input 
+                                <input
                                     type="file"
                                     id="imageUpload"
                                     onChange={handleImageChange} />
                             </div>
                         </div>
-                        
+
                         <div className='form-group form-bt'>
-                            <button 
-                                className='btn-cancel' 
+                            <button
+                                className='btn-cancel'
                                 onClick={() => navigate('/trivias')}>ยกเลิก</button>
-                            <button 
-                                className='btn-addtv' 
+                            <button
+                                className='btn-addtv'
                                 onClick={handleAddTrivId}>บันทึกข้อมูล</button>
                         </div>
-                    </div>     
+                    </div>
                 </div>
-                
+
             </div>
         </>
     )

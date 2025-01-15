@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import React from 'react';
+import React,{ useEffect } from 'react';
 import './App.css';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import AuthProvider, { useAuth }  from './middleware/Auth';
@@ -24,6 +24,7 @@ import EditProfile from './routes/nutr/EditProfile';
 import MenuDetailScreen from './routes/nutr/MenuDetailScreen';
 import AnswerTopic from './routes/nutr/AnswerTopic';
 import TriviaDetailScreen from './routes/nutr/TriviaDetailScreen';
+import EditTrivia from '../src/components/trivia-manage/EditTrivia'
 import Report from './routes/nutr/ReportScreen';
 import ReportHistory from './routes/nutr/ReportHistory';
 import ReportHistoryDetail from './routes/nutr/HistoryReportDetail';
@@ -37,6 +38,11 @@ import TopicDetail from './routes/admin/TopicDetail';
 import MenuScreenAdmin from './routes/admin/MenuScreenAdmin';
 import TriviaScreenAd from './routes/admin/TriviaAdmin';
 import TriviaDetailAdmin from './routes/admin/TriviaDetailAdmin';
+
+import { messaging } from './firebase';
+import { getToken, onMessage } from 'firebase/messaging';
+
+
 function RedirectBasedOnRole() {
   const { isAuthenticated, nutrData } = useAuth();
 
@@ -79,6 +85,7 @@ const nutrRoutes = [
   { path: '/menu', component: <Menu /> },
   { path: '/trivia', component: <Trivia /> },
   { path: '/trivia-detail', component: <TriviaDetailScreen /> },
+  { path: '/edit-trivia', component: <EditTrivia /> },
   { path: '/ingredients', component: <IngrScreen /> },
   { path: '/profile', component: <ProfileScreen /> },
   { path: '/profile-edit', component: <EditProfile /> },
@@ -103,6 +110,31 @@ const adminRoutes = [
 ];
 
 function App() {
+
+  const requestPermission = async () => {
+    try {
+      const token = await getToken(messaging, { vapidKey: "BIcHuJzsuP581ZDGix1MmWx9Ql7DjD-u90v-9aPMoIFtnsVmjBwrEWmVZwlkycE6fFzPl1FemP9PnwcmOV8D3co" });
+      if (token) {
+        console.log("Token received:", token);
+      } else {
+        console.warn("Permission not granted for notifications.");
+      }
+    } catch (error) {
+      console.error("Error requesting permission:", error);
+    }
+  };
+  
+  const listenForMessages = () => {
+    onMessage(messaging, (payload) => {
+      console.log("Message received:", payload);
+      alert(`${payload.notification.title}: ${payload.notification.body}`);
+    });
+  };
+  
+  useEffect(() => {
+    requestPermission();
+    listenForMessages();
+  }, []);
   return (
     <AuthProvider>
       <div className="App">

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css'
+
 const optionsDMY = {
      timeZone: "Asia/Bangkok",
      year: 'numeric',
@@ -12,11 +13,35 @@ const optionsDMY = {
      day: 'numeric',
 };
 
+
 function ReportHistory() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
 
      const [reports, setReports] = useState([])
+
+     const statusMap = {
+          0: "อยู่ระหว่างการตรวจสอบ",
+          1: "ดำเนินการเรียบร้อย",
+          2: "ปฏิเสธรายงาน",
+        };
+      
+        const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
+      
+        const getStatusColor = (status) => {
+          const numericStatus = Number(status); // แปลงเป็นตัวเลข
+          console.log("Status received:", numericStatus); // ตรวจสอบค่า
+          switch (numericStatus) {
+            case 1:
+              return "#28a745"; // เขียว
+            case 0:
+              return "#ffc107"; // เหลือง
+            case 2:
+              return "#dc3545"; // แดง
+            default:
+              return "#6c757d"; // เทา
+          }
+        };
 
      useEffect(() => {
           const fetchReportData = async () => {
@@ -42,17 +67,20 @@ function ReportHistory() {
      };
      
      const renderItem = (item) => (
-          <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
+          <div className='report-card-history' onClick={() => handleItemPress(item._id)} key={item._id}>
+              
                <div className='trivia-info'>
                     <h1>{item.triviaDetails.head}</h1>
-                    <p className='trivia-date'>รายงานเมื่อ {calculateTimeAgo(item.updatedAt)}</p>
+                    <p className='trivia-date'>รายงานเมื่อ {calculateTimeAgo(item.createdAt)}</p>
                     <div className='trivia-des'>
                          <p>{item.note}</p>
                     </div>
                    <div className='detail-rp'>
-                   <p>ผู้รายงาน:{item.nutrDetails.firstname} {item.nutrDetails.lastname}</p>
+                   <p>ผู้รายงาน:{item.nutrDetails.firstname} {item.nutrDetails.lastname}</p> <br />
+                   <p>สถานะการรายงาน: {getStatusText(item.status)}</p>
                    </div>
                </div>
+               
           </div>
      );
 

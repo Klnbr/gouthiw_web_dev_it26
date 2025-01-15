@@ -1,7 +1,8 @@
-// import { initializeApp } from "firebase/app";
+import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import firebase from "firebase/compat/app";
+import firebaseapp from "firebase/compat/app";
 import 'firebase/compat/storage' 
+import { getMessaging } from "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBob_hsCVI0S8-DoCxAayGQGqdPsY0xGX8",
@@ -14,10 +15,10 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-if(!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig)
-}
+// if(!firebase.apps.length) {
+//   firebase.initializeApp(firebaseConfig)
+// }
+const firebase = initializeApp(firebaseConfig);
 
-export {firebase};
+const messaging = getMessaging(firebase);
+export {firebase , messaging };

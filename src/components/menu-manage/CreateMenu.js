@@ -8,6 +8,8 @@ import Navbar from '../Navbar/Navbar';
 import './CreateMenu.css';
 import { useNavigate } from 'react-router-dom';
 import { firebase } from '../.././firebase'
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
 
@@ -20,10 +22,10 @@ function CreateMenu() {
           menuName: '',
           category: '',
           image: null,
-          ingredients: [{ ingr_id:'', qty:'', unit:'', purine_total: '', uric_total: '' }],
+          ingredients: [{ ingr_id:'', qty:'', unit:'', purine_total: '' }],
           method: [''],
           purine: '',
-          uric: ''
+          // uric: ''
      });
 
      const steps = [
@@ -91,19 +93,20 @@ function CreateMenu() {
                return;
           }
           try {
-               const storageRef = firebase.storage().ref();
-               const imageRef = storageRef.child(`images/${formData.image.name}`);
-               await imageRef.put(formData.image);
-               const imageUrl = await imageRef.getDownloadURL();
+               const storage= getStorage();
+               const storageRef = ref(storage, `images/${image.name}`);
+               await uploadBytes(storageRef, image);
+        
+               // ดึง URL ของภาพที่อัปโหลด
+               const imageUrl = await getDownloadURL(storageRef);
                console.log("Image uploaded successfully. URL:", imageUrl);
-
                const menuData = { 
                     menuName: formData.menuName,
                     category: formData.category,
                     ingredients: formData.ingredients,
                     method: formData.method,
                     purine_total: formData.purine_total,
-                    uric_total: formData.uric_total,
+                    // uric_total: formData.uric_total,
                     image: imageUrl,
                     isDeleted: false
                };
@@ -114,13 +117,12 @@ function CreateMenu() {
                     `http://localhost:5500/menus/${nutrData._id}`, menuData
                );
 
-               console.log("Menu created", response.data);
                if (response.status === 201) {
                     alert("เพิ่มเข้าสำเร็จ");
                     navigate('/menus');
                }
           } catch (error) {
-               alert("เพิ่มเข้าไม่สำเร็จ", error.response.data.message || "Unknown error");
+               alert("เพิ่มเข้าไม่สำเร็จ");
                console.log("error creating menu", error);
           }
      };

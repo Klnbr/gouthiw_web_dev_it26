@@ -15,7 +15,7 @@ const reportSchema = new mongoose.Schema({
      status: {
           type: Number,
           default: 0
-     }
+     } 
 },{ timestamps: true })
 
 const myReport = mongoose.model('Report', reportSchema)

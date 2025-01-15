@@ -72,6 +72,7 @@ const myTopic = require("./models/topic");
 const myUser = require("./models/user");
 const myReport = require("./models/report");
 
+const sendNotification = require("../src/notification");
 
 //signup
 app.post("/signup", async (req, res) => {
@@ -297,7 +298,7 @@ app.post("/menus/:id", async (req, res) => {
       ingredients,
       method,
       purine_total,
-      uric_total,
+      // uric_total,
       image,
       isDeleted,
     } = req.body;
@@ -307,7 +308,7 @@ app.post("/menus/:id", async (req, res) => {
     }
 
     const formattedPurine = !isNaN(parseFloat(purine_total)) ? parseFloat(purine_total).toFixed(2) : 0;
-    const formattedUric = !isNaN(parseFloat(uric_total)) ? parseFloat(uric_total).toFixed(2) : 0;
+    // const formattedUric = !isNaN(parseFloat(uric_total)) ? parseFloat(uric_total).toFixed(2) : 0;
 
     const newMenu = new myMenu({
       menuName,
@@ -315,7 +316,7 @@ app.post("/menus/:id", async (req, res) => {
       ingredients,
       method,
       purine_total: formattedPurine,
-      uric_total: formattedUric,
+      // uric_total: formattedUric,
       image,
       isDeleted,
     });
@@ -1167,6 +1168,8 @@ app.get("/report-detail/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
+   
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid report ID" });
     }
@@ -1230,52 +1233,70 @@ app.get("/report-detail/:id", async (req, res) => {
 //อัปเดตสถานะของรายงาน
 app.put("/reports/:id/status", async (req, res) => {
   const { id } = req.params;
-  const { status } = req.body;
-
-  if (!['กำลังดำเนินการ', 'ดำเนินการเสร็จสิ้น', 'การรายงานถูกปฏิเสธ'].includes(status)) {
-    return res.status(400).json({ error: 'สถานะไม่ถูกต้อง' });
-  }
+  const { status, isDeleted } = req.body;
 
   try {
-    const report = await Report.findByIdAndUpdate(
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid report ID" });
+    }
+
+    const updatedReport = await myReport.findByIdAndUpdate(
       id,
-      { status, updatedAt: new Date() },
+      { status, isDeleted },
       { new: true }
     );
 
-    if (!report) {
-      return res.status(404).json({ error: 'ไม่พบรายงาน' });
+    if (!updatedReport) {
+      return res.status(404).send({ error: "Report not found" });
+    }
+    res.status(200).send(updatedReport);
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+});
+
+//ลบการรายงาน
+app.delete("/report-detail/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const softDeletedReport = await myReport.findByIdAndUpdate(id, {
+      isDeleted: true,
+    });
+
+    if (!softDeletedReport) {
+      return res.status(404).json({ message: "Report not found" });
     }
 
-    res.json({ message: 'สถานะอัปเดตเรียบร้อย', report });
+    res.status(200).json({ message: "Report soft deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: 'เกิดข้อผิดพลาดขณะอัปเดตสถานะ' });
+    console.log("Error delete report", error);
+    res.status(500).json({ message: "Error delete report" });
   }
 });
 
 //แจ้งเตือนสถานะรายงาน
-app.post('/reports/:id/notify', async (req, res) => {
-  const { id } = req.params;
+// app.post('/reports/:id/notify', async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const report = await Report.findById(id);
+//   try {
+//     const report = await Report.findById(id);
 
-    if (!report) {
-      return res.status(404).json({ error: 'ไม่พบรายงาน' });
-    }
+//     if (!report) {
+//       return res.status(404).json({ error: 'ไม่พบรายงาน' });
+//     }
 
-    // ตัวอย่างการแจ้งเตือน (อาจใช้ Nodemailer หรือ Firebase Cloud Messaging)
-    const notificationMessage = `
-      เรียนคุณ ${report.reporter.name},
-      สถานะของรายงานของคุณได้รับการอัปเดตเป็น: ${report.status}.
-    `;
-    console.log('Sending notification:', notificationMessage);
+//     // ตัวอย่างการแจ้งเตือน (อาจใช้ Nodemailer หรือ Firebase Cloud Messaging)
+//     const notificationMessage = `
+//       เรียนคุณ ${report.reporter.name},
+//       สถานะของรายงานของคุณได้รับการอัปเดตเป็น: ${report.status}.
+//     `;
+//     console.log('Sending notification:', notificationMessage);
 
-    // TODO: ส่งอีเมลหรือ Push Notification ตามระบบที่ใช้งาน
+//     // TODO: ส่งอีเมลหรือ Push Notification ตามระบบที่ใช้งาน
 
-    res.json({ message: 'การแจ้งเตือนส่งเรียบร้อย' });
-  } catch (error) {
-    res.status(500).json({ error: 'เกิดข้อผิดพลาดขณะส่งการแจ้งเตือน' });
-  }
-});
+//     res.json({ message: 'การแจ้งเตือนส่งเรียบร้อย' });
+//   } catch (error) {
+//     res.status(500).json({ error: 'เกิดข้อผิดพลาดขณะส่งการแจ้งเตือน' });
+//   }
+// });
 

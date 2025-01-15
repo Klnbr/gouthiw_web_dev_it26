@@ -113,12 +113,22 @@
      color: #999;
 }
 
-
-
-
-
-
-
+/* .menu-edit {
+     display: flex;
+     justify-content: center; 
+     align-items: center; 
+     width: 5%;
+     padding: 10px;
+     border: none;
+     color: white;
+     border-radius: 5%;
+     background-color: #FFA13F;
+     cursor: pointer;
+     margin-left: auto; 
+     margin-right: 50px;
+     margin-top: 10px;
+ }
+  */
 
 
 .menu-render{

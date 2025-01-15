@@ -44,6 +44,7 @@ function MenuDetailScreen() {
                                    </button>
                               )}
                          </button>
+
                          <div className='menu-detail-content'>
                               <div className='card-left'>
                                    <div className='menu-detail-flex'>

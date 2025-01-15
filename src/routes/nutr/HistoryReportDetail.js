@@ -33,35 +33,28 @@ function ReportDetail() {
   const { reportData } = location.state || {}; // ดึงค่าจาก state
   const [status, setStatus] = useState(reportData.status || "กำลังดำเนินการ");
 
+  const statusMap = {
+    0: "อยู่ระหว่างการตรวจสอบ",
+    1: "ดำเนินการเรียบร้อย",
+    2: "ปฏิเสธรายงาน",
+  };
+
+  const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
+
   const getStatusColor = (status) => {
-    switch (status) {
-      case "ดำเนินการเสร็จสิ้น":
+    const numericStatus = Number(status); // แปลงเป็นตัวเลข
+    console.log("Status received:", numericStatus); // ตรวจสอบค่า
+    switch (numericStatus) {
+      case 1:
         return "#28a745"; // เขียว
-      case "กำลังดำเนินการ":
+      case 0:
         return "#ffc107"; // เหลือง
-      case "การรายงานถูกปฏิเสธ":
+      case 2:
         return "#dc3545"; // แดง
       default:
         return "#6c757d"; // เทา
     }
   };
-
-  const handleStatusChange = (newStatus) => {
-    if (newStatus === status) return;
-    fetch(`/api/reports/${reportData.id}/status`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        alert("สถานะอัปเดตเรียบร้อย!");
-        setStatus(newStatus);
-        fetch(`/api/reports/${reportData.id}/notify`, { method: "POST" });
-      })
-      .catch((error) => console.error("Error updating status:", error));
-  };
-
 
   return (
     <>
@@ -79,11 +72,11 @@ function ReportDetail() {
                 <div className="report-header">
       <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
       <div
-        className="status-bar"
-        style={{ backgroundColor: getStatusColor(status) }}
-      >
-        <p className="status-text">{status}</p>
-      </div>
+                      className="status-bar"
+                      style={{ backgroundColor: getStatusColor(status) }}
+                    >
+                      <p className="status-text">{getStatusText(status)}</p>
+                    </div>
     </div>
                   <hr className="hr-line-100" />
                   <div className="report-flex">
@@ -101,7 +94,7 @@ function ReportDetail() {
                       </div>
                     </div>
                     <p className="report-date">
-                      {calculateTimeAgo(reportData.updatedAt)}
+                      {calculateTimeAgo(reportData.createdAt)}
                     </p>
                   </div>
 

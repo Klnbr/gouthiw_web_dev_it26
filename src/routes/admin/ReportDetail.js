@@ -5,6 +5,7 @@ import "../../App.css";
 import "../../components/report.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReadMore from "../../components/Readmore";
+import axios from "axios";
 
 const optionsDMY = {
   timeZone: "Asia/Bangkok", // แก้ไข timezone
@@ -30,38 +31,85 @@ const calculateTimeAgo = (createdAt) => {
 function ReportDetail() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [reports, setReports] = useState([])
   const { reportData } = location.state || {}; // ดึงค่าจาก state
-  const [status, setStatus] = useState(reportData.status || "กำลังดำเนินการ");
+  const [status, setStatus] = useState(reportData.status || 0);
+
+  const statusMap = {
+    0: "อยู่ระหว่างการตรวจสอบ",
+    1: "ดำเนินการเรียบร้อย",
+    2: "ปฏิเสธรายงาน",
+  };
+
+  const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
 
   const getStatusColor = (status) => {
-    switch (status) {
-      case "ดำเนินการเสร็จสิ้น":
+    const numericStatus = Number(status); // แปลงเป็นตัวเลข
+    console.log("Status received:", numericStatus); // ตรวจสอบค่า
+    switch (numericStatus) {
+      case 1:
         return "#28a745"; // เขียว
-      case "กำลังดำเนินการ":
+      case 0:
         return "#ffc107"; // เหลือง
-      case "การรายงานถูกปฏิเสธ":
+      case 2:
         return "#dc3545"; // แดง
       default:
         return "#6c757d"; // เทา
     }
   };
 
-  const handleStatusChange = (newStatus) => {
-    if (newStatus === status) return;
-    fetch(`/reports/${reportData.id}/status`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus }),
-    })
-      .then((response) => response.json())
-      .then(() => {
-        alert("สถานะอัปเดตเรียบร้อย!");
-        setStatus(newStatus);
-        fetch(`/reports/${reportData.id}/notify`, { method: "POST" });
-      })
-      .catch((error) => console.error("Error updating status:", error));
+  const handleStatusChange = (newStatusNumber) => {
+    if (Number(newStatusNumber) === status) return; // ตรวจสอบหากสถานะยังคงเดิม
+    setStatus(Number(newStatusNumber)); // อัปเดตสถานะใน state
+    updateStatus(Number(newStatusNumber)); // อัปเดตสถานะในฐานข้อมูล
   };
 
+  const updateStatus = async (newStatus) => {
+    try {
+      const updatedReportData = {
+        ...reportData,
+        status: newStatus,
+        isDeleted: false,
+      };
+      console.log("Updated Report Data:", updatedReportData);
+      const response = await axios.put(
+        `http://localhost:5500/reports/${reportData._id}/status`, // ใช้ `_id` ของรายงานที่กำลังแก้ไข
+        updatedReportData
+      );
+
+      if (response.status === 200) {
+        alert("อัพเดตสถานะสำเร็จ!");
+        console.log("Response from server:", response.data);
+      }
+    } catch (error) {
+      alert("อัพเดตสถานะไม่สำเร็จ");
+      console.error("Error updating report:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+      }
+    }
+  };
+
+  const handleItemDelete = async (reportId) => {
+    const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
+    if (!confirmDelete) {
+      return; // ถ้าไม่ยืนยัน จะไม่ทำการลบ
+    }
+
+    try {
+      const response = await axios.delete(`http://localhost:5500/report-detail/${reportId}`);
+
+      if (response.status === 200) {
+        alert("ลบสำเร็จ");
+      
+        const response = await axios.get("http://localhost:5500/reports", { timeout: 10000 });
+        setReports(response.data);
+        navigate('/admin/report-detail', { state: { reportData } });
+      }
+    } catch (error) {
+      console.log('Error deleting report', error);
+    }
+  };
 
   return (
     <>
@@ -71,20 +119,21 @@ function ReportDetail() {
           <SideBar />
           <div className="content-rp">
             <div className="report-render">
-            <button className="btn-goback" onClick={() => navigate(-1)}>
-                    <i className="fa-solid fa-angle-left"></i>
-                  </button>
+              <button className="btn-goback" onClick={() => navigate(-1)}>
+                <i className="fa-solid fa-angle-left"></i>
+              </button>
               <div className="report-card">
                 <div className="report-info">
-                <div className="report-header">
-      <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
-      <div
-        className="status-bar"
-        style={{ backgroundColor: getStatusColor(status) }}
-      >
-        <p className="status-text">{status}</p>
-      </div>
-    </div>
+                  <div className="report-header">
+                    <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
+                    <div
+                      className="status-bar"
+                      style={{ backgroundColor: getStatusColor(status) }}
+                    >
+                      <p className="status-text">{getStatusText(status)}</p>
+                    </div>
+
+                  </div>
                   <hr className="hr-line-100" />
                   <div className="report-flex">
                     <div className="report-details">
@@ -101,7 +150,7 @@ function ReportDetail() {
                       </div>
                     </div>
                     <p className="report-date">
-                      {calculateTimeAgo(reportData.updatedAt)}
+                      {calculateTimeAgo(reportData.createdAt)}
                     </p>
                   </div>
 
@@ -112,23 +161,23 @@ function ReportDetail() {
                         <h4>{reportData.triviaDetails.head}</h4>
                         <hr className="hr-line-90" />
                         <div className="img-rp">
-                         <img className="img-tv"
-                          src={reportData.triviaDetails.image}
-                          alt={reportData.triviaDetails.head}
-                        /> 
+                          <img className="img-tv"
+                            src={reportData.triviaDetails.image}
+                            alt={reportData.triviaDetails.head}
+                          />
                         </div>
-                        
-                        <ReadMore text={reportData.triviaDetails.content} 
-                          dangerouslySetInnerHTML={{ __html: reportData.triviaDetails.content }}/>
-                   
-                      </div> 
+
+                        <ReadMore text={reportData.triviaDetails.content}
+                          dangerouslySetInnerHTML={{ __html: reportData.triviaDetails.content }} />
+
+                      </div>
                       <div className="ps">
-                         <p>หมายเหตุ: </p> 
-                          <div className="rp-note">
-                      <p>{reportData.note || "ไม่มีรายละเอียด"}</p>
+                        <p>หมายเหตุ: </p>
+                        <div className="rp-note">
+                          <p>{reportData.note || "ไม่มีรายละเอียด"}</p>
+                        </div>
                       </div>
-                      </div>
-                    </div>  
+                    </div>
                   </div>
                   <div className="action-buttons">
                     <div className="status-update">
@@ -138,20 +187,18 @@ function ReportDetail() {
                         onChange={(e) => handleStatusChange(e.target.value)}
                         value={status}
                       >
-                        <option value="อยู่ระหว่างการตรวจสอบ">อยู่ระหว่างการตรวจสอบ</option>
-                        <option value="ดำเนินการเรียบร้อย">ดำเนินการเรียบร้อย</option>
-                        <option value="ปฏิเสธรายงาน">ปฏิเสธรายงาน</option>
+                        <option value={0}>อยู่ระหว่างการตรวจสอบ</option>
+                        <option value={1}>ดำเนินการเรียบร้อย</option>
+                        <option value={2}>ปฏิเสธรายงาน</option>
                       </select>
                     </div>
                     <button
                       className="btn-delete"
-                      onClick={() =>
-                        window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรายงานนี้?") &&
-                        navigate(-1)
-                      }
+                      onClick={() => handleItemDelete(reportData._id)} // Correctly passing reportData._id
                     >
-                      ลบรายงาน
+                      ลบเกร็ดความรู้
                     </button>
+
                   </div>
 
                 </div>

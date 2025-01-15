@@ -79,7 +79,7 @@ function AnswerTopic() {
                const response = await axios.put(`http://localhost:5500/topic/answer/${topicData._id}`, ansData);
                console.log("Response from server:", response);
 
-               if (response.status === 201) {
+               if (response.status === 200) {
                     alert("ตอบกระทู้สำเร็จ");
                     navigate('/topics');
                }

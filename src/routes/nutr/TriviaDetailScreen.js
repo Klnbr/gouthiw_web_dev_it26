@@ -5,6 +5,7 @@ import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
 
+
 const optionsDMY = {
     timeZone: "Asia/Bangkok", year: 'numeric', month: 'long', day: 'numeric',
 };
@@ -22,7 +23,7 @@ function TriviaDetailScreen() {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
         }
-    }, [nutrData, triviaData]);
+    }, [nutrData]);
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date();
@@ -54,6 +55,17 @@ function TriviaDetailScreen() {
         setDropdownVisible(!dropdownVisible);
     };
 
+    const handleItemPress = async (itemId) => {
+        try {
+             const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
+             const triviaData = response.data;
+
+             navigate('/trivia', { state: { triviaData } });
+        } catch (error) {
+             console.log('Error fetching menu data', error.message);
+        }
+   };
+
     return (
         <>
             <div className='container'>
@@ -61,7 +73,13 @@ function TriviaDetailScreen() {
                 <div className='content-no-sidebar'>
                     <button className="btn-goback" onClick={() => navigate(-1)}>
                         <i className="fa-solid fa-angle-left"></i>
+                       
                     </button>
+                    { editButton &&
+                            <button className="btn-edit" 
+                                onClick={() => handleItemPress(triviaData._id)}>
+                        แก้ไข</button>}  
+                    
 
                     <div className='triv-detail-content'>
                         <div className='dropdown-container-tv'>

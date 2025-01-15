@@ -20,7 +20,7 @@ function EditMenu() {
           ingredients: [],
           method: [],
           purine: 0,
-          uric: 0
+          // uric: 0
      });
 
      useEffect(() => {
@@ -32,7 +32,7 @@ function EditMenu() {
                     ingredients: menuData.ingredients || [],
                     method: menuData.method || [],
                     purine: menuData.purine,
-                    uric: menuData.uric
+                    // uric: menuData.uric
                });
           }
      }, [menuData]);
@@ -86,7 +86,7 @@ function EditMenu() {
                     ingredients: formData.ingredients,
                     method: formData.method,
                     purine: formData.purine,
-                    uric: formData.uric,
+                    // uric: formData.uric,
                     image: imageUrl,
                     isDeleted: false
                };
