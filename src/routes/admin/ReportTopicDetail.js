@@ -15,46 +15,27 @@ const optionsDMY = {
 };
 
 const calculateTimeAgo = (createdAt) => {
-  const currentTime = new Date();
-  const postTime = new Date(createdAt);
-  const timeDiff = Math.abs(currentTime - postTime) / 36e5;
+    const currentTime = new Date();
+    const postTime = new Date(createdAt);
+    const timeDiff = Math.abs(currentTime - postTime) / 36e5; // คำนวณต่างเป็นชั่วโมง
+  
+    if (timeDiff < 1) {
+      return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
+    } else if (timeDiff < 24) {
+      return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
+    } else {
+      return postTime.toLocaleString("th-TH", optionsDMY);
+    }
+  };
 
-  if (timeDiff < 1) {
-    return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-  } else if (timeDiff < 24) {
-    return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
-  } else {
-    return postTime.toLocaleString("th-TH", optionsDMY);
-  }
-};
-
-function ReportDetail() {
-  const navigate = useNavigate();
+function ReportTopicDetail() {
+ const navigate = useNavigate();
   const location = useLocation();
   const [reports, setReports] = useState([]);
-  const [reportData, setReportData] = useState(location.state?.reportData || null);
+  const { reportData } = location.state || {}; // ดึงค่าจาก state
   const [status, setStatus] = useState(reportData?.status || 0);
-
-  // โหลดข้อมูลใหม่ถ้า reportData หายไป
-  useEffect(() => {
-    if (!reportData) {
-      const fetchReport = async () => {
-        try {
-          const response = await axios.get("http://localhost:5500/report/trivias");
-          const foundReport = response.data.find(r => r._id === location.state?.reportId) || null;
-          setReportData(foundReport);
-        } catch (error) {
-          console.error("Error fetching report:", error);
-        }
-      };
-      fetchReport();
-    }
-  }, [reportData, location.state?.reportId]);
-
-  // ถ้า reportData ยังไม่โหลดให้แสดง Loading...
-  // if (!reportData || !reportData.triviaDetails) {
-  //   return <p>Loading...</p>;
-  // }
+  const [reportstopic, setReportstopic] = useState([]);
+  const [reportsTopic, setReportsTopic] = useState([]);
 
   const statusMap = {
     0: "อยู่ระหว่างการตรวจสอบ",
@@ -62,22 +43,22 @@ function ReportDetail() {
     2: "ปฏิเสธรายงาน",
   };
 
-  const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
-
   const getStatusColor = (status) => {
-    const numericStatus = Number(status);
+    const numericStatus = Number(status); // แปลงเป็นตัวเลข
     switch (numericStatus) {
       case 1:
-        return "#28a745";
+        return "#28a745"; // เขียว
       case 0:
-        return "#ffc107";
+        return "#ffc107"; // เหลือง
       case 2:
-        return "#dc3545";
+        return "#dc3545"; // แดง
       default:
-        return "#6c757d";
+        return "#6c757d"; // เทา
     }
   };
 
+  const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
+  
   const handleStatusChange = (newStatusNumber) => {
     if (Number(newStatusNumber) === status) return;
     setStatus(Number(newStatusNumber));
@@ -111,7 +92,7 @@ function ReportDetail() {
       const response = await axios.delete(`http://localhost:5500/report-detail/${reportId}`);
       if (response.status === 200) {
         alert("ลบสำเร็จ");
-        const updatedResponse = await axios.get("http://localhost:5500/report/trivias" , reportData);
+        const updatedResponse = await axios.get("http://localhost:5500/report/topics" , reportData);
         setReports(updatedResponse.data);
         navigate("/admin/report");
       }
@@ -119,7 +100,6 @@ function ReportDetail() {
       alert("เกิดข้อผิดพลาดในการลบ");
     }
   };
-
   return (
     <div className="container">
       <Navbar />
@@ -133,7 +113,7 @@ function ReportDetail() {
             <div className="report-card">
               <div className="report-info">
                 <div className="report-header">
-                  <h3>[รายงาน] เกร็ดความรู้ | {reportData.triviaDetails.head}</h3>
+                  <h3>[รายงาน] กระทู้ | {reportData.topicDetails.title}</h3>
                   <div
                     className="status-bar"
                     style={{ backgroundColor: getStatusColor(status) }}
@@ -145,14 +125,14 @@ function ReportDetail() {
                 <div className="report-flex">
                   <div className="report-details">
                     <img
-                      src={reportData.nutrDetails.image_profile}
-                      alt={`${reportData.nutrDetails.firstname} ${reportData.nutrDetails.lastname}`}
+                      src={reportData.userDetails.image_profile}
+                      alt={`${reportData.userDetails.firstname} ${reportData.userDetails.lastname}`}
                     />
                     <div className="report-info">
                       <p>
-                        {reportData.nutrDetails.firstname} {reportData.nutrDetails.lastname}
+                        {reportData.userDetails.name}
                       </p>
-                      <p>{reportData.nutrDetails.email}</p>
+                      <p>{reportData.userDetails.email}</p>
                     </div>
                   </div>
                   <p className="report-date">
@@ -162,21 +142,21 @@ function ReportDetail() {
 
                 <div className="report-details">
                   <div className="rp-dt">
-                    <b>เกร็ดความรู้ที่ถูกรายงาน: </b>
+                    <b>กระทู้ที่ถูกรายงาน: </b>
                     <div className="tv-rp">
-                      <h4>{reportData.triviaDetails.head}</h4>
+                      <h4>{reportData.topicDetails.title}</h4>
                       <hr className="hr-line-90" />
                       <div className="img-rp">
                         <img
                           className="img-tv"
-                          src={reportData.triviaDetails.image}
-                          alt={reportData.triviaDetails.head}
+                          src={reportData.topicDetails.image}
+                          alt={reportData.topicDetails.head}
                         />
                       </div>
                       <ReadMore
-                        text={reportData.triviaDetails.content}
+                        text={reportData.topicDetails.content}
                         dangerouslySetInnerHTML={{
-                          __html: reportData.triviaDetails.content,
+                          __html: reportData.topicDetails.content,
                         }}
                       />
                     </div>
@@ -205,7 +185,7 @@ function ReportDetail() {
                     className="btn-delete"
                     onClick={() => handleItemDelete(reportData._id)}
                   >
-                    ลบเกร็ดความรู้
+                    ลบกระทู้
                   </button>
                 </div>
               </div>
@@ -216,5 +196,5 @@ function ReportDetail() {
     </div>
   );
 }
+export default  ReportTopicDetail;
 
-export default ReportDetail;

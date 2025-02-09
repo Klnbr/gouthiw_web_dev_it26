@@ -38,6 +38,7 @@ import TopicDetail from './routes/admin/TopicDetail';
 import MenuScreenAdmin from './routes/admin/MenuScreenAdmin';
 import TriviaScreenAd from './routes/admin/TriviaAdmin';
 import TriviaDetailAdmin from './routes/admin/TriviaDetailAdmin';
+import ReportTopicDetail from './routes/admin/ReportTopicDetail';
 
 import { messaging } from './firebase';
 import { getToken, onMessage } from 'firebase/messaging';
@@ -99,7 +100,8 @@ const adminRoutes = [
   { path: '/admin/home', component: <AdminHome /> },
   { path: '/admin/report', component: <ReportScreen /> },
   { path: '/admin/information', component: <UserInformation /> },
-  { path: '/admin/report-detail', component: <ReportDetail /> },
+  { path: '/admin/report-trivia-detail', component: <ReportDetail /> },
+  { path: '/admin/report-topic-detail', component: <ReportTopicDetail /> },
   { path: '/admin/menus', component: <MenuScreenAdmin />  },
   { path: '/admin/menu-detail', component: <MenuDetailScreen /> },
   { path: '/admin/trivias', component: <TriviaScreenAd /> },

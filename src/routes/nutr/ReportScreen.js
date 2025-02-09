@@ -4,6 +4,7 @@ import axios from 'axios';
 import TextArea from 'antd/es/input/TextArea';
 import Navbar from '../../components/Navbar/Navbar'
 import { useAuth } from '../../middleware/Auth';
+import { notification } from 'antd';
 
 function Report() {
      const navigate = useNavigate();
@@ -18,7 +19,8 @@ function Report() {
                const reportData = {
                     triv_id: triviaData._id,
                     nutr_id: nutrData._id,
-                    note: note
+                    note: note,
+                    recipientRole: "admin"
                };
           
                console.log("Report Data:", reportData);

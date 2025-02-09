@@ -65,6 +65,21 @@
   margin-right: auto;
 }
 
+.trivia-header {
+  display: flex;
+  /* justify-content: space-between;  ให้แยกช่องว่างระหว่าง <h1> และ "รายงานเมื่อ" */
+  align-items: center;  /* จัดให้เนื้อหากลางในแนวตั้ง */
+}
+
+.trivia-header h1 {
+  margin: 0;  /* ลบ margin เพื่อให้ข้อความอยู่แนบสนิท */
+}
+
+.trivia-date {
+  font-size: 0.8rem;
+  color: gray;
+}
+
 
 .content-rp {
   display: flex;

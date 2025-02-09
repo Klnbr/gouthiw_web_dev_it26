@@ -31,7 +31,7 @@ function ReportDetail() {
   const navigate = useNavigate();
   const location = useLocation();
   const { reportData } = location.state || {}; // ดึงค่าจาก state
-  const [status, setStatus] = useState(reportData.status || "กำลังดำเนินการ");
+  const [status, setStatus] = useState(reportData.status || 0);
 
   const statusMap = {
     0: "อยู่ระหว่างการตรวจสอบ",

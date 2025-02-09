@@ -1,14 +1,19 @@
-/* Register.css */
 .sign-up--container {
     margin-top: -11vh;
     background-color: #4AB4A2;
-    height: 111vh;
+    height: auto;
+    min-height: 100vh;
     padding-top: 11vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .signup-card {
     background-color: white;
     width: 60%;
+    max-width: 600px;
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -17,38 +22,33 @@
     margin-top: 1%;
 }
 
-.signup-form--right label {
-    color: black;
-    text-align: left;
-    width: calc(100% - 40px);
-    display: block;
-    margin: 15px 0 5px 0;
-}
-
 .signup-form {
     margin-top: 20px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    margin-left: auto;
-    margin-right: auto;
-    width: 80%;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .signup-form--left {
-    width: 30%;
+    width: 100%;
+    display: flex;
     justify-content: center;
+    margin-bottom: 20px;
 }
 
 .signup-form--left img {
     border-radius: 50%;
     cursor: pointer;
     filter: grayscale(50%);
+    width: 150px;
+    height: 150px;
 }
 
 .signup-form--image {
-    width: 250px;
-    height: 250px;
+    width: 150px;
+    height: 150px;
     object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
@@ -59,12 +59,30 @@
     filter: grayscale(60%);
 }
 
-.signup-form--right {
-    width: 60%;
-}
-
 .signup-form--left input[type="file"] {
     display: none;
+}
+
+.signup-form--right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signup-form--right label {
+    color: black;
+    text-align: left;
+    width: 100%;
+    display: block;
+    margin: 10px 0 5px 0;
+}
+
+.form--inputbox {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .signup-btn {
@@ -72,13 +90,49 @@
     background-color: #4AB4A2;
     color: white;
     border: none;
-    padding: 10px;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    padding: 12px;
+    margin-top: 20px;
     cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
 .signup-form--right b {
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .signup-card {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .signup-form--image {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-card {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .signup-form--image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .signup-btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .signup-form--right b {
+        font-size: 0.8rem;
+    }
 }

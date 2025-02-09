@@ -1,23 +1,25 @@
-/* Login.css */
 .sign-in--container {
-    margin-top: -11vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: #4AB4A2;
-    height: 111vh;
-    padding-top: 20vh;
+    height: 100vh;
+    padding: 5vh 10vw;
 }
 
 .signin-card {
     background-color: white;
-    width: 30%;
+    width: 100%;
+    max-width: 400px; /* ปรับขนาดให้พอดีกับมือถือ */
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 2% 3%;
-    margin: auto;
+    padding: 20px;
 }
 
 .signin-card img {
-    width: 80px
+    width: 80px;
 }
 
 .signin-card h1 {
@@ -27,9 +29,15 @@
 .signin-form label {
     color: black;
     text-align: left;
-    width: calc(100% - 40px);
     display: block;
     margin: 15px 0 5px 0;
+}
+
+.form--inputbox {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .signin-btn {
@@ -37,10 +45,15 @@
     background-color: #4AB4A2;
     color: white;
     border: none;
-    padding: 10px;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    padding: 12px;
+    margin-top: 20px;
+    border-radius: 5px;
     cursor: pointer;
+    font-size: 1rem;
+}
+
+.signin-btn:hover {
+    background-color: #3a9286;
 }
 
 .signin-form b {
@@ -48,8 +61,35 @@
     font-size: 0.8rem;
 }
 
-.screen--btm {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .sign-in--container {
+        padding: 5vh 5vw;
+    }
+
+    .signin-card {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .signin-btn {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .sign-in--container {
+        padding: 5vh 5vw;
+    }
+
+    .signin-card {
+        width: 95%;
+        padding: 10px;
+    }
+
+    .signin-btn {
+        font-size: 0.85rem;
+        padding: 10px;
+    }
 }

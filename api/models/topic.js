@@ -1,6 +1,10 @@
 const mongoose = require('mongoose')
 
 const answerSchema = new mongoose.Schema({
+    _id: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        auto: true 
+    },
     nutr_id: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Nutr' 
@@ -46,16 +50,16 @@ const topicSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    image: {
+    image: [{
         type: String
-    },
+    }],
     detail: {
         type: String,
         require: true
     },
     answer: [answerSchema],
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
     },
     isDeleted: {

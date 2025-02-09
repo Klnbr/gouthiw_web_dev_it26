@@ -51,7 +51,7 @@ function MenuDetailScreen() {
                                         <h1>{menuData.menuName}</h1>
                                         <h2>ประเภท: {menuData.category}</h2>
                                    </div>
-                                   <img src={menuData.image} alt='' />
+                                   <img src={menuData.image} alt='รูปอาหาร' />
                                    <div className='menu-detail-flex'>
                                         <p>พิวรีน (โดยเฉลี่ย) :</p>
                                         <p>{menuData.purine_total} มิลลิกรัม</p>

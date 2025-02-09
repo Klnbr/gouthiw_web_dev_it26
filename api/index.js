@@ -73,6 +73,8 @@ const myUser = require("./models/user");
 const myReport = require("./models/report");
 
 const sendNotification = require("../src/notification");
+const { title } = require("process");
+const { notification } = require("antd");
 
 //signup
 app.post("/signup", async (req, res) => {
@@ -806,7 +808,7 @@ app.get("/topics", async (req, res) => {
       {
         $lookup: {
           from: "users",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
-          localField: "user",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
+          localField: "user_id",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
           foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
           as: "userDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
         }
@@ -855,7 +857,7 @@ app.get("/topic/:id", async (req, res) => {
       {
         $lookup: {
           from: "users",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
-          localField: "user",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
+          localField: "user_id",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
           foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
           as: "userDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
         }
@@ -968,9 +970,12 @@ app.put("/topic/answer/:id", async (req, res) => {
 });
 
 // ดึงการรายงานมาแสดง
-app.get("/reports", async (req, res) => {
+app.get("/report/trivias", async (req, res) => {
   try {
-    const reports = await myReport.aggregate([
+    const reportstv = await myReport.aggregate([
+      {
+        $match: { isDeleted: false }  // ดึงเฉพาะกระทู้ที่ไม่ถูกลบ
+      },
       {
         $lookup: { // โฟกัสที่ nutr_id เพื่อไปดึงข้อมูลจาก nutr มา join
           from: "nutrs", // เปิดประตู nutrs
@@ -1000,6 +1005,7 @@ app.get("/reports", async (req, res) => {
           nutr_id: 1,
           note: 1,
           status: 1,
+          notification: 1,
           createdAt: 1,
           updatedAt: 1,
           "nutrDetails.firstname": 1,
@@ -1013,7 +1019,7 @@ app.get("/reports", async (req, res) => {
         },
       },
     ]);
-    return res.json(reports);
+    return res.json(reportstv);
   } catch (error) {
     console.log("error fetching all the reports", error);
     res.status(500).json({ message: "Error fetching all the reports" });
@@ -1023,7 +1029,10 @@ app.get("/reports", async (req, res) => {
 // ดึงการรายงานกระทู้มาแสดง  ยังทำไม่เสร็จจจจจ
 app.get("/report/topics", async (req, res) => {
   try {
-    const reports = await myReport.aggregate([
+    const reportstp = await myReport.aggregate([
+      {
+        $match: { isDeleted: false }  // ดึงเฉพาะกระทู้ที่ไม่ถูกลบ
+      },
       {
         $lookup: { // โฟกัสที่ nutr_id เพื่อไปดึงข้อมูลจาก nutr มา join
           from: "users", // เปิดประตู nutrs
@@ -1038,7 +1047,7 @@ app.get("/report/topics", async (req, res) => {
       {
         $lookup: { // โฟกัสที่ triv_id เพื่อไปดึงข้อมูลจาก trivias มา join
           from: "topics", // เปิดประตู trivias
-          localField: "topic_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
+          localField: "content_id", // ส่งตัวแทนจากฝั่ง reports ไปเทียบ
           foreignField: "_id", // ตัวรับเทียบใน trivias
           as: "topicDetails", // trivias ส่งข้อมูลก้อนกลับมา
         },
@@ -1050,9 +1059,10 @@ app.get("/report/topics", async (req, res) => {
         $project: { // เปิดการมองเห็นข้อมูลใน reports ทั้งหมดรวมถึงข้อมูลที่ join มา
           _id: 1,
          user_id: 1,
-          topic_id: 1,
+         content_id: 1,
           note: 1,
           status: 1,
+          // notification: 1,
           createdAt: 1,
           updatedAt: 1,
           "userDetails.name": 1,
@@ -1061,19 +1071,22 @@ app.get("/report/topics", async (req, res) => {
           "topicDetails.head": 1,
           "topicDetails.image": 1,
           "topicDetails.content": 1,
+          "topicDetails.title": 1,
           // ไม่แน่จายยย
           "topicDetails.anwer_detail": 1,
           "topicDetails.replies": 1,
         },
       },
     ]);
-    return res.json(reports);
+
+    console.log("Fetched Reports:", reportstp);
+
+    return res.json(reportstp);
   } catch (error) {
     console.log("error fetching all the reports", error);
     res.status(500).json({ message: "Error fetching all the reports" });
   }
 });
-
 
 // เพิ่มการรายงาน
 app.post("/report", async (req, res) => {
@@ -1085,6 +1098,8 @@ app.post("/report", async (req, res) => {
       nutr_id,
       note,
       status: 0,
+      notification: 0,
+      recipientRole: "admin",
     });
 
     await newReport.save();
@@ -1143,6 +1158,7 @@ app.get("/reports/:nutrId", async (req, res) => {
           nutr_id: 1,
           note: 1,
           status: 1,
+          notification: 1,
           createdAt: 1,
           updatedAt: 1,
           "nutrDetails.firstname": 1,
@@ -1163,13 +1179,10 @@ app.get("/reports/:nutrId", async (req, res) => {
   }
 });
 
-// ดึงการรายงานมาแสดง 1 การรายงาน (Auth)
-app.get("/report-detail/:id", async (req, res) => {
+// ดึงการรายงานเกร็ดความรู้มาแสดง 1 การรายงาน (Auth)
+app.get("/report-detail/trivia/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-   
-
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({ message: "Invalid report ID" });
     }
@@ -1230,8 +1243,75 @@ app.get("/report-detail/:id", async (req, res) => {
   }
 });
 
+// ดึงการรายงานกระทู้มาแสดง 1 การรายงาน (Auth)  ยังไม่เสร็จจจจ
+app.get("/report-detail/topic/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("Received ID:", id);
+
+    // ตรวจสอบความถูกต้องของ ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid report ID" });
+    }
+
+    const reports = await myReport.aggregate([
+      {
+        $match: { _id: new mongoose.Types.ObjectId(id) } 
+      },
+      {
+        $lookup: {
+          from: "users", // เปลี่ยนชื่อ collection ให้ถูกต้อง
+          localField: "user_id", // field ที่เชื่อมโยงกับ user_id
+          foreignField: "_id", // เชื่อมโยงกับ _id ของ users
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$userDetails", // แตกก้อน
+      },
+      {
+        $lookup: {
+          from: "topics", // ใช้ชื่อ collection ที่ถูกต้องสำหรับข้อมูลกระทู้
+          localField: "content_id", // ใช้ content_id จาก myReport
+          foreignField: "_id", // เชื่อมโยงกับ _id ใน topics
+          as: "topicDetails",
+        },
+      },
+      {
+        $unwind: "$topicDetails", // แตกก้อน
+      },
+      {
+        $project: {
+          _id: 1,
+          note: 1,
+          status: 1,
+          createdAt: 1,
+          "userDetails.name": 1,
+          "userDetails.email": 1,
+          "topicDetails.title": 1,
+          "topicDetails.image": 1,
+          "topicDetails.detail": 1,
+          "topicDetails.answer": 1, 
+          "userDetails.image_profile": 1
+        },
+      },
+    ]);
+
+    console.log("Reports fetched:", reports);
+
+    if (reports.length === 0) {
+      return res.status(404).json({ message: "ไม่พบรายงานที่มี ID นี้" });
+    }
+
+    return res.json(reports[0]);
+  } catch (error) {
+    console.error("Error fetching reports data", error);
+    res.status(500).json({ message: "ไม่สามารถดึงข้อมูลรายงานได้" });
+  }
+});
+
 //อัปเดตสถานะของรายงาน
-app.put("/reports/:id/status", async (req, res) => {
+app.put("/report/:id/status", async (req, res) => {
   const { id } = req.params;
   const { status, isDeleted } = req.body;
 
@@ -1260,7 +1340,7 @@ app.delete("/report-detail/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const softDeletedReport = await myReport.findByIdAndUpdate(id, {
-      isDeleted: true,
+      isDeleted: true, 
     });
 
     if (!softDeletedReport) {
@@ -1274,29 +1354,17 @@ app.delete("/report-detail/:id", async (req, res) => {
   }
 });
 
-//แจ้งเตือนสถานะรายงาน
-// app.post('/reports/:id/notify', async (req, res) => {
-//   const { id } = req.params;
+//การแจ้งเตือน
+app.get("/report/notifications", async (req, res) => {
+  try {
+    const notifications = await myReport.find({ notification: 0, recipientRole: "admin" }).lean();
+    console.log("Notifications for admin", notifications);
+    res.json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ message: "Error fetching notifications" });
+  }
+});
 
-//   try {
-//     const report = await Report.findById(id);
 
-//     if (!report) {
-//       return res.status(404).json({ error: 'ไม่พบรายงาน' });
-//     }
-
-//     // ตัวอย่างการแจ้งเตือน (อาจใช้ Nodemailer หรือ Firebase Cloud Messaging)
-//     const notificationMessage = `
-//       เรียนคุณ ${report.reporter.name},
-//       สถานะของรายงานของคุณได้รับการอัปเดตเป็น: ${report.status}.
-//     `;
-//     console.log('Sending notification:', notificationMessage);
-
-//     // TODO: ส่งอีเมลหรือ Push Notification ตามระบบที่ใช้งาน
-
-//     res.json({ message: 'การแจ้งเตือนส่งเรียบร้อย' });
-//   } catch (error) {
-//     res.status(500).json({ error: 'เกิดข้อผิดพลาดขณะส่งการแจ้งเตือน' });
-//   }
-// });
-
+ //แจ้งเตือนสถานะของรายงาน
