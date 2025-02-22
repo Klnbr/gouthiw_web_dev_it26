@@ -842,94 +842,87 @@ app.get("/topics", async (req, res) => {
 //ดึงกระทู้มา 1 กระทู้
 app.get("/topic/:id", async (req, res) => {
   try {
-    const { id } = req.params;
+      const { id } = req.params;
+      console.log("Received Topic ID:", id); // Debug ID
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid topic ID" });
-    }
-
-    const objectId = new mongoose.Types.ObjectId(id);
-
-    const topics = await myTopic.aggregate([
-      {
-        $match: { _id: objectId  }
-      },
-      {
-        $lookup: {
-          from: "users",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
-          localField: "user_id",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
-          foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
-          as: "userDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
-        }
-      },
-      {
-        $unwind: "$userDetails"  // ใช้ unwind เพื่อแปลง array เป็น object
-      },
-      {
-        $unwind: {
-            path: "$answer", 
-            preserveNullAndEmptyArrays: true // เพื่อหลีกเลี่ยงการสูญเสียกระทู้ที่ไม่มี answer
-        }
-      },
-      {
-        $lookup: 
-            {
-                from: "nutrs",  // ชื่อ collection ที่เก็บข้อมูลผู้ใช้ (ควรเป็นชื่อใน MongoDB)
-                localField: "answer.nutr_id",  // ฟิลด์ใน collection topics ที่เชื่อมโยงกับ user
-                foreignField: "_id",  // ฟิลด์ใน collection users ที่เป็น _id
-                as: "nutrDetails"  // ชื่อฟิลด์ที่จะเก็บข้อมูลผู้ใช้ที่เชื่อมโยง
-            },
-        
-      },
-      {
-        $unwind: {
-            path: "$nutrDetails",
-            preserveNullAndEmptyArrays: true  // เพื่อหลีกเลี่ยงการสูญเสียกระทู้ที่ไม่มี nutrDetails
-        }            
-      },
-      {
-        $group: {
-            _id: "$_id",
-            title: { $first: "$title" },
-            detail: { $first: "$detail" },
-            createdAt: { $first: "$createdAt" },
-            answer: { 
-                $push: { 
-                    nutrDetails: {
-                        firstname: "$nutrDetails.firstname",
-                        lastname: "$nutrDetails.lastname"
-                    }, 
-                    answer_detail: "$answer.answer_detail" 
-                } 
-            },
-            userDetails: { $first: "$userDetails" }
-        }
-      },
-      {
-        $project: {
-            title: 1,              // แสดงฟิลด์ title ของ topic
-            detail: 1,             // แสดงฟิลด์ detail ของ topic
-            answer: 1,
-            createdAt: 1,
-            "userDetails.name": 1  // แสดงเฉพาะชื่อผู้ใช้จาก userDetails
-        }
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ message: "Invalid topic ID" });
       }
-    ]);
 
-    // ตรวจสอบว่ากระทู้ถูกพบหรือไม่
-    if (topics.length === 0) {
-      return res.status(404).json({ message: "Topic not found" });
-    }
+      const objectId = new mongoose.Types.ObjectId(id);
+      console.log("Converted ObjectId:", objectId); // Debug ObjectId
 
-    console.log("topics:", topics);
+      const topics = await myTopic.aggregate([
+          { $match: { _id: objectId } },
+          {
+              $lookup: {
+                  from: "users",
+                  localField: "user_id",
+                  foreignField: "_id",
+                  as: "userDetails"
+              }
+          },
+          { $unwind: "$userDetails" },
+          {
+              $unwind: {
+                  path: "$answer",
+                  preserveNullAndEmptyArrays: true
+              }
+          },
+          {
+              $lookup: {
+                  from: "nutrs",
+                  localField: "answer.nutr_id",
+                  foreignField: "_id",
+                  as: "nutrDetails"
+              }
+          },
+          {
+              $unwind: {
+                  path: "$nutrDetails",
+                  preserveNullAndEmptyArrays: true
+              }
+          },
+          {
+              $group: {
+                  _id: "$_id",
+                  title: { $first: "$title" },
+                  detail: { $first: "$detail" },
+                  createdAt: { $first: "$createdAt" },
+                  image: { $push: "$image" },
+                  answer: {
+                      $push: {
+                          nutrDetails: {
+                              firstname: "$nutrDetails.firstname",
+                              lastname: "$nutrDetails.lastname",
+                              image_profile: "$nutrDetails.image_profile"
+                          },
+                          answer_detail: "$answer.answer_detail"
+                      }
+                  },
+                  userDetails: { 
+                      $first: {
+                          name: "$userDetails.name",
+                          image_profile: "$userDetails.image_profile"
+                      }
+                  }
+              }
+          }
+      ]);
 
-    // ส่งกลับข้อมูลกระทู้แรก
-    return res.json(topics[0]);
+      if (topics.length === 0) {
+          return res.status(404).json({ message: "Topic not found" });
+      }
+
+      // console.log("Fetched Topics Data:", JSON.stringify(topics, null, 2));
+      console.log("Fetched Topics:", topics);
+      return res.json(topics[0]);
   } catch (error) {
-    console.log("error fetching the topic", error);
-    res.status(500).json({ message: "Error fetching the topic" });
+      console.log("Error fetching the topic:", error);
+      res.status(500).json({ message: "Error fetching the topic", error: error.message });
   }
 });
+
 
 // ตอบกลับกระทู้
 app.put("/topic/answer/:id", async (req, res) => {
@@ -1354,17 +1347,84 @@ app.delete("/report-detail/:id", async (req, res) => {
   }
 });
 
-//การแจ้งเตือน
+//การแจ้งเตือนการรายงาน
 app.get("/report/notifications", async (req, res) => {
   try {
-    const notifications = await myReport.find({ notification: 0, recipientRole: "admin" }).lean();
-    console.log("Notifications for admin", notifications);
+    const notifications = await myReport.find({ notification: 0, recipientRole: "admin" })
+      .populate("triv_id") 
+      .populate("content_id") 
+      .lean();
+      notifications.forEach((notification) => {
+        console.log("Notification Content ID:", notification.content_id);
+    });
+
+    console.log("Notifications with Full Populate:", notifications); // ✅ Debugging
     res.json(notifications);
   } catch (error) {
     console.error("Error fetching notifications:", error);
     res.status(500).json({ message: "Error fetching notifications" });
   }
 });
+
+// app.get("/report/notifications", async (req, res) => {
+//   try {
+//     const notifications = await myReport.aggregate([
+//       {
+//         $match: { notification: 0, recipientRole: "admin" } // กรองการแจ้งเตือนที่มี status 0 และ recipientRole เป็น admin
+//       },
+//       {
+//         $lookup: {
+//           from: "trivias", // เชื่อมโยงกับ collection trivias
+//           localField: "triv_id", // ใช้ triv_id ใน reports
+//           foreignField: "_id", // เชื่อมโยงกับ _id ใน trivias
+//           as: "triviaDetails", // เก็บข้อมูลที่ได้จาก trivias
+//         },
+//       },
+//       {
+//         $unwind: {
+//           path: "$triviaDetails", // แตกข้อมูล triviaDetails ให้เป็นข้อมูลที่สามารถเข้าถึงได้ง่าย
+//           preserveNullAndEmptyArrays: true, // ถ้าไม่มี triviaDetails ก็ให้เป็นค่า null
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "topics", // เชื่อมโยงกับ collection topics
+//           localField: "content_id", // ใช้ content_id ใน reports
+//           foreignField: "_id", // เชื่อมโยงกับ _id ใน topics
+//           as: "topicDetails", // เก็บข้อมูลที่ได้จาก topics
+//         },
+//       },
+//       {
+//         $unwind: {
+//           path: "$topicDetails", // แตกข้อมูล topicDetails ให้เป็นข้อมูลที่สามารถเข้าถึงได้ง่าย
+//           preserveNullAndEmptyArrays: true, // ถ้าไม่มี topicDetails ก็ให้เป็นค่า null
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: 1,
+//           note: 1,
+//           status: 1,
+//           createdAt: 1,
+//           "triviaDetails.head": 1,
+//           "triviaDetails.image": 1,
+//           "triviaDetails.content": 1,
+//           "triviaDetails.trivia_type": 1,
+//           "topicDetails.title": 1,
+//           "topicDetails.image": 1,
+//           "topicDetails.detail": 1,
+//           "topicDetails.answer": 1,
+//         },
+//       },
+//     ]);
+
+//     console.log("Notifications with Full Populate:", notifications); // ✅ Debugging
+//     res.json(notifications);
+//   } catch (error) {
+//     console.error("Error fetching notifications:", error);
+//     res.status(500).json({ message: "Error fetching notifications" });
+//   }
+// });
 
 
  //แจ้งเตือนสถานะของรายงาน

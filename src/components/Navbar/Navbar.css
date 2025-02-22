@@ -157,6 +157,7 @@
 .notification-popup {
      position: absolute;
      top: 50px;
+     
      right: 10px;
      background-color: #fff;
      border: 1px solid #ddd;
@@ -177,13 +178,43 @@
      padding: 5px;
      border-bottom: 1px solid #eee;
      margin-top: 5px;
+     cursor: pointer;
  }
  
  .notification-item:last-child {
      border-bottom: none;
  }
 
+ .notification-item:hover {
+     background-color: #4AB4A2;
+     color: white;
+     transition: all 0.2s ease-in-out;
+ }
 
+ .view-all-btn {
+     text-align: center;
+     margin-top: 10px;
+     align-items: center;
+     cursor: pointer;
+     align-content: center;
+     /* color: #4AB4A2; */
+ }
+
+ .topic-images {
+     display: flex;
+     gap: 10px;
+     margin-top: 10px;
+ }
+ 
+ .topic-img {
+     width: 100px;
+     height: 100px;
+     object-fit: cover;
+     border-radius: 8px;
+     border: 1px solid #ddd;
+ }
+
+ 
 @media screen and (max-width: 850px) {
      .nav-container {
           display: none;

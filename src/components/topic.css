@@ -38,6 +38,22 @@
     margin-top: 20px;
 }
 
+/* .topic-userdetail {
+    justify-content: space-between;
+} */
+
+.topic-userdetail i {
+    font-size: 0.8rem;
+    color: #7e7e7e;
+    margin-top: 4px;
+    margin-right: 5px;
+}
+
+.topic-userdetail {
+    display: flex;
+    margin-top: 20px;
+}
+
 .flex {
     display: flex;
 }
@@ -64,7 +80,8 @@
 .topic-detail-card {
     width: 80%;
     height: auto;
-    padding: 13px;
+    padding:
+ 13px;
     justify-content: space-between;
     margin-bottom: 10px;
     box-shadow: 0 2px 2px 1px lightgrey;
@@ -122,4 +139,18 @@
     margin-right: auto;
     margin-top: 30px;
     margin-bottom: 10px;
+}
+
+.topic-images {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.topic-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }

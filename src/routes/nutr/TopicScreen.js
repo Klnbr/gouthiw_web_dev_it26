@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 import '../../components/topic.css'
+import '../../App.css'
 
 const optionsDMY = {
      timeZone: "Asia/Bangkok",
@@ -27,15 +28,17 @@ function TopicScreen() {
      const [error, setError] = useState(null);  // เพิ่มสถานะ error
 
      const [topics, setTopics] = useState([]);
+     const [currentPage, setCurrentPage] = useState(1);
+     const itemsPerPage = 4;  // จำนวนหัวข้อที่จะแสดงต่อหน้า
 
      useEffect(() => {
-          const fetchTopicData = async () => {
+        const fetchTopicData = async () => {
                try {
                     const response = await axios.get("http://localhost:5500/topics", { timeout: 10000 });
                     setTopics(response.data);
                     setLoading(false);  // เมื่อดึงข้อมูลสำเร็จ เปลี่ยนสถานะการโหลด
                } catch (error) {
-                    console.log("Error fetching trivias data", error.message)
+                    console.log("Error fetching topics data", error.message)
                     setError("ไม่สามารถดึงข้อมูลกระทู้ได้");  // ตั้งค่าสถานะ error
                     setLoading(false);
                }
@@ -44,7 +47,6 @@ function TopicScreen() {
           fetchTopicData();
      }, [nutrData])
 
-     // ฟังก์ชันในการคำนวณเวลาที่โพสต์
      const calculateTimeAgo = (createdAt) => {
           const currentTime = new Date();
           const postTime = new Date(createdAt);
@@ -61,11 +63,8 @@ function TopicScreen() {
 
      const handleItemPress = async (itemId) => {
           try {
-               console.log("Item ID:", itemId);
                const response = await axios.get(`http://localhost:5500/topic/${itemId}`);
                const topicData = response.data;
-
-               console.log("Fetched Topic Data:", topicData);
                navigate('/topic-answer', { state: { topicData } });
           } catch (error) {
                console.log('Error fetching topic data', error.message);
@@ -91,12 +90,21 @@ function TopicScreen() {
           </div>
      );
 
+     // คำนวณหน้าที่จะแสดง
+     const indexOfLastItem = currentPage * itemsPerPage;
+     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+     const currentItems = topics.slice(indexOfFirstItem, indexOfLastItem);
+
+     const totalPages = Math.ceil(topics.length / itemsPerPage);
+
+     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
      return (
           <>
                <div className='container'>
                     <Navbar />
                     <div className='sidebar-content-wrapper'>
-                         <SideBar/>
+                         <SideBar />
                          <div className='content'>
                               <div className='main-content'>
                                    <div className='topic-option'>
@@ -109,12 +117,38 @@ function TopicScreen() {
                                    ) : error ? (
                                         <h2>{error}</h2>
                                    ) : (
-                                        topics.length > 0 ? (
-                                             topics.map(item => renderItem(item))
+                                        currentItems.length > 0 ? (
+                                             currentItems.map(item => renderItem(item))
                                         ) : (
                                              <h2>ยังไม่มีกระทู้</h2>
                                         )
-                                   )}   
+                                   )}
+                                   {/* Pagination controls */}
+                                   <div className="pagination">
+                                        <button
+                                             onClick={() => paginate(currentPage - 1)}
+                                             disabled={currentPage === 1}
+                                             className="pagination-button"
+                                        >
+                                             ย้อนกลับ
+                                        </button>
+                                        {[...Array(totalPages).keys()].map(number => (
+                                             <button
+                                                  key={number}
+                                                  onClick={() => paginate(number + 1)}
+                                                  className={`pagination-button ${currentPage === number + 1 ? 'active' : ''}`}
+                                             >
+                                                  {number + 1}
+                                             </button>
+                                        ))}
+                                        <button
+                                             onClick={() => paginate(currentPage + 1)}
+                                             disabled={currentPage === totalPages}
+                                             className="pagination-button"
+                                        >
+                                             ถัดไป
+                                        </button>
+                                   </div>
                               </div>
                          </div>
                     </div>
@@ -123,4 +157,4 @@ function TopicScreen() {
      )
 }
 
-export default TopicScreen
+export default TopicScreen;

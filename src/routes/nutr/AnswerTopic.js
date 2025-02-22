@@ -34,34 +34,43 @@ const AnswerTopic = () => {
     const [image, setImage] = useState(null);
 
     const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setImage(file);
+        const files = e.target.files;
+        if (files.length > 0) {
+            const fileArray = Array.from(files);
+            setImage(fileArray);
         }
     };
-
+    
+    
     const renderItem = (item) => (
-     <div className='topic-answer-card' key={item._id}>
-         <div className='topic-content'>
-             <h1>{item.answer_detail}</h1>
-             {/* แสดงรูปภาพถ้ามี */}
-             {item.answer_image && (
-                 <img src={item.answer_image} alt="Answer Image" className="answer-image" />
-             )}
-         </div>
-         <div className='topic-user'>
-             <div className='flex'>
-                 <i className="fa-solid fa-user-nurse"></i>
-                 <p>{item.nutrDetails?.firstname} {item.nutrDetails?.lastname}</p>
-             </div>
-             <img src={item.topicData.image} alt='' />
-             <div className='flex'>
-                 <i className="fa-solid fa-reply"></i>
-                 <p>{item.answer?.length}</p>
-             </div>
-         </div>
-     </div>
- );
+        <div className='topic-answer-card' key={item._id}>
+            <div className='topic-content'>
+                <h1>{item.answer_detail}</h1>
+                {/* แสดงรูปภาพถ้ามี */}
+                <div className='topic-user'>
+                    <div className='flex'>
+                        <i className="fa-solid fa-user-nurse"></i>
+                        <p>{item.nutrDetails?.firstname} {item.nutrDetails?.lastname}</p>
+                    </div>
+                    <div className='topic-images'>
+                        {/* เช็คว่า item.image เป็นอาเรย์หรือไม่ */}
+                        {Array.isArray(item.image) ? (
+                            item.image.map((img, index) => (
+                                <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='topic-img' />
+                            ))
+                        ) : (
+                            item.image && <img src={item.image} alt="รูปกระทู้" className='topic-img' />
+                        )}
+                    </div>
+                    <div className='flex'>
+                        <i className="fa-solid fa-reply"></i>
+                        <p>{item.answer?.length}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+    
 
  const calculateTimeAgo = (createdAt) => {
      const currentTime = new Date();
@@ -83,6 +92,7 @@ const AnswerTopic = () => {
             alert("กรุณาเพิ่มการตอบกลับของคุณ");
             return;
         }
+
 
         const ansData = new FormData();
         ansData.append('nutr_id', nutrData._id);
@@ -123,6 +133,7 @@ const AnswerTopic = () => {
                             <div className='topic-detail'>
                                 <p>{topicData.detail}</p>
                             </div>
+                            <img className='trivia-pic' alt={`รูปภาพกระทู้`} src={topicData.image} />
                             <div className='topic-user'>
                                 <i className="fa-solid fa-user"></i>
                                 <p>{topicData.userDetails?.name || "ไม่ทราบชื่อผู้ใช้"}</p>

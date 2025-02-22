@@ -34,6 +34,9 @@ function TriviaScreen() {
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
      const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
 
+       const [currentPage, setCurrentPage] = useState(1);
+          const itemsPerPage = 4;
+
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
      useEffect(() => {
@@ -89,6 +92,8 @@ function TriviaScreen() {
           return div.textContent || div.innerText || '';
      };
 
+     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
      const renderItem = (item) => (
           <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
                <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} />
@@ -115,6 +120,12 @@ function TriviaScreen() {
                return postTime.toLocaleString("th-TH", optionsDMY);
           }
      };
+
+     const indexOfLastItem = currentPage * itemsPerPage;
+     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+     const currentItems = filterDisplay.slice(indexOfFirstItem, indexOfLastItem);
+
+     const totalPages = Math.ceil(filterDisplay.length / itemsPerPage);
 
      return (
           <>
@@ -199,19 +210,47 @@ function TriviaScreen() {
                                    </div>
                                    
                                    <div className='trivia-render'>
-                                        {activeButton === 'ทั้งหมด' ? (
-                                             filterDisplay.length > 0 ? (
-                                                  filterDisplay.map(item => renderItem(item))
-                                             ) : (
-                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-                                             )
-                                        ) : (
-                                             trivsUser.length > 0 ? (
-                                                  trivsUser.map(item => renderItem(item))
-                                             ) : (
-                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-                                             )
-                                        )}
+    {activeButton === 'ทั้งหมด' ? (
+        currentItems.length > 0 ? (
+            currentItems.map(item => renderItem(item))
+        ) : (
+            <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+        )
+    ) : (
+        trivsUser.length > 0 ? (
+            trivsUser.map(item => renderItem(item))
+        ) : (
+            <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+        )
+    )}
+</div>
+
+
+                                   {/* Pagination controls */}
+                                   <div className="pagination">
+                                        <button
+                                             onClick={() => paginate(currentPage - 1)}
+                                             disabled={currentPage === 1}
+                                             className="pagination-button"
+                                        >
+                                             ย้อนกลับ
+                                        </button>
+                                        {[...Array(totalPages).keys()].map(number => (
+                                             <button
+                                                  key={number}
+                                                  onClick={() => paginate(number + 1)}
+                                                  className={`pagination-button ${currentPage === number + 1 ? 'active' : ''}`}
+                                             >
+                                                  {number + 1}
+                                             </button>
+                                        ))}
+                                        <button
+                                             onClick={() => paginate(currentPage + 1)}
+                                             disabled={currentPage === totalPages}
+                                             className="pagination-button"
+                                        >
+                                             ถัดไป
+                                        </button>
                                    </div>
                               </div>
                          </div>     

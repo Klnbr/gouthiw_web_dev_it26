@@ -314,6 +314,56 @@
     box-shadow: 1px 1px 2px gray;
 }
 
+.pagination {
+    display: flex;
+    /* justify-content: center;
+    align-items: center; */
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pagination-button {
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+}
+
+.pagination-button:hover {
+    background-color: #FFA13F;
+    color: white;
+}
+
+.pagination-button:disabled {
+    background-color: #f0f0f0;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-button.active {
+    background-color: #FFA13F;
+    color: white;
+    font-weight: 700;
+    border-color: #FFA13F;
+}
+
+/* ให้ปุ่ม Previous กับ Next อยู่ห่างออกจากตัวเลข */
+.pagination-button:first-child {
+    margin-right: 5px;
+}
+
+.pagination-button:last-child {
+    margin-left: 5px;
+}
+
+
 @media screen and (max-width: 1024px) {
     .container {
         flex-direction: column;

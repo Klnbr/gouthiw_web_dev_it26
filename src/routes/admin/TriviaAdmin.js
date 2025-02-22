@@ -23,101 +23,113 @@ const optionsTime = {
 };
 
 export default function TriviaAdmin() {
-    const navigate = useNavigate();
-    const { nutrData } = useAuth();
+     const navigate = useNavigate();
+     const { nutrData } = useAuth();
 
-    const [trivs, setTrivia] = useState([]);
-    const [trivsUser, setTriviaUser] = useState([]);
-    const [showUserTrivias, setShowUserTrivias] = useState(false);
+     const [trivs, setTrivia] = useState([]);
+     const [trivsUser, setTriviaUser] = useState([]);
+     const [showUserTrivias, setShowUserTrivias] = useState(false);
 
-    const [searchTriv, setSearchTriv] = useState('');
-    const [selectedType, setSelectedType] = useState("ทั้งหมด");
-    const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
+     const [searchTriv, setSearchTriv] = useState('');
+     const [selectedType, setSelectedType] = useState("ทั้งหมด");
+     const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
 
-    const [activeButton, setActiveButton] = useState('ทั้งหมด');
+       const [currentPage, setCurrentPage] = useState(1);
+          const itemsPerPage = 4;
 
-    useEffect(() => {
-         const fetchTriviaData = async () => {
-              try {
-                   const response = await axios.get("http://localhost:5500/trivias", { timeout: 10000 });
-                   setTrivia(response.data);
-              } catch (error) {
-                   console.log("Error fetching trivias data", error.message)
-              }
-         }
-         const fetchTriviaDataUser = async () => {
-              try {
-                   const response = await axios.get(`http://localhost:5500/trivias/auth/${nutrData._id}`, { timeout: 10000 });
-                   setTriviaUser(response.data);
-              } catch (error) {
-                   console.log("Error fetching trivias data", error.message)
-              }
-         }
-         fetchTriviaData();
-         if (nutrData) {
-              fetchTriviaDataUser();
-         }
-    }, [nutrData])
+     const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
-    const filteredTrivs = trivs.filter(triv => 
-         (selectedType === "ทั้งหมด" || triv.trivia_type === selectedType) &&
-         triv.head.includes(searchTriv)
-    );
+     useEffect(() => {
+          const fetchTriviaData = async () => {
+               try {
+                    const response = await axios.get("http://localhost:5500/trivias", { timeout: 10000 });
+                    setTrivia(response.data);
+               } catch (error) {
+                    console.log("Error fetching trivias data", error.message)
+               }
+          }
+          const fetchTriviaDataUser = async () => {
+               try {
+                    const response = await axios.get(`http://localhost:5500/trivias/auth/${nutrData._id}`, { timeout: 10000 });
+                    setTriviaUser(response.data);
+               } catch (error) {
+                    console.log("Error fetching trivias data", error.message)
+               }
+          }
+          fetchTriviaData();
+          if (nutrData) {
+               fetchTriviaDataUser();
+          }
+     }, [nutrData])
 
-    // การกรองตามลำดับการแสดง
-    const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
-         ? filteredTrivs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
-         : selectedDisplay === "last_update"
-         ? filteredTrivs.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // เรียงตามวันที่อัปเดตล่าสุด
-         : filteredTrivs;
+     const filteredTrivs = trivs.filter(triv => 
+          (selectedType === "ทั้งหมด" || triv.trivia_type === selectedType) &&
+          triv.head.includes(searchTriv)
+     );
 
-    const handleItemPress = async (itemId) => {
-         try {
-              const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
-              const triviaData = response.data;
+     // การกรองตามลำดับการแสดง
+     const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
+          ? filteredTrivs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
+          : selectedDisplay === "last_update"
+          ? filteredTrivs.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // เรียงตามวันที่อัปเดตล่าสุด
+          : filteredTrivs;
 
-              console.log("triviaData: ", triviaData)
-              navigate('/admin/trivia-detail', { state: { triviaData } });
-         } catch (error) {
-              console.log('Error fetching trivia data', error.message);
-         }
-    };
+     const handleItemPress = async (itemId) => {
+          try {
+               const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
+               const triviaData = response.data;
 
-    const stripHTML = (html) => {
-         const div = document.createElement('div');
-         div.innerHTML = html;
-         return div.textContent || div.innerText || '';
-    };
+               console.log("triviaData: ", triviaData)
+               navigate('/trivia-detail', { state: { triviaData } });
+          } catch (error) {
+               console.log('Error fetching trivia data', error.message);
+          }
+     };
 
-    const renderItem = (item) => (
-         <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
-              <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} />
-              <div className='trivia-info'>
-                   <h1>{item.head}</h1>
-                   <p className='trivia-date'>อัพเดตล่าสุด {calculateTimeAgo(item.updatedAt)}</p>
-                   <div className='trivia-des'>
-                        <p>{stripHTML(item.content)}</p>
-                   </div>
-              </div>
-         </div>
-    );
+     const stripHTML = (html) => {
+          const div = document.createElement('div');
+          div.innerHTML = html;
+          return div.textContent || div.innerText || '';
+     };
 
-    const calculateTimeAgo = (createdAt) => {
-         const currentTime = new Date();
-         const postTime = new Date(createdAt);
-         const timeDiff = Math.abs(currentTime - postTime) / 36e5;  // คำนวณต่างเป็นชั่วโมง
-         
-         if (timeDiff < 1) {
-              return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-         } else if (timeDiff < 24) {
-              return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
-         } else {
-              return postTime.toLocaleString("th-TH", optionsDMY);
-         }
-    };
+     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  return (
-     <>
+     const renderItem = (item) => (
+          <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
+               <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} />
+               <div className='trivia-info'>
+                    <h1>{item.head}</h1>
+                    <p className='trivia-date'>อัพเดตล่าสุด {calculateTimeAgo(item.updatedAt)}</p>
+                    <div className='trivia-des'>
+                         <p>{stripHTML(item.content)}</p>
+                    </div>
+               </div>
+          </div>
+     );
+
+     const calculateTimeAgo = (createdAt) => {
+          const currentTime = new Date();
+          const postTime = new Date(createdAt);
+          const timeDiff = Math.abs(currentTime - postTime) / 36e5;  // คำนวณต่างเป็นชั่วโมง
+          
+          if (timeDiff < 1) {
+               return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
+          } else if (timeDiff < 24) {
+               return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
+          } else {
+               return postTime.toLocaleString("th-TH", optionsDMY);
+          }
+     };
+
+     const indexOfLastItem = currentPage * itemsPerPage;
+     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+     const currentItems = filterDisplay.slice(indexOfFirstItem, indexOfLastItem);
+
+     const totalPages = Math.ceil(filterDisplay.length / itemsPerPage);
+
+
+     return (
+          <>
                <div className='container'>
                     <Navbar />
                     <div className='sidebar-content-wrapper'>
@@ -199,19 +211,47 @@ export default function TriviaAdmin() {
                                    </div>
                                    
                                    <div className='trivia-render'>
-                                        {activeButton === 'ทั้งหมด' ? (
-                                             filterDisplay.length > 0 ? (
-                                                  filterDisplay.map(item => renderItem(item))
-                                             ) : (
-                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-                                             )
-                                        ) : (
-                                             trivsUser.length > 0 ? (
-                                                  trivsUser.map(item => renderItem(item))
-                                             ) : (
-                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-                                             )
-                                        )}
+    {activeButton === 'ทั้งหมด' ? (
+        currentItems.length > 0 ? (
+            currentItems.map(item => renderItem(item))
+        ) : (
+            <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+        )
+    ) : (
+        trivsUser.length > 0 ? (
+            trivsUser.map(item => renderItem(item))
+        ) : (
+            <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+        )
+    )}
+</div>
+
+
+                                   {/* Pagination controls */}
+                                   <div className="pagination">
+                                        <button
+                                             onClick={() => paginate(currentPage - 1)}
+                                             disabled={currentPage === 1}
+                                             className="pagination-button"
+                                        >
+                                             ย้อนกลับ
+                                        </button>
+                                        {[...Array(totalPages).keys()].map(number => (
+                                             <button
+                                                  key={number}
+                                                  onClick={() => paginate(number + 1)}
+                                                  className={`pagination-button ${currentPage === number + 1 ? 'active' : ''}`}
+                                             >
+                                                  {number + 1}
+                                             </button>
+                                        ))}
+                                        <button
+                                             onClick={() => paginate(currentPage + 1)}
+                                             disabled={currentPage === totalPages}
+                                             className="pagination-button"
+                                        >
+                                             ถัดไป
+                                        </button>
                                    </div>
                               </div>
                          </div>     
@@ -219,5 +259,5 @@ export default function TriviaAdmin() {
                     
                </div>
           </>
-  )
+     )
 }

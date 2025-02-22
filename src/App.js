@@ -40,6 +40,8 @@ import TriviaScreenAd from './routes/admin/TriviaAdmin';
 import TriviaDetailAdmin from './routes/admin/TriviaDetailAdmin';
 import ReportTopicDetail from './routes/admin/ReportTopicDetail';
 
+import NotiScreen from './routes/admin/Noti'
+
 import { messaging } from './firebase';
 import { getToken, onMessage } from 'firebase/messaging';
 
@@ -94,6 +96,7 @@ const nutrRoutes = [
   { path: '/report', component: <Report /> },
   { path: '/report-history', component: <ReportHistory /> },
   { path: '/report-history/detail', component: <ReportHistoryDetail /> },
+  { path: '/noti', component: <NotiScreen /> },
 ];
 
 const adminRoutes = [
@@ -109,6 +112,7 @@ const adminRoutes = [
   { path: '/admin/ingredients', component: <IngrScreen /> },
   { path: '/admin/topics', component: <TopicScreenAd /> },
   { path: '/admin/topic-detail', component:<TopicDetail /> },
+  { path: '/admin/noti', component: <NotiScreen /> },
 ];
 
 function App() {

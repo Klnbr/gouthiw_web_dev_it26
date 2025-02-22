@@ -61,9 +61,18 @@ function ReportTopicDetail() {
   
   const handleStatusChange = (newStatusNumber) => {
     if (Number(newStatusNumber) === status) return;
-    setStatus(Number(newStatusNumber));
-    updateStatus(Number(newStatusNumber));
+  
+    // การยืนยันก่อนเปลี่ยนสถานะ
+    const confirmChange = window.confirm("คุณต้องการเปลี่ยนสถานะใช่หรือไม่?");
+    if (confirmChange) {
+      setStatus(Number(newStatusNumber));  // เปลี่ยนสถานะใน UI
+      updateStatus(Number(newStatusNumber));  // อัพเดตสถานะในฐานข้อมูล
+    } else {
+      // ถ้าไม่ยืนยันให้กลับไปสถานะเดิม
+      setStatus(status); 
+    }
   };
+  
 
   const updateStatus = async (newStatus) => {
     try {

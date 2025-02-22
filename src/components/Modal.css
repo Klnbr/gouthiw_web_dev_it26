@@ -1,44 +1,73 @@
 .modal {
-     border: 1px solid black;
-     width: 100%;
-     height: 100%;
+     position: fixed;
      top: 0;
      left: 0;
-     right: 0;
-     bottom: 0;
-     position: fixed;
+     width: 100%;
+     height: 100%;
      background: rgba(0, 0, 0, 0.5);
-     z-index: 999;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     z-index: 10000; /* เพิ่มค่าให้สูงขึ้น */
 }
 
 .active-modal {
      overflow-y: hidden;
 }
 
+.modal-content {
+     background: #f1f1f1;
+     padding: 22px 28px;
+     border-radius: 8px;
+     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+     max-width: 400px;
+     min-width: 300px;
+     position: relative;
+}
+
+.modal-content h1 {
+     text-align: center;
+     font-size: 1.2rem;
+     margin-bottom: 20px;
+}
+
+.modal-content label {
+     font-size: 0.9rem;
+     font-weight: bold;
+}
+
+.modal--input {
+     margin-top: 5px;
+     margin-bottom: 10px;
+     width: 100%;
+     padding: 8px;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+}
+
+.ingr-form--select {
+     width: 100%;
+     padding: 8px;
+     border-radius: 5px;
+     margin-bottom: 10px;
+}
+
 .ingr-save--btn {
-     padding: 5px;
-     width: 40%;
+     padding: 8px;
+     width: 100%;
      border: none;
      background-color: #4AB4A2;
      color: white;
      border-radius: 5px;
      margin-top: 20px;
-     justify-content: center;
-     align-items: center;
-     display: flex;
-     margin-left: auto;
-     margin-right: auto;
      cursor: pointer;
-}
-
-.btn-title {
-     margin-left: 5px;
+     text-align: center;
 }
 
 .ingr-cancel--btn {
-     display: flex;
-     margin-left: auto;
-     margin-right: 0;
+     position: absolute;
+     top: 10px;
+     right: 10px;
      padding: 5px 7px;
      border-radius: 100%;
      border: 1px solid rgb(94, 94, 94);
@@ -49,38 +78,4 @@
 .ingr-cancel--btn:hover {
      color: rgb(67, 67, 67);
      border: 1px solid rgb(67, 67, 67);
-}
-
-.modal-content {
-     position: absolute;
-     top: 40%;
-     left: 50%;
-     transform: translate(-50%, -50%);
-     line-height: 1.4;
-     background: #f1f1f1;
-     padding: 22px 28px;
-     border-radius: 3px;
-     max-width: 400px;
-     min-width: 300px;
-}
-
-.modal-content h1 {
-     text-align: center;
-     font-size: 1.2rem;
-     margin-bottom: 20px;
-}
-
-.modal-content label {
-     font-size: 0.8rem;
-}
-
-.modal--input {
-     margin-top: 5px;
-     margin-bottom: 10px;
-}
-
-.ingr-form--select {
-     width: 100%;
-     margin-top: 5px;
-     margin-bottom: 10px;
 }
