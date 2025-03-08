@@ -64,17 +64,7 @@ export default function TriviaDetailAdmin() {
                     </button>
 
                     <div className='triv-detail-content'>
-                        <div className='dropdown-container-tv'>
-                            <i
-                                className="fa-solid fa-ellipsis-vertical dropdown-icon"
-                                onClick={toggleDropdown}
-                            ></i>
-                            {dropdownVisible && (
-                                <div className="dropdown-trivia">
-                                    <button onClick={() => handleReport(triviaData._id)}>รายงาน</button>
-                                </div>
-                            )}
-                        </div>
+                        
 
                         <div className='triv-detail'>
                             <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />

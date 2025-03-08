@@ -843,14 +843,13 @@ app.get("/topics", async (req, res) => {
 app.get("/topic/:id", async (req, res) => {
   try {
       const { id } = req.params;
-      console.log("Received Topic ID:", id); // Debug ID
+      console.log("Received Topic ID:", id);
 
       if (!mongoose.Types.ObjectId.isValid(id)) {
           return res.status(400).json({ message: "Invalid topic ID" });
       }
 
       const objectId = new mongoose.Types.ObjectId(id);
-      console.log("Converted ObjectId:", objectId); // Debug ObjectId
 
       const topics = await myTopic.aggregate([
           { $match: { _id: objectId } },
@@ -884,12 +883,14 @@ app.get("/topic/:id", async (req, res) => {
               }
           },
           {
+            
               $group: {
                   _id: "$_id",
                   title: { $first: "$title" },
                   detail: { $first: "$detail" },
                   createdAt: { $first: "$createdAt" },
-                  image: { $push: "$image" },
+                  image: { $first: "$image" }, // กรณีที่ image เป็น String ธรรมดา
+                  allImages: { $push: "$image" }, // ดึงรูปทั้งหมด
                   answer: {
                       $push: {
                           nutrDetails: {
@@ -897,7 +898,8 @@ app.get("/topic/:id", async (req, res) => {
                               lastname: "$nutrDetails.lastname",
                               image_profile: "$nutrDetails.image_profile"
                           },
-                          answer_detail: "$answer.answer_detail"
+                          answer_detail: "$answer.answer_detail",
+                          answer_image: "$answer.answer_image"
                       }
                   },
                   userDetails: { 
@@ -906,7 +908,9 @@ app.get("/topic/:id", async (req, res) => {
                           image_profile: "$userDetails.image_profile"
                       }
                   }
-              }
+              
+          }
+        
           }
       ]);
 
@@ -914,7 +918,6 @@ app.get("/topic/:id", async (req, res) => {
           return res.status(404).json({ message: "Topic not found" });
       }
 
-      // console.log("Fetched Topics Data:", JSON.stringify(topics, null, 2));
       console.log("Fetched Topics:", topics);
       return res.json(topics[0]);
   } catch (error) {
@@ -925,42 +928,54 @@ app.get("/topic/:id", async (req, res) => {
 
 
 // ตอบกลับกระทู้
-app.put("/topic/answer/:id", async (req, res) => {
+app.put("/topic/answer/:id", upload.array("answer_image", 5), async (req, res) => {
   try {
     const { id } = req.params;
     const { nutr_id, answer_detail } = req.body;
 
-    // ตรวจสอบความถูกต้องของ ID
+    // เช็คว่าไฟล์ถูกส่งมาหรือไม่
+    const answer_images = req.files ? req.files.map(file => file.path) : []; // รับ URL ของไฟล์ที่อัปโหลด
+
+    console.log("รับค่าจาก Frontend:", { id, nutr_id, answer_detail, answer_images });
+
     if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.log("Invalid Topic ID:", id);
       return res.status(400).json({ message: "Invalid topic ID" });
     }
 
-    // ตรวจสอบค่าที่ส่งมา
     if (!nutr_id || !answer_detail) {
+      console.log("Missing nutr_id or answer_detail");
       return res.status(400).json({ message: "nutr_id and answer_detail are required" });
     }
 
-    const updatedTopic = await myTopic.findByIdAndUpdate(id, { 
-      $push: {
-        answer: {
-          nutr_id, 
-          answer_detail,
-          parentId: id, // เพื่อเชื่อมโยงการตอบกลับกับการตอบกลับของนักโภชนาการ
-        }
-      }
-    }, { new: true });
+    console.log("✅ answer_images before saving:", answer_images);
 
-    // ตรวจสอบว่ามีกระทู้ที่ถูกอัปเดตหรือไม่
+    const updatedTopic = await myTopic.findByIdAndUpdate(
+      id,
+      { 
+        $push: {
+          answer: {
+            nutr_id,
+            answer_detail,
+            answer_image: answer_images, // เก็บ URL ของภาพที่อัปโหลด
+            parentId: id,
+          },
+        },
+      },
+      { new: true }
+    );
+
     if (!updatedTopic) {
       return res.status(404).json({ message: "Topic not found" });
     }
 
     res.status(200).json({ message: "Reply added successfully", topic: updatedTopic });
   } catch (error) {
-    console.log("Error adding reply to topic", error);
+    console.log("❌ Error adding reply to topic", error);
     res.status(500).json({ message: "Error adding reply to topic" });
   }
 });
+
 
 // ดึงการรายงานมาแสดง
 app.get("/report/trivias", async (req, res) => {
@@ -1165,6 +1180,7 @@ app.get("/reports/:nutrId", async (req, res) => {
         },
       },
     ]);
+    console.log("Reports Data:", reports);
     return res.json(reports);
   } catch (error) {
     console.error("Error fetching reports data", error);
@@ -1350,15 +1366,13 @@ app.delete("/report-detail/:id", async (req, res) => {
 //การแจ้งเตือนการรายงาน
 app.get("/report/notifications", async (req, res) => {
   try {
-    const notifications = await myReport.find({ notification: 0, recipientRole: "admin" })
+    const notifications = await myReport.find()
       .populate("triv_id") 
       .populate("content_id") 
       .lean();
       notifications.forEach((notification) => {
-        console.log("Notification Content ID:", notification.content_id);
+       
     });
-
-    console.log("Notifications with Full Populate:", notifications); // ✅ Debugging
     res.json(notifications);
   } catch (error) {
     console.error("Error fetching notifications:", error);

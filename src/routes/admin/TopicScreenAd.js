@@ -65,7 +65,7 @@ export default function TopicScreenAd() {
          try {
               const response = await axios.get(`http://localhost:5500/topic/${itemId}`);
               const topicData = response.data;
-              navigate('/topic-answer', { state: { topicData } });
+              navigate('/admin/topic-detail', { state: { topicData } });
          } catch (error) {
               console.log('Error fetching topic data', error.message);
          }

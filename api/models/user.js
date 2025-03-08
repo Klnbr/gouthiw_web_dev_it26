@@ -40,7 +40,7 @@ const diaryEntrySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const userSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true,
     },

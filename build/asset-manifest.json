@@ -1,18 +1,17 @@
 {
   "files": {
-    "main.css": "/static/css/main.4241ec0b.css",
-    "main.js": "/static/js/main.dd9cf659.js",
+    "main.css": "/static/css/main.375c0979.css",
+    "main.js": "/static/js/main.e4becfca.js",
     "static/media/bottom_screen.png": "/static/media/bottom_screen.d3f6daf33ae61a3e256d.png",
     "static/media/bottom_nav2.png": "/static/media/bottom_nav2.ad15063d7bff4bc1e178.png",
-    "static/media/gouthiw-logo.png": "/static/media/gouthiw-logo.441b6c69212b7444a51f.png",
     "static/media/logo_temporary.png": "/static/media/logo_temporary.4055be521792e7cbcd49.png",
     "static/media/homebanner.jpg": "/static/media/homebanner.126a180fd4852ec77edb.jpg",
     "index.html": "/index.html",
-    "main.4241ec0b.css.map": "/static/css/main.4241ec0b.css.map",
-    "main.dd9cf659.js.map": "/static/js/main.dd9cf659.js.map"
+    "main.375c0979.css.map": "/static/css/main.375c0979.css.map",
+    "main.e4becfca.js.map": "/static/js/main.e4becfca.js.map"
   },
   "entrypoints": [
-    "static/css/main.4241ec0b.css",
-    "static/js/main.dd9cf659.js"
+    "static/css/main.375c0979.css",
+    "static/js/main.e4becfca.js"
   ]
 }

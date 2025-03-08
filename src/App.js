@@ -28,6 +28,8 @@ import EditTrivia from '../src/components/trivia-manage/EditTrivia'
 import Report from './routes/nutr/ReportScreen';
 import ReportHistory from './routes/nutr/ReportHistory';
 import ReportHistoryDetail from './routes/nutr/HistoryReportDetail';
+// import ReportDetailNutr from './routes/nutr/ReportDetailNutr';
+
 //admin
 import AdminHome from './routes/admin/AdminHome';
 import ReportScreen from './routes/admin/ReportManage';
@@ -44,6 +46,7 @@ import NotiScreen from './routes/admin/Noti'
 
 import { messaging } from './firebase';
 import { getToken, onMessage } from 'firebase/messaging';
+import ReportDetailNutr from './routes/nutr/ReportDetailNutr';
 
 
 function RedirectBasedOnRole() {
@@ -96,7 +99,8 @@ const nutrRoutes = [
   { path: '/report', component: <Report /> },
   { path: '/report-history', component: <ReportHistory /> },
   { path: '/report-history/detail', component: <ReportHistoryDetail /> },
-  { path: '/noti', component: <NotiScreen /> },
+  { path: '/notification', component: <NotiScreen /> },
+  { path: '/report-trivia-detail', component: <ReportDetailNutr /> },
 ];
 
 const adminRoutes = [
@@ -112,7 +116,7 @@ const adminRoutes = [
   { path: '/admin/ingredients', component: <IngrScreen /> },
   { path: '/admin/topics', component: <TopicScreenAd /> },
   { path: '/admin/topic-detail', component:<TopicDetail /> },
-  { path: '/admin/noti', component: <NotiScreen /> },
+  { path: '/admin/notification', component: <NotiScreen /> },
 ];
 
 function App() {

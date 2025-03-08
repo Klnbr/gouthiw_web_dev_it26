@@ -169,6 +169,12 @@
      border-radius: 20px;
  }
 
+ .report-time {
+     color: red;
+     font-weight: bold;
+ }
+
+ 
  .notification-popup h3 {
      text-decoration-line: underline;
      border-color: #4AB4A2;

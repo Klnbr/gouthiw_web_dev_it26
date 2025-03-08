@@ -17,6 +17,9 @@ const answerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    answer_image: [{
+        type: String // เก็บ URL ของภาพในหัวข้อ
+    }],
     replies: [
         {
             user_id: {
@@ -26,7 +29,8 @@ const answerSchema = new mongoose.Schema({
             reply_detail: { 
                 type: String,
                 required: true
-            },
+            },  
+
             isDeleted: {
                 type: Boolean,
                 default: false
@@ -44,14 +48,13 @@ const answerSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-
 const topicSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
     },
     image: [{
-        type: String
+        type: String // เก็บ URL ของภาพในหัวข้อ
     }],
     detail: {
         type: String,

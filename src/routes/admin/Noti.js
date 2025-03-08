@@ -38,12 +38,21 @@ export default function Noti() {
       }
 
       if (type === "trivia") {
-        navigate("/admin/report-trivia-detail", { state: { reportData } });
+        if (nutrData?.role === '1') {
+          navigate('/admin/report-trivia-detail', { state: { reportData } });
+        } else {
+          navigate('/report-trivia-detail', { state: { reportData } });
+        }
       } else if (type === "topic") {
-        navigate("/admin/report-topic-detail", { state: { reportData } });
+        if (nutrData?.role === '1') {
+          navigate('/admin/report-topic-detail', { state: { reportData } });
+        } else {
+          navigate('/report-topic-detail', { state: { reportData } });
+        }
       } else {
         alert("ประเภทของรายงานไม่ถูกต้อง");
       }
+
     } catch (error) {
       console.error("Error fetching report data:", error.message);
       alert("เกิดข้อผิดพลาดในการดึงข้อมูลรายงาน");

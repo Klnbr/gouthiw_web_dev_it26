@@ -1,122 +1,101 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import SideBar from '../../components/SideBar/SideBar';
 import { useAuth } from '../../middleware/Auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Input } from "antd";
 import axios from 'axios';
-
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const optionsDMY = {
-     timeZone: "Asia/Bangkok",
-     year: 'numeric',
-     month: 'long',
-     day: 'numeric',
- };
+    timeZone: "Asia/Bangkok",
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+};
 
- 
- const optionsTime = {
-     timeZone: "Asia/Bangkok",
-     hour: 'numeric',
-     minute: 'numeric',
-     second: 'numeric'
- };
-
- 
 const AnswerTopic = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { topicData } = location.state || {};
     const { nutrData } = useAuth();
-    
+    const [loading, setLoading] = useState(false);
     const { TextArea } = Input;
     const [answer, setAnswer] = useState('');
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState([]);
 
     const handleImageChange = (e) => {
-        const files = e.target.files;
-        if (files.length > 0) {
-            const fileArray = Array.from(files);
-            setImage(fileArray);
+        const files = Array.from(e.target.files);
+        setImage(files);
+    };
+
+    const handleAnswer = async () => {
+        if (!answer || image.length === 0) {
+            alert("กรุณาใส่คำตอบและเลือกรูปภาพ");
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            // อัปโหลดรูปทั้งหมด
+            const storage = getStorage();
+            const imageUrls = [];
+
+            for (let file of image) {
+                const storageRef = ref(storage, `answer_image/${file.name}`);
+                await uploadBytes(storageRef, file);
+                const imageUrl = await getDownloadURL(storageRef);
+                imageUrls.push(imageUrl); // เก็บ URL ของภาพ
+            }
+
+            // ตรวจสอบว่า URL ของภาพถูกเก็บ
+            console.log("✅ Image URLs:", imageUrls);
+
+            // ส่งข้อมูลคำตอบพร้อมกับ URL ของภาพที่อัปโหลด
+            const ansData = {
+                nutr_id: nutrData._id,
+                answer_detail: answer,
+                answer_image: imageUrls, // เก็บเป็น Array ของ URL
+              };
+              
+              const response = await axios.put(`http://localhost:5500/topic/answer/${topicData._id}`, ansData);
+              
+            if (response.status === 200) {
+                alert("ตอบกระทู้สำเร็จ");
+                navigate('/topics');
+            }
+        } catch (error) {
+            console.log("error creating topic", error);
+            alert("ตอบกระทู้ไม่สำเร็จ");
+        } finally {
+            setLoading(false);
         }
     };
-    
-    
+
     const renderItem = (item) => (
         <div className='topic-answer-card' key={item._id}>
             <div className='topic-content'>
                 <h1>{item.answer_detail}</h1>
-                {/* แสดงรูปภาพถ้ามี */}
                 <div className='topic-user'>
                     <div className='flex'>
                         <i className="fa-solid fa-user-nurse"></i>
                         <p>{item.nutrDetails?.firstname} {item.nutrDetails?.lastname}</p>
                     </div>
                     <div className='topic-images'>
-                        {/* เช็คว่า item.image เป็นอาเรย์หรือไม่ */}
-                        {Array.isArray(item.image) ? (
-                            item.image.map((img, index) => (
-                                <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='topic-img' />
-                            ))
-                        ) : (
-                            item.image && <img src={item.image} alt="รูปกระทู้" className='topic-img' />
-                        )}
+                    {Array.isArray(item.answer_image) && item.answer_image.length > 0 ? (
+  item.answer_image.map((img, index) => (
+    <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='topic-img' />
+  ))
+) : (
+  <p>ไม่มีรูปภาพ</p>
+)}
+
                     </div>
-                    <div className='flex'>
-                        <i className="fa-solid fa-reply"></i>
-                        <p>{item.answer?.length}</p>
-                    </div>
+
                 </div>
             </div>
         </div>
     );
-    
-
- const calculateTimeAgo = (createdAt) => {
-     const currentTime = new Date();
-     const postTime = new Date(createdAt);
-     const timeDiff = Math.abs(currentTime - postTime) / 36e5;
-
-     if (timeDiff < 1) {
-         return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-     } else if (timeDiff < 24) {
-         return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
-     } else {
-         return postTime.toLocaleString("th-TH", optionsDMY);
-     }
- };
-
- 
-    const handleAnswer = async () => {
-        if (!answer) {
-            alert("กรุณาเพิ่มการตอบกลับของคุณ");
-            return;
-        }
-
-
-        const ansData = new FormData();
-        ansData.append('nutr_id', nutrData._id);
-        ansData.append('answer_detail', answer);
-        if (image) {
-            ansData.append('answer_image', image);  // ส่งไฟล์รูปภาพไปด้วย
-        }
-
-        try {
-            const response = await axios.put(`http://localhost:5500/topic/answer/${topicData._id}`, ansData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            if (response.status === 200) {
-                alert("ตอบกระทู้สำเร็จ");
-                navigate('/topics');
-            }
-        } catch (error) {
-            alert("ตอบกระทู้ไม่สำเร็จ");
-            console.log("error creating topic", error);
-        }
-    };
 
     return (
         <>
@@ -127,16 +106,19 @@ const AnswerTopic = () => {
                         <div className='topic-detail-card'>
                             <div className='topic-detail-content'>
                                 <h1>{topicData.title}</h1>
-                                <p>{calculateTimeAgo(topicData.createdAt)}</p>
                             </div>
                             <hr className='hr-line' />
                             <div className='topic-detail'>
                                 <p>{topicData.detail}</p>
                             </div>
-                            <img className='trivia-pic' alt={`รูปภาพกระทู้`} src={topicData.image} />
-                            <div className='topic-user'>
-                                <i className="fa-solid fa-user"></i>
-                                <p>{topicData.userDetails?.name || "ไม่ทราบชื่อผู้ใช้"}</p>
+                            <div className='topic-images'>
+                                {Array.isArray(topicData.image) && topicData.image.length > 0 ? (
+                                    topicData.image.map((img, index) => (
+                                        <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='trivia-pic' />
+                                    ))
+                                ) : (
+                                    <p>ไม่มีรูปภาพ</p>
+                                )}
                             </div>
                         </div>
 
@@ -150,8 +132,7 @@ const AnswerTopic = () => {
                                 value={answer}
                                 onChange={(e) => setAnswer(e.target.value)}
                             />
-                            {/* ฟอร์มสำหรับเลือกไฟล์รูปภาพ */}
-                            <input type="file" onChange={handleImageChange} />
+                            <input type="file" multiple onChange={handleImageChange} />
                             <div className='topic-btn'>
                                 <div className='topic-user'>
                                     <i className="fa-solid fa-user-nurse"></i>

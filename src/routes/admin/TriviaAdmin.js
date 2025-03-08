@@ -80,7 +80,7 @@ export default function TriviaAdmin() {
                const triviaData = response.data;
 
                console.log("triviaData: ", triviaData)
-               navigate('/trivia-detail', { state: { triviaData } });
+               navigate('/admin/trivia-detail', { state: { triviaData } });
           } catch (error) {
                console.log('Error fetching trivia data', error.message);
           }

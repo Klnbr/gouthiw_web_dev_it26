@@ -36,6 +36,10 @@ const reportSchema = new mongoose.Schema({
           type: Boolean,
           default: false
      },
+     isVisible: {
+          type: Boolean,
+          default: false
+     },
 }, { timestamps: true })
 
 const myReport = mongoose.model('Report', reportSchema)
