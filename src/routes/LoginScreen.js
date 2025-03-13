@@ -27,7 +27,7 @@ function LoginScreen() {
                     <Input type='password' className='form--inputbox' value={password} onChange={(e) => setPassword(e.target.value)} />
 
                     <button className='signin-btn' onClick={() => handleSignin({ email, password })}>เข้าสู่ระบบ</button>
-                    <b>ยังไม่มีมีบัญชี?  <a href='/signup'>ลงทะเบียน</a></b>
+                    <b>ยังไม่มีมีบัญชี?  <p onClick={() => navigate('/signup')}>ลงทะเบียน</p></b>
                 </div>
             </div>
             {/* <img className='screen--btm' alt='' src={BottomScreen} /> */}

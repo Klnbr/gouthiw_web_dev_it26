@@ -22,11 +22,7 @@ const reportSchema = new mongoose.Schema({
      },
      status: {
           type: Number,
-          default: 0
-     },
-     notification: {
-          type: Number,
-          default: 0
+          default: null
      },
      recipientRole: {
           type: String, // "admin", "user", "nutr"
@@ -36,10 +32,11 @@ const reportSchema = new mongoose.Schema({
           type: Boolean,
           default: false
      },
-     isVisible: {
-          type: Boolean,
-          default: false
+     reminderDate: { // deadline
+          type: String, // ใช้เก็บวันที่ตั้งการแจ้งเตือน
+          default: null
      },
+
 }, { timestamps: true })
 
 const myReport = mongoose.model('Report', reportSchema)

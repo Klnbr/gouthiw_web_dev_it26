@@ -71,6 +71,7 @@ const myNutr = require("./models/nutr");
 const myTopic = require("./models/topic");
 const myUser = require("./models/user");
 const myReport = require("./models/report");
+const myNoti = require("./models/noti");
 
 const sendNotification = require("../src/notification");
 const { title } = require("process");
@@ -604,7 +605,11 @@ app.get("/trivias/auth/:id", async (req, res) => {
     }
 
     const userTrivia = await myNutr.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(id) } },
+      { $match: { 
+        _id: new mongoose.Types.ObjectId(id),
+          isDeleted: false
+        } 
+      },
       {
         $unwind: "$triv_owner",
       },
@@ -649,7 +654,8 @@ app.post("/trivia/:id", upload.single("image"), async (req, res) => {
       image,
       content,
       trivia_type,
-      isDeleted,
+      isDeleted: false,
+      isVisible: true
     });
 
     await addTrivia.save();
@@ -705,6 +711,7 @@ app.get("/trivia/:id", async (req, res) => {
           trivia_type: 1, // ประเภทของ trivia
           createdAt: 1, // วันที่สร้าง
           updatedAt: 1, // วันที่อัปเดต
+          edit_deadline: 1,
           creator: {
             _id: "$creatorDetails._id", // ไอดีของผู้สร้าง
             firstname: "$creatorDetails.firstname", // ชื่อผู้สร้าง
@@ -926,7 +933,6 @@ app.get("/topic/:id", async (req, res) => {
   }
 });
 
-
 // ตอบกลับกระทู้
 app.put("/topic/answer/:id", upload.array("answer_image", 5), async (req, res) => {
   try {
@@ -975,7 +981,6 @@ app.put("/topic/answer/:id", upload.array("answer_image", 5), async (req, res) =
     res.status(500).json({ message: "Error adding reply to topic" });
   }
 });
-
 
 // ดึงการรายงานมาแสดง
 app.get("/report/trivias", async (req, res) => {
@@ -1087,8 +1092,6 @@ app.get("/report/topics", async (req, res) => {
       },
     ]);
 
-    console.log("Fetched Reports:", reportstp);
-
     return res.json(reportstp);
   } catch (error) {
     console.log("error fetching all the reports", error);
@@ -1105,12 +1108,33 @@ app.post("/report", async (req, res) => {
       triv_id,
       nutr_id,
       note,
-      status: 0,
+      status: null,
       notification: 0,
       recipientRole: "admin",
     });
 
     await newReport.save();
+
+    const admin = await myNutr.findOne({ role: "1" });
+
+    const trivia = await myTrivia.findById(triv_id);
+
+    const notiAdmin = new myNoti({
+      report_id: newReport._id,
+      triv_id,
+      recipients: [
+        {
+          nutr_id: admin._id,
+          message: "[เกร็ดความรู้] มีการรายงานใหม่",
+          report_role: "admin",
+        },
+      ],
+      title: trivia.head,
+      note,
+      status_report: null,
+    });
+
+    await notiAdmin.save();
 
     res
       .status(201)
@@ -1180,7 +1204,6 @@ app.get("/reports/:nutrId", async (req, res) => {
         },
       },
     ]);
-    console.log("Reports Data:", reports);
     return res.json(reports);
   } catch (error) {
     console.error("Error fetching reports data", error);
@@ -1234,6 +1257,7 @@ app.get("/report-detail/trivia/:id", async (req, res) => {
           status: 1,
           createdAt: 1,
           updatedAt: 1,
+          reminderDate: 1,
           "nutrDetails.firstname": 1,
           "nutrDetails.lastname": 1,
           "nutrDetails.email": 1,
@@ -1306,8 +1330,6 @@ app.get("/report-detail/topic/:id", async (req, res) => {
       },
     ]);
 
-    console.log("Reports fetched:", reports);
-
     if (reports.length === 0) {
       return res.status(404).json({ message: "ไม่พบรายงานที่มี ID นี้" });
     }
@@ -1319,30 +1341,165 @@ app.get("/report-detail/topic/:id", async (req, res) => {
   }
 });
 
-//อัปเดตสถานะของรายงาน
-app.put("/report/:id/status", async (req, res) => {
-  const { id } = req.params;
-  const { status, isDeleted } = req.body;
+// อัปเดตสถานะของรายงาน, เกร็ดความรู้
+app.put("/report/:id/trivia/status", async (req, res) => {
+    const { id } = req.params;
+    const { triv_id, status, reminderDate  } = req.body;
 
-  try {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).send({ error: "Invalid report ID" });
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({ error: "Invalid report ID" });
+        }
+
+        let updatedReport;
+        let updatedTrivia;
+
+        if (status === 1) { 
+            updatedReport = await myReport.findByIdAndUpdate( id, { status, reminderDate }, { new: true });
+            updatedTrivia = await myTrivia.findByIdAndUpdate( triv_id, { isVisible: false, edit_deadline: reminderDate }, { new: true });
+        } else if (status === 2) {
+            updatedReport = await myReport.findByIdAndUpdate( id, { status, isDeleted: true }, { new: true });
+        } else if (status === 3) {
+            updatedReport = await myReport.findByIdAndUpdate( id, { status }, { new: true });
+            updatedTrivia = await myTrivia.findByIdAndUpdate( triv_id, { isVisible: false, isDeleted: true }, { new: true });
+        } else {
+            console.log("Ststus is 0 or others")
+        }
+
+        // if (!updatedReport) {
+        //     return res.status(404).send({ error: "Report not found" });
+        // }
+
+        // if (!updatedTrivia) {
+        //     return res.status(404).send({ error: "Trivia not found" });
+        // }
+    
+        res.status(200).send(updatedReport);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
     }
-
-    const updatedReport = await myReport.findByIdAndUpdate(
-      id,
-      { status, isDeleted },
-      { new: true }
-    );
-
-    if (!updatedReport) {
-      return res.status(404).send({ error: "Report not found" });
-    }
-    res.status(200).send(updatedReport);
-  } catch (error) {
-    res.status(500).send({ error: error.message });
-  }
 });
+
+// อัปเดตสถานะของรายงานเป็น 0 (แอดมินรับเรื่อง)
+app.put("/report/:id/status", async (req, res) => {
+    const { id } = req.params;
+    const { status  } = req.body;
+
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send({ error: "Invalid report ID" });
+        }
+
+        const updatedReport = await myReport.findByIdAndUpdate( id, { status }, { new: true });
+
+        if (!updatedReport) {
+            return res.status(404).send({ error: "Report not found" });
+        }
+
+        res.status(200).send(updatedReport);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
+// สร้างการแจ้งเตือน
+app.post("/report/trivia/notification", async (req, res) => {
+    const { report_id, triv_id, title, note, status, nutr_id, reminderDate  } = req.body;
+    
+    try {
+        const nutr = await myNutr.findOne({ "triv_owner.triv_id": triv_id });
+    
+        if (!nutr && !status) {
+            return res.status(404).json({ message: "Owner of trivia not found" });
+        }
+
+        let noti = null;
+
+        if (status === 0) {
+            noti = new myNoti({
+                report_id,
+                triv_id, 
+                recipients: [
+                    {
+                        nutr_id: nutr_id,
+                        message: "ได้รับการรายงานของคุณแล้ว",
+                        report_role: "reporter"
+                    }
+                ], 
+                title, 
+                note,
+                status_report: status
+            });
+        } else if (status === 1) {
+            noti = new myNoti({
+                report_id,
+                triv_id, 
+                recipients: [
+                    {
+                        nutr_id: nutr_id,
+                        message: "การรายงานของคุณถูกดำเนินการแล้ว กรุณาตรวจสอบ",
+                        report_role: "reporter"
+                    },
+                    {
+                        nutr_id: nutr._id,
+                        message: "มีผู้รายงานเกร็ดความรู้ของคุณ กรุณาตรวจสอบ",
+                        report_role: "reported"
+                    }
+                ], 
+                title, 
+                note, 
+                reminderDate,
+                status_report: status
+            });
+        } else if (status === 2) {
+            noti = new myNoti({
+                report_id,
+                triv_id, 
+                recipients: [
+                    {
+                        nutr_id: nutr_id,
+                        message: "การรายงานของคุณถูกปฏิเสธ เนื่องด้วยไม่พบการละเมิด",
+                        report_role: "reporter"
+                    },
+                ],
+                title, 
+                note,
+                status_report: status
+            });
+        } else if (status === 3) {
+            noti = new myNoti({
+                report_id,
+                triv_id, 
+                recipients: [
+                    {
+                        nutr_id: nutr_id,
+                        message: "การรายงานของคุณถูกดำเนินการแล้ว กรุณาตรวจสอบ",
+                        report_role: "reporter"
+                    },
+                    {
+                        nutr_id: nutr._id,
+                        message: "เกร็ดความรู้ของคุณถูกลบ กรุณาตรวจสอบ",
+                        report_role: "reported"
+                    }
+                ],
+                title, 
+                note,
+                status_report: status
+            });
+        }
+        
+        if (noti) {
+            await noti.save();
+            return res.status(201).json({ message: "Notification created successfully" });
+        } else {
+            return res.status(400).json({ message: "Invalid status value" });
+        }
+        
+    } catch (error) {
+        console.log("Error creating notification", error);
+        res.status(500).json({ message: "Error creating notification" });
+    }
+})
 
 //ลบการรายงาน
 app.delete("/report-detail/:id", async (req, res) => {
@@ -1364,75 +1521,15 @@ app.delete("/report-detail/:id", async (req, res) => {
 });
 
 //การแจ้งเตือนการรายงาน
-app.get("/report/notifications", async (req, res) => {
-  try {
-    const notifications = await myReport.find()
-      .populate("triv_id") 
-      .populate("content_id") 
-      .lean();
-      notifications.forEach((notification) => {
-       
-    });
-    res.json(notifications);
-  } catch (error) {
-    console.error("Error fetching notifications:", error);
-    res.status(500).json({ message: "Error fetching notifications" });
-  }
-});
-
 // app.get("/report/notifications", async (req, res) => {
 //   try {
-//     const notifications = await myReport.aggregate([
-//       {
-//         $match: { notification: 0, recipientRole: "admin" } // กรองการแจ้งเตือนที่มี status 0 และ recipientRole เป็น admin
-//       },
-//       {
-//         $lookup: {
-//           from: "trivias", // เชื่อมโยงกับ collection trivias
-//           localField: "triv_id", // ใช้ triv_id ใน reports
-//           foreignField: "_id", // เชื่อมโยงกับ _id ใน trivias
-//           as: "triviaDetails", // เก็บข้อมูลที่ได้จาก trivias
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$triviaDetails", // แตกข้อมูล triviaDetails ให้เป็นข้อมูลที่สามารถเข้าถึงได้ง่าย
-//           preserveNullAndEmptyArrays: true, // ถ้าไม่มี triviaDetails ก็ให้เป็นค่า null
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "topics", // เชื่อมโยงกับ collection topics
-//           localField: "content_id", // ใช้ content_id ใน reports
-//           foreignField: "_id", // เชื่อมโยงกับ _id ใน topics
-//           as: "topicDetails", // เก็บข้อมูลที่ได้จาก topics
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$topicDetails", // แตกข้อมูล topicDetails ให้เป็นข้อมูลที่สามารถเข้าถึงได้ง่าย
-//           preserveNullAndEmptyArrays: true, // ถ้าไม่มี topicDetails ก็ให้เป็นค่า null
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: 1,
-//           note: 1,
-//           status: 1,
-//           createdAt: 1,
-//           "triviaDetails.head": 1,
-//           "triviaDetails.image": 1,
-//           "triviaDetails.content": 1,
-//           "triviaDetails.trivia_type": 1,
-//           "topicDetails.title": 1,
-//           "topicDetails.image": 1,
-//           "topicDetails.detail": 1,
-//           "topicDetails.answer": 1,
-//         },
-//       },
-//     ]);
-
-//     console.log("Notifications with Full Populate:", notifications); // ✅ Debugging
+//     const notifications = await myReport.find()
+//       .populate("triv_id") 
+//       .populate("content_id") 
+//       .lean();
+//       notifications.forEach((notification) => {
+       
+//     });
 //     res.json(notifications);
 //   } catch (error) {
 //     console.error("Error fetching notifications:", error);
@@ -1440,5 +1537,91 @@ app.get("/report/notifications", async (req, res) => {
 //   }
 // });
 
+app.get("/report/notifications/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
 
- //แจ้งเตือนสถานะของรายงาน
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).send({ error: "Invalid nutr ID" });
+    }
+
+    const notifications = await myNoti.aggregate([
+      {
+        $match: {
+          "recipients.nutr_id": new mongoose.Types.ObjectId(id) ,
+          isDeleted: false
+        },
+      },
+      {
+        $unwind: "$recipients", // แยก recipients ออกมา
+      },
+      {
+        $match: { 
+          "recipients.nutr_id": new mongoose.Types.ObjectId(id) // คัดกรองเฉพาะผู้ที่เกี่ยวข้อง
+        }
+      },
+      {
+        $lookup: {
+          from: "nutrs",
+          localField: "recipients.nutr_id",
+          foreignField: "_id",
+          as: "recipientNutr",
+        },
+      },
+      {
+        $unwind: "$recipientNutr",
+      },
+      {
+        $project: {
+          report_id: 1,
+          triv_id: 1,
+          title: 1,
+          note: 1,
+          status_report: 1,
+          reminderDate: 1,
+          role: "$recipients.report_role", // แสดงค่า report_role
+          message: "$recipients.message", // แสดงข้อความ
+          isRead: "$recipients.isRead",
+          createdAt: 1,
+          updatedAt: 1,
+        }
+      }
+    ]) 
+
+    if (!notifications.length) {
+      return res.status(404).json({ message: "No notifications found for this nutr_id" });
+    }
+
+    res.json(notifications);
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    res.status(500).json({ message: "Error fetching notifications" });
+  }
+});
+
+// ฟังก์ชันเพื่อตรวจสอบและลบเนื้อหาผู้เขียนที่ไม่มีการอัปเดตภายใน 3 วัน
+app.put("/check-and-delete-expired-reports", async (req, res) => {
+  try {
+    // ดึงรายงานทั้งหมดที่มีการตั้งค่า reminderDate
+    const reports = await myReport.find({ reminderDate: { $ne: null }, isDeleted: false });
+
+    const now = new Date();
+
+    for (let report of reports) {
+      const reminderDate = new Date(report.reminderDate);
+
+      // ถ้าเวลาผ่านไป 3 วันแล้วและยังไม่มีการอัปเดต updateAt
+      if (now - reminderDate >= 3 * 24 * 60 * 60 * 1000) { // 3 วัน = 3 * 24 * 60 * 60 * 1000 ms
+        if (!report.updateAt || new Date(report.updateAt).getTime() === reminderDate.getTime()) {
+          // ลบรายงานที่ไม่ได้มีการอัปเดตภายใน 3 วัน
+          await myReport.findByIdAndUpdate(report._id, { isDeleted: true });
+        }
+      }
+    }
+
+    res.status(200).send({ message: "Expired reports checked and deleted if necessary." });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
+  
+});

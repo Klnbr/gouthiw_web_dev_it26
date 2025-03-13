@@ -139,7 +139,7 @@ function RegisterScreen() {
                         <Input className='form--inputbox' value={confirm} onChange={(e) => setConfirm(e.target.value)} />
 
                         <button className='signup-btn' onClick={handleSignup}>ลงทะเบียน</button>
-                        <b>มีบัญชีอยู่แล้ว?  <a href='/signin'>เข้าสู่ระบบ</a></b>
+                        <b>มีบัญชีอยู่แล้ว?  <p onClick={() => navigate('/signin')}>เข้าสู่ระบบ</p></b>
                     </div>
                 </div>
             </div>

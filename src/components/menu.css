@@ -6,7 +6,8 @@
 
 .menu-content .display-flex .breadcumb {
      color: black;
-     width: 12%;
+     font-size: 0.8vw;
+     width: 11%;
 }
 
 .menu-content .display-flex .divider {

@@ -210,20 +210,20 @@ function TriviaScreen() {
                                    </div>
                                    
                                    <div className='trivia-render'>
-    {activeButton === 'ทั้งหมด' ? (
-        currentItems.length > 0 ? (
-            currentItems.map(item => renderItem(item))
-        ) : (
-            <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-        )
-    ) : (
-        trivsUser.length > 0 ? (
-            trivsUser.map(item => renderItem(item))
-        ) : (
-            <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
-        )
-    )}
-</div>
+                                        {activeButton === 'ทั้งหมด' ? (
+                                             currentItems.length > 0 ? (
+                                                  currentItems.map(item => renderItem(item))
+                                             ) : (
+                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                             )
+                                        ) : (
+                                             trivsUser.length > 0 ? (
+                                                  trivsUser.map(item => renderItem(item))
+                                             ) : (
+                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                             )
+                                        )}
+                                   </div>
 
 
                                    {/* Pagination controls */}

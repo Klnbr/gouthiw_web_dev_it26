@@ -14,12 +14,21 @@ const triviaSchema = new mongoose.Schema({
      trivia_type: {
           type: String
      },
+     views: {
+          type: Number,
+          default: 0
+     },
+     edit_deadline: {
+          type: Date,
+          default: null
+     },
      isDeleted: {
           type: Boolean,
           default: false
-     }, isVisible: {
+     }, 
+     isVisible: {
           type: Boolean,
-          default: false
+          default: true
      },
 }, { timestamps: true });
 

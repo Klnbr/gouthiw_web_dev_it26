@@ -54,8 +54,8 @@
   display: flex;
   /* flex-wrap: wrap; */
   width: 95%;
-  height: 24vh;
-  padding: 13px;
+  /* height: 20vh; */
+  padding: 20px;
   justify-content: space-between;
   margin-bottom: 10px;
   box-shadow: 0 2px 2px 1px lightgrey;
@@ -65,21 +65,56 @@
   margin-right: auto;
 }
 
-.trivia-header {
+.report-trivia-info {
+  width: 100%;
+  margin-right: 10px;
   display: flex;
-  /* justify-content: space-between;  ให้แยกช่องว่างระหว่าง <h1> และ "รายงานเมื่อ" */
-  align-items: center;  /* จัดให้เนื้อหากลางในแนวตั้ง */
 }
 
-.trivia-header h1 {
-  margin: 0;  /* ลบ margin เพื่อให้ข้อความอยู่แนบสนิท */
+.report-info-1 {
+  width: 8%;
+  display: flex;
+  justify-content: center;
 }
 
-.trivia-date {
+.report-info-2 {
+  width: 60%;
+}
+
+.report-info-3 {
+  width: 30%;
+  justify-content: end;
+}
+
+.report-info-3 p {
+  text-align: right;
+}
+
+.report-info-icon {
+  font-size: 30px;
+  color: #FFA13F;
+}
+
+.report-info-2-head {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.report-info-2-time {
   font-size: 0.8rem;
   color: gray;
 }
 
+.trivia-info h1 {
+  font-size: 1.2rem;
+  color: #4AB4A2;
+  font-weight: 500;
+}
+
+.trivia-info h1:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 .content-rp {
   display: flex;

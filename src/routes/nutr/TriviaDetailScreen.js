@@ -25,17 +25,39 @@ function TriviaDetailScreen() {
         }
     }, [nutrData]);
 
-    const calculateTimeAgo = (createdAt) => {
-        const currentTime = new Date();
-        const postTime = new Date(createdAt);
-        const timeDiff = Math.abs(currentTime - postTime) / 36e5;
+    console.log("edit_deadline: ", triviaData.edit_deadline);
 
+    const calculateTimeAgo = (createdAt) => {
+        const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
+        const postTime = new Date(createdAt).toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
+        const timeDiff = Math.abs(currentTime - postTime) / 36e5;
+    
         if (timeDiff < 1) {
             return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
         } else if (timeDiff < 24) {
             return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
         } else {
             return postTime.toLocaleString("th-TH", optionsDMY);
+        }
+    };
+    
+    const calculateTimeRemaining = (reminderDate) => {
+        const currentTime = new Date();
+        const targetTime = new Date(reminderDate);
+        const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
+    
+        if (timeDiff <= 0) {
+            return "ถึงกำหนดแล้ว";
+        }
+    
+        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+        if (days > 0) {
+            return `เหลืออีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
+        } else {
+            return `เหลืออีก ${hours} ชั่วโมง ${minutes} นาที`;
         }
     };
 
@@ -75,6 +97,11 @@ function TriviaDetailScreen() {
                         <i className="fa-solid fa-angle-left"></i>
                        
                     </button>
+                    {triviaData.edit_deadline && (
+                            <div>
+                                <p>{calculateTimeRemaining(triviaData.edit_deadline)}</p>
+                            </div>
+                        )}
                     { editButton &&
                             <button className="btn-edit" 
                                 onClick={() => handleItemPress(triviaData._id)}>
@@ -87,13 +114,13 @@ function TriviaDetailScreen() {
                                 className="fa-solid fa-ellipsis-vertical dropdown-icon"
                                 onClick={toggleDropdown}
                             ></i>
+                            
                             {dropdownVisible && (
                                 <div className="dropdown-trivia">
                                     <button onClick={() => handleReport(triviaData._id)}>รายงาน</button>
                                 </div>
                             )}
                         </div>
-
                         <div className='triv-detail'>
                             <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
                             <div className='triv-detail-flex'>
