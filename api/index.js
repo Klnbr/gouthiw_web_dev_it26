@@ -1380,6 +1380,27 @@ app.put("/report/:id/trivia/status", async (req, res) => {
     }
 });
 
+app.put("/report/notifications/:id/read", async (req, res) => {
+  const { id } = req.params;
+  const { isRead } = req.body;
+
+  try {
+    const notification = await myNoti.findOneAndUpdate(
+      { "recipients.report_role": "admin", "_id": id },
+      { $set: { "recipients.$.isRead": isRead } },
+      { new: true }
+    );
+
+    if (!notification) {
+      return res.status(404).send({ message: "Notification not found" });
+    }
+
+    res.status(200).send({ message: "Notification marked as read" });
+  } catch (error) {
+      res.status(500).send({ error: error.message });
+  }
+});
+
 // อัปเดตสถานะของรายงานเป็น 0 (แอดมินรับเรื่อง)
 app.put("/report/:id/status", async (req, res) => {
     const { id } = req.params;

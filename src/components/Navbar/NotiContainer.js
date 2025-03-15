@@ -29,6 +29,7 @@ const NotiContainer = () => {
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt) // เรียงจากใหม่ไปเก่า
     );
     
+    const latestNotifications = sortedNotifications.slice(0, 5);
 
     // const handleItemPress = async (itemId, type) => {
     //     try {
@@ -59,7 +60,7 @@ const NotiContainer = () => {
     //     }
     // };
 
-    const adminItemPress = async (reportId) => {
+    const adminItemPress = async (reportId, notiId) => {
         try {
             const responseDetail = await axios.get(`http://localhost:5500/report-detail/trivia/${reportId}`);
             const reportData = responseDetail.data;
@@ -80,24 +81,19 @@ const NotiContainer = () => {
                 };
                 
                 await axios.post("http://localhost:5500/report/trivia/notification", notiData);
+
+                await axios.put(`http://localhost:5500/report/notifications/${notiId}/read`, { isRead: true });
             }
 
             if (!reportData || !reportData._id) {
                 alert("ข้อมูลรายงานไม่ถูกต้องหรือไม่พบ ID");
                 return;
-            }  
+            }
+            
 
             if (responseDetail.status === 200) {
                 navigate("/admin/report-trivia-detail", { state: { reportData } });
             }
-
-            // if (type === "trivia") {
-            //     navigate("/admin/report-trivia-detail", { state: { reportData } });
-            // } else if (type === "topic") {
-            //     navigate("/admin/report-topic-detail", { state: { reportData } });
-            // } else {
-            //     alert("ประเภทของรายงานไม่ถูกต้อง");
-            // }
         } catch (error) {
             console.error("Error fetching report data:", error.message);
             alert("เกิดข้อผิดพลาดในการดึงข้อมูลรายงาน");
@@ -135,12 +131,12 @@ const NotiContainer = () => {
         <div>
             <ul>
                 {notifications.length === 0 && <p className='no-notification'>ไม่มีการแจ้งเตือน</p>}
-                {sortedNotifications.map((notification) => (
+                {latestNotifications.map((notification) => (
                     <div>
                         {notification.role === "reporter" && (
-                            <li key={notification._id} className='notification-item'>
+                            <li key={notification._id} className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}>
                                 <div className='notification-status'>
-                                    <p>
+                                    <p className='notification-content'>
                                         <span className='notification-message'>{notification.message}:</span> 
                                         {
                                             notification.status_report === 0 ? 'รอการตรวจสอบ' : 
@@ -154,9 +150,9 @@ const NotiContainer = () => {
                         )}
 
                         {notification.role === "reported" && (
-                            <li key={notification._id} className='notification-item'>
+                            <li key={notification._id} className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}>
                                 <div className='notification-status'>
-                                    <p>
+                                    <p className='notification-content'>
                                         <span className='notification-message'>{notification.message}</span>: 
                                         {
                                             notification.status_report === 1 ? 'คุณถูกแจ้งให้แก้ไขเนื้อหาเกร็ดความรู้' : 'เกร็ดความรู้ของคุณถูกลบโดยผู้ดูแลระบบ'
@@ -168,9 +164,9 @@ const NotiContainer = () => {
                         )}
 
                         {notification.role === "admin" && (
-                            <li key={notification._id} className='notification-item'>
-                                <div className='notification-status' onClick={() => adminItemPress(notification.report_id)}>
-                                    <p>
+                            <li key={notification._id} className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}>
+                                <div className='notification-status' onClick={() => adminItemPress(notification.report_id, notification._id)}>
+                                    <p className='notification-content'>
                                         <span className='notification-message'>{notification.message}</span>: 
                                             {/* {
                                                 notification.status_report === 0 ? 'คุณถูกแจ้งให้แก้ไขเนื้อหาเกร็ดความรู้' : 
@@ -185,6 +181,9 @@ const NotiContainer = () => {
                     
                 ))}
             </ul>
+            <div className='see-all-noti'>
+                <p>ดูแจ้งเตือนทั้งหมด</p>
+            </div>
         </div>
     );
 };
