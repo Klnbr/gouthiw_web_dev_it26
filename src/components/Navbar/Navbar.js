@@ -20,20 +20,23 @@ function Navbar() {
     const [notificationVisible, setNotificationVisible] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [pendingReports, setPendingReports] = useState(0);
+    const [notiCount, setNotiCount] = useState(0);
 
-    // const calculateTimeAgo = (createdAt) => {
-    //     const currentTime = new Date();
-    //       const postTime = new Date(createdAt);
-    //       const timeDiff = Math.abs(currentTime - postTime) / 36e5;
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5500/report/notifications/${nutrData._id}`);
+                setNotifications(response.data);
 
-    //       if (timeDiff < 1) {
-    //            return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-    //       } else if (timeDiff < 24) {
-    //            return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
-    //       } else {
-    //            return postTime.toLocaleString("th-TH", optionsDMY);
-    //       }
-    //  };
+                const unreadCount = response.data.filter(noti => !noti.isRead).length;
+                setNotiCount(unreadCount);
+            } catch (error) {
+                console.error("Error fetching notifications:", error);
+            }
+        };
+      
+        fetchNotifications();
+    }, [nutrData, setNotiCount]);
     
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -52,13 +55,19 @@ function Navbar() {
         <div className='nav--container'>
             <div className='nav--logo'>
                 <p>GOUTHIW</p>
+                {/* <div className='nav--noti'/> */}
             </div>
             <div className='flex'>
-                <i className="fa-regular fa-bell" onClick={toggleNotifications}></i>
+                <div className='noti--content'>
+                    {notiCount > 0 && 
+                        <div className='nav--noti'/>
+                    }
+                    <i className="fa-regular fa-bell" onClick={toggleNotifications}></i>
+                </div>
                 {notificationVisible && (
                     <div className="notification-popup">
                         <h3>การแจ้งเตือน</h3>
-                        <NotiContainer />
+                        <NotiContainer setNotiCount={setNotiCount} />
                     </div>
                 )}
 

@@ -17,15 +17,22 @@ function TriviaDetailScreen() {
     const { nutrData } = useAuth();
     const [editButton, setEditButton] = useState(false);
     const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [pendingReports, setPendingReports] = useState(0);
 
     useEffect(() => {
-        // Show edit button if the logged-in user is the creator
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
         }
     }, [nutrData]);
 
-    console.log("edit_deadline: ", triviaData.edit_deadline);
+    const fetchDataReports = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5500/trivia/${triviaData._id}/reports`);
+            setPendingReports(response.data.length);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
@@ -55,9 +62,9 @@ function TriviaDetailScreen() {
         const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
     
         if (days > 0) {
-            return `เหลืออีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
+            return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
         } else {
-            return `เหลืออีก ${hours} ชั่วโมง ${minutes} นาที`;
+            return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
         }
     };
 
@@ -66,7 +73,6 @@ function TriviaDetailScreen() {
             const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
             const triviaData = response.data;
 
-            console.log("triviaData: ", triviaData);
             navigate('/report', { state: { triviaData } });
         } catch (error) {
             console.log('Error fetching trivia data', error.message);
@@ -102,7 +108,7 @@ function TriviaDetailScreen() {
                                 <p>{calculateTimeRemaining(triviaData.edit_deadline)}</p>
                             </div>
                         )}
-                    { editButton &&
+                    {editButton &&
                             <button className="btn-edit" 
                                 onClick={() => handleItemPress(triviaData._id)}>
                         แก้ไข</button>}  

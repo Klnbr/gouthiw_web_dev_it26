@@ -13,7 +13,7 @@ const reportSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: 'User'
      },
-     content_id: {
+     topic_id: {
           type: mongoose.Schema.Types.ObjectId,
           ref: 'Topic'
      },
@@ -26,13 +26,13 @@ const reportSchema = new mongoose.Schema({
      },
      recipientRole: {
           type: String, // "admin", "user", "nutr"
-          required: true
+          // required: true
      },
      isDeleted: {
           type: Boolean,
           default: false
      },
-     reminderDate: { // deadline
+     edit_deadline: { // deadline
           type: String, // ใช้เก็บวันที่ตั้งการแจ้งเตือน
           default: null
      },

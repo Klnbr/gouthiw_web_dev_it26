@@ -82,7 +82,7 @@ const NotiContainer = () => {
                 
                 await axios.post("http://localhost:5500/report/trivia/notification", notiData);
 
-                await axios.put(`http://localhost:5500/report/notifications/${notiId}/read`, { isRead: true });
+                await axios.put(`http://localhost:5500/report/notifications/${notiId}/read`, { isRead: true, role: "admin" });
             }
 
             if (!reportData || !reportData._id) {
@@ -93,6 +93,48 @@ const NotiContainer = () => {
 
             if (responseDetail.status === 200) {
                 navigate("/admin/report-trivia-detail", { state: { reportData } });
+            }
+        } catch (error) {
+            console.error("Error fetching report data:", error.message);
+            alert("เกิดข้อผิดพลาดในการดึงข้อมูลรายงาน");
+        }
+    };
+
+    const handleItemPress = async (reportId, notiId) => {
+        try {
+            const response = await axios.get(`http://localhost:5500/report-detail/trivia/${reportId}`);
+            const reportData = response.data;
+
+            await axios.put(`http://localhost:5500/report/notifications/${notiId}/read`, { isRead: true, role: "reporter" });
+
+            if (!reportData || !reportData._id) {
+                alert("ข้อมูลรายงานไม่ถูกต้องหรือไม่พบ ID");
+                return;
+            }
+
+            if (response.status === 200) {
+                navigate("/report-history/detail", { state: { reportData } });
+            }
+        } catch (error) {
+            console.error("Error fetching report data:", error.message);
+            alert("เกิดข้อผิดพลาดในการดึงข้อมูลรายงาน");
+        }
+    };
+
+    const handleItemPressTrivia = async (trivId, notiId) => {
+        try {
+            const response = await axios.get(`http://localhost:5500/trivia/${trivId}`);
+            const triviaData = response.data;
+
+            await axios.put(`http://localhost:5500/report/notifications/${notiId}/read`, { isRead: true, role: "reported" });
+
+            if (!triviaData || !triviaData._id) {
+                alert("ข้อมูลรายงานไม่ถูกต้องหรือไม่พบ ID");
+                return;
+            }
+
+            if (response.status === 200) {
+                navigate("/trivia-detail", { state: { triviaData } });
             }
         } catch (error) {
             console.error("Error fetching report data:", error.message);
@@ -135,7 +177,7 @@ const NotiContainer = () => {
                     <div>
                         {notification.role === "reporter" && (
                             <li key={notification._id} className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}>
-                                <div className='notification-status'>
+                                <div className='notification-status' onClick={() => handleItemPress(notification.report_id, notification._id)}>
                                     <p className='notification-content'>
                                         <span className='notification-message'>{notification.message}:</span> 
                                         {
@@ -151,7 +193,7 @@ const NotiContainer = () => {
 
                         {notification.role === "reported" && (
                             <li key={notification._id} className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}>
-                                <div className='notification-status'>
+                                <div className='notification-status' onClick={() => handleItemPressTrivia(notification.triv_id, notification._id)}>
                                     <p className='notification-content'>
                                         <span className='notification-message'>{notification.message}</span>: 
                                         {
@@ -163,6 +205,7 @@ const NotiContainer = () => {
                             </li>
                         )}
 
+                        {/* น่าจะเรียบร้อยละ */}
                         {notification.role === "admin" && (
                             <li key={notification._id} className={`notification-item ${notification.isRead ? 'read' : 'unread'}`}>
                                 <div className='notification-status' onClick={() => adminItemPress(notification.report_id, notification._id)}>

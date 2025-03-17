@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import SideBar from '../../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
+import { Input, Select } from "antd";
 import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 import '../../components/topic.css'
@@ -26,6 +27,8 @@ function TopicScreen() {
      const { nutrData } = useAuth();
      const [loading, setLoading] = useState(true);  // เพิ่มสถานะการโหลด
      const [error, setError] = useState(null);  // เพิ่มสถานะ error
+     const [searchTopic, setSearchTopic] = useState('');
+     const [selectedDisplay, setSelectedDisplay] = useState("ใหม่ล่าสุด");
 
      const [topics, setTopics] = useState([]);
      const [currentPage, setCurrentPage] = useState(1);
@@ -46,6 +49,18 @@ function TopicScreen() {
           
           fetchTopicData();
      }, [nutrData])
+
+     const filteredTopics = topics.filter(topic => 
+          topic.title.includes(searchTopic)
+     );
+
+     const filterDisplay = selectedDisplay === "ใหม่ล่าสุด"
+          ? topics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
+          : selectedDisplay === "newest"
+          ? topics.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // เรียงตามวันที่อัปเดตล่าสุด
+          : filteredTopics;
+
+
 
      const calculateTimeAgo = (createdAt) => {
           const currentTime = new Date();
@@ -107,11 +122,55 @@ function TopicScreen() {
                          <SideBar />
                          <div className='content'>
                               <div className='main-content'>
-                                   <div className='topic-option'>
-                                        <i className="fa-solid fa-angle-down"></i>
-                                        <p>เรียงจากล่าสุด</p>
+                                   <div className='trivia-content'>
+                                        <div className='display-flex'>
+                                             <p className='breadcumb'>
+                                                  <span className='press-to-back'>หน้าหลัก</span>
+                                                  <span className='gray-color'> &#62;</span> กระทู้
+                                             </p>
+                                             <div className='divider' />
+                                        </div>
+
+                                        <h1 className='head-content'>กระทู้</h1>
+                                        <div className='trivia-manage'>
+                                             <div className='trivia-search'>
+                                                  <div className='trivia-search-wrapper'>
+                                                       <i className="fa-solid fa-magnifying-glass trivia-search-icon"></i>
+                                                       <input 
+                                                            type='text'
+                                                            placeholder='ค้นหากระทู้ที่นี่' 
+                                                            onChange={(e) => setSearchTopic(e.target.value)} 
+                                                            className='trivia-search-input' />
+                                                  </div>
+
+                                                  <div className='trivia-select-wrapper'>
+                                                       <i className="fa-solid fa-sort trivia-search-icon"></i>
+                                                       <Select 
+                                                            className='trivia-search-select'
+                                                            value={selectedDisplay} 
+                                                            onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                            options={[
+                                                                 { value: "newest", label: "ใหม่ล่าสุด" },
+                                                                 { value: "oldest", label: "เก่าสุด" }
+                                                            ]}
+                                                       />
+                                                  </div>
+                                             </div>
+                                        </div>
                                    </div>
-                                   {/* แสดงข้อความขณะโหลดหรือเมื่อมี error */}
+
+
+
+
+
+
+
+
+
+
+
+
+
                                    {loading ? (
                                         <h2>กำลังโหลด...</h2>
                                    ) : error ? (

@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css'
+import "../../components/report.css";
 
 const optionsDMY = {
      timeZone: "Asia/Bangkok",
@@ -19,31 +20,30 @@ function ReportHistory() {
 
      const [reports, setReports] = useState([]);
      const [currentPage, setCurrentPage] = useState(1);
-     const [itemsPerPage] = useState(5); // Adjust based on how many items you want per page
+     const [itemsPerPage] = useState(5);
+     const [type, setType] = useState(null);
 
      const statusMap = {
-          0: "อยู่ระหว่างการตรวจสอบ",
-          1: "ดำเนินการเรียบร้อย",
-          2: "ปฏิเสธรายงาน",
+          0: "รอตรวจสอบ",
+          1: "กำลังรอการแก้ไข",
+          2: "การรายงานถูกปฏิเสธ",
+          3: "ลบออกจากระบบ"
      };
 
-     const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
-     
-     const getStatusColor = (status) => {
-          const numericStatus = Number(status);
-          switch (numericStatus) {
-               case 1: return "#28a745"; 
-               case 0: return "#ffc107"; 
-               case 2: return "#dc3545"; 
-               default: return "#6c757d"; 
-          }
-     };
+     const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการรอตรวจสอบ";
 
      useEffect(() => {
           const fetchReportData = async () => {
                try {
                     const response = await axios.get(`http://localhost:5500/reports/${nutrData._id}`, { timeout: 10000 });
                     setReports(response.data);
+                    if (response.data.triv_id) {
+                         setType("trivia");
+                    }
+
+                    else if (response.data.topic_id) {
+                         setType("topic");
+                    }
                } catch (error) {
                     console.log("Error fetching report data", error.message)
                }
@@ -53,9 +53,8 @@ function ReportHistory() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`http://localhost:5500/report-detail/${itemId}`);
+               const response = await axios.get(`http://localhost:5500/report-detail/trivia/${itemId}`);
                const reportData = response.data;
-               console.log("reportData sent: ", reportData);
                navigate('/report-history/detail', { state: { reportData } });
           } catch (error) {
                console.log('Error fetching report data', error.message);
@@ -63,16 +62,37 @@ function ReportHistory() {
      };
 
      const renderItem = (item) => (
-          <div className='report-card-history' onClick={() => handleItemPress(item._id)} key={item._id}>
-               <div className='trivia-info'>
-                    <h1>{item.triviaDetails.head}</h1>
-                    <p className='trivia-date'>รายงานเมื่อ {calculateTimeAgo(item.createdAt)}</p>
-                    <div className='trivia-des'>
-                         <p>{item.note}</p>
+          <div className='report-card-admin' onClick={() => handleItemPress(item._id)} key={item._id}>
+               <div className='report-trivia-info'>
+                    <div className="report-info-1">
+                         <i className="fa-solid fa-book report-info-icon"></i>
                     </div>
-                    <div className='detail-rp'>
-                         <p>ผู้รายงาน:{item.nutrDetails.firstname} {item.nutrDetails.lastname}</p>
-                         <p>สถานะการรายงาน: {getStatusText(item.status)}</p>
+
+                    <div className="report-info-2">
+                         <p className="report-info-2-head">
+                              [รายงาน] เกร็ดความรู้ | หัวข้อ: {item.triviaDetails.head}
+                         </p>
+                         <p>
+                              ผู้รายงาน: {item.nutrDetails.firstname} {item.nutrDetails.lastname}
+                         </p>
+                         {item.note && (
+                              <p className="report-info-2-time">
+                                   รายงานเมื่อ {calculateTimeAgo(item.createdAt)}
+                              </p>
+                         )}
+                    </div>
+
+                    <div className="report-info-3">
+                        <p>
+                              <span style={{ 
+                                        color: "white", 
+                                        backgroundColor: item.status === 1 ? "#FFC107" : item.status === 2 ? "#DC3545" : item.status === 3 ? "#28A745" :  "grey",
+                                        padding: "0.3rem 0.8rem",
+                                        marginLeft: "0.5rem", 
+                                        borderRadius: "0.5rem"
+                                   }}>{getStatusText(item.status)}
+                              </span>
+                         </p>
                     </div>
                </div>
           </div>
@@ -123,39 +143,37 @@ function ReportHistory() {
                               )}
 
                                 {/* Pagination Controls */}
-<div className="pagination">
-     {/* Previous Button */}
-     <button 
-          onClick={() => handlePageChange(currentPage - 1)} 
-          disabled={currentPage === 1}
-          className="pagination-button"
-     >
-          ย้อนกลับ
-     </button>
+                              <div className="pagination">
+                                   {/* Previous Button */}
+                                   <button 
+                                        onClick={() => handlePageChange(currentPage - 1)} 
+                                        disabled={currentPage === 1}
+                                        className="pagination-button"
+                                   >
+                                        ย้อนกลับ
+                                   </button>
 
-     {/* Page Numbers */}
-     {pageNumbers.map(number => (
-          <button
-               key={number}
-               onClick={() => handlePageChange(number)}
-               className={`pagination-button ${currentPage === number ? "active" : ""}`}
-          >
-               {number}
-          </button>
-     ))}
+                                   {/* Page Numbers */}
+                                   {pageNumbers.map(number => (
+                                        <button
+                                             key={number}
+                                             onClick={() => handlePageChange(number)}
+                                             className={`pagination-button ${currentPage === number ? "active" : ""}`}
+                                        >
+                                             {number}
+                                        </button>
+                                   ))}
 
-     {/* Next Button */}
-     <button 
-          onClick={() => handlePageChange(currentPage + 1)} 
-          disabled={currentPage === pageNumbers.length}
-          className="pagination-button"
-     >
-          ถัดไป
-     </button>
-</div>
-
+                                   {/* Next Button */}
+                                   <button 
+                                        onClick={() => handlePageChange(currentPage + 1)} 
+                                        disabled={currentPage === pageNumbers.length}
+                                        className="pagination-button"
+                                   >
+                                        ถัดไป
+                                   </button>
+                              </div>
                          </div>
-
                     </div>
                </div>
           </div>

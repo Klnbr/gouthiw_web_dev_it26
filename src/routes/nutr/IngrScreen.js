@@ -251,46 +251,46 @@ function IngrScreen() {
                                         </div>
                                    </div>
                                    {modal && (
-               <div className="modal">
-                    <div className="modal-content">
-                         <button className="ingr-cancel--btn" onClick={toggleModal}>X</button>
-                         <h1>เพิ่มวัตถุดิบ</h1>
-                         
-                         <label>ชื่อวัตถุดิบ</label>
-                         <input
-                              type="text"
-                              className="modal--input"
-                              value={name}
-                              onChange={(e) => setName(e.target.value)}
-                         />
+                                        <div className="modal">
+                                             <div className="modal-content">
+                                                  <button className="ingr-cancel--btn" onClick={toggleModal}>X</button>
+                                                  <h1>เพิ่มวัตถุดิบ</h1>
+                                                  
+                                                  <label>ชื่อวัตถุดิบ</label>
+                                                  <input
+                                                       type="text"
+                                                       className="modal--input"
+                                                       value={name}
+                                                       onChange={(e) => setName(e.target.value)}
+                                                  />
 
-                         <label>ค่าพิวรีน</label>
-                         <input
-                              type="text"
-                              className="modal--input"
-                              value={purine}
-                              onChange={(e) => setPurine(e.target.value)}
-                         />
+                                                  <label>ค่าพิวรีน</label>
+                                                  <input
+                                                       type="text"
+                                                       className="modal--input"
+                                                       value={purine}
+                                                       onChange={(e) => setPurine(e.target.value)}
+                                                  />
 
-                         <label>ประเภท</label>
-                         <select
-                              className="ingr-form--select"
-                              value={type}
-                              onChange={(e) => setType(e.target.value)}
-                         >
-                              <option value="">เลือกประเภท</option>
-                              <option value="เนื้อสัตว์">เนื้อสัตว์</option>
-                              <option value="ผัก">ผัก</option>
-                              <option value="ผลไม้">ผลไม้</option>
-                              <option value="อื่น ๆ">อื่น ๆ</option>
-                         </select>
+                                                  <label>ประเภท</label>
+                                                  <select
+                                                       className="ingr-form--select"
+                                                       value={type}
+                                                       onChange={(e) => setType(e.target.value)}
+                                                  >
+                                                       <option value="">เลือกประเภท</option>
+                                                       <option value="เนื้อสัตว์">เนื้อสัตว์</option>
+                                                       <option value="ผัก">ผัก</option>
+                                                       <option value="ผลไม้">ผลไม้</option>
+                                                       <option value="อื่น ๆ">อื่น ๆ</option>
+                                                  </select>
 
-                         <button className="ingr-save--btn" onClick={handleSave}>
-                              บันทึก
-                         </button>
-                    </div>
-               </div>
-          )}
+                                                  <button className="ingr-save--btn" onClick={handleSave}>
+                                                       บันทึก
+                                                  </button>
+                                             </div>
+                                        </div>
+                                   )}
 
                                    {/* Table section */}
                                    <div className='above-table'>

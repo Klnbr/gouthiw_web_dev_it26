@@ -7,54 +7,56 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ReadMore from "../../components/Readmore";
 
 const optionsDMY = {
-  timeZone: "Asia/Bangkok", // แก้ไข timezone
-  year: "numeric",
-  month: "long",
-  day: "numeric",
+    timeZone: "Asia/Bangkok", // แก้ไข timezone
+    year: "numeric",
+    month: "long",
+    day: "numeric",
 };
 
 const calculateTimeAgo = (createdAt) => {
-  const currentTime = new Date();
-  const postTime = new Date(createdAt);
-  const timeDiff = Math.abs(currentTime - postTime) / 36e5; // คำนวณต่างเป็นชั่วโมง
+    const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
+    const postTime = new Date(createdAt).toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
+    const timeDiff = Math.abs(currentTime - postTime) / 36e5;
 
-  if (timeDiff < 1) {
-    return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-  } else if (timeDiff < 24) {
-    return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
-  } else {
-    return postTime.toLocaleString("th-TH", optionsDMY);
-  }
+    if (timeDiff < 1) {
+        return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
+    } else if (timeDiff < 24) {
+        return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
+    } else {
+        return postTime.toLocaleString("th-TH", optionsDMY);
+    }
 };
 
 function ReportDetail() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { reportData } = location.state || {}; // ดึงค่าจาก state
-  const [status, setStatus] = useState(reportData.status || 0);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { reportData } = location.state || {}; // ดึงค่าจาก state
+    const [status, setStatus] = useState(reportData.status || 0);
 
-  const statusMap = {
-    0: "อยู่ระหว่างการตรวจสอบ",
-    1: "ดำเนินการเรียบร้อย",
-    2: "ปฏิเสธรายงาน",
-  };
+    const statusMap = {
+        0: "รอตรวจสอบ",
+        1: "กำลังรอการแก้ไข",
+        2: "การรายงานถูกปฏิเสธ",
+        3: "ลบออกจากระบบ"
+    };
 
-  const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
+    const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
 
-  const getStatusColor = (status) => {
-    const numericStatus = Number(status); // แปลงเป็นตัวเลข
-    console.log("Status received:", numericStatus); // ตรวจสอบค่า
-    switch (numericStatus) {
-      case 1:
-        return "#28a745"; // เขียว
-      case 0:
-        return "#ffc107"; // เหลือง
-      case 2:
-        return "#dc3545"; // แดง
-      default:
-        return "#6c757d"; // เทา
-    }
-  };
+    const getStatusColor = (status) => {
+        const numericStatus = Number(status);
+        switch (numericStatus) {
+            case 0:
+                return "grey";
+            case 1:
+                return "lightblue";
+            case 2:
+                return "pink";
+            case 3:
+                return "red";
+            default:
+                return "#dc3545";
+        }
+    };
 
   return (
     <>

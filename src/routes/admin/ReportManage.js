@@ -25,13 +25,13 @@ function ReportManage() {
     const itemsPerPage = 5;
 
     const statusMap = {
-        0: "รอตรวจสอบ", // รับมา แสดงที่หน้ารายงาน ยังไม่ดำเนินการอะไร
-        1: "กำลังรอการแก้ไข", // ส่งกลับไปให้นักโภชนาการแก้ไข
-        2: "การรายงานถูกปฏิเสธ", // ไม่เข้าข่ายการละเมิดกฎ
-        3: "ลบออกจากระบบ" // 
+        0: "รอตรวจสอบ",
+        1: "กำลังรอการแก้ไข",
+        2: "การรายงานถูกปฏิเสธ",
+        3: "ลบออกจากระบบ"
     };
 
-    const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการตรวจสอบ";
+    const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการรอตรวจสอบ";
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date();
@@ -49,21 +49,21 @@ function ReportManage() {
 
     useEffect(() => {
         const fetchReportsTrivia = async () => {
-        try {
-            const response = await axios.get("http://localhost:5500/report/trivias");
-            if (Array.isArray(response.data)) setReportsTrivia(response.data);
-        } catch (error) {
-            console.error("Error fetching trivia reports:", error);
-        }
+            try {
+                const response = await axios.get("http://localhost:5500/report/trivias");
+                if (Array.isArray(response.data)) setReportsTrivia(response.data);
+            } catch (error) {
+                console.error("Error fetching trivia reports:", error);
+            }
         };
 
         const fetchReportsTopic = async () => {
-        try {
-            const response = await axios.get("http://localhost:5500/report/topics");
-            if (Array.isArray(response.data)) setReportsTopic(response.data);
-        } catch (error) {
-            console.error("Error fetching topic reports:", error);
-        }
+            try {
+                const response = await axios.get("http://localhost:5500/report/topics");
+                if (Array.isArray(response.data)) setReportsTopic(response.data);
+            } catch (error) {
+                console.error("Error fetching topic reports:", error);
+            }
         };
 
         fetchReportsTrivia();

@@ -61,7 +61,7 @@ export default function Noti() {
 
 
     const renderItem = (item) => {
-        const type = item.triv_id ? "trivia" : item.content_id ? "topic" : null;
+        const type = item.triv_id ? "trivia" : item.topic_id ? "topic" : null;
         if (!type) return null;
 
         return (
@@ -73,7 +73,7 @@ export default function Noti() {
                 <div className="trivia-info">
                     <div className="trivia-header">
                         <h1>
-                            {type === "trivia" ? `[เกร็ดความรู้] ${item.triv_id.head}` : `[กระทู้] ${item.content_id.title}`}
+                            {type === "trivia" ? `[เกร็ดความรู้] ${item.triv_id.head}` : `[กระทู้] ${item.topic_id.title}`}
                         </h1>
                     </div>
                     <p className="trivia-date">รายงานเมื่อ {new Date(item.createdAt).toLocaleString()}</p>

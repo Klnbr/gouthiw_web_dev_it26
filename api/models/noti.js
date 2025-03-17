@@ -14,7 +14,7 @@ const notiSchema = new mongoose.Schema({
             isRead: { type: Boolean, default: false }
         }
     ],
-    content_id: {
+    topic_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Topic'
     },
