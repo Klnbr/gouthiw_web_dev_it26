@@ -83,15 +83,15 @@ function Navbar() {
                                     } else {
                                         navigate('/profile');  // ถ้าไม่ใช่แอดมิน, ไปที่หน้า /noti
                                     }
-                                }}>My profile</button>
-                                <button onClick={handleLogout}>Log out</button>
+                                }}>โปรไฟล์ของฉัน</button>
+                                <button onClick={handleLogout}>ออกจากระบบ</button>
                             </div>
                         )}
                     </div>
                 ) : (
                     <div className='nav-btn'>
-                        <button className='nav--signin' onClick={() => navigate('/signin')}>Signin</button>
-                        <button className='nav--signup' onClick={() => navigate('/signup')}>Signup</button>
+                        <button className='nav--signin' onClick={() => navigate('/signin')}>เข้าสู่ระบบ</button>
+                        <button className='nav--signup' onClick={() => navigate('/signup')}>ลงทะเบียน</button>
                     </div>
                 )}
             </div>

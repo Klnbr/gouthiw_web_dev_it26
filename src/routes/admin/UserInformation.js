@@ -142,6 +142,7 @@ function UserInformation() {
                           <div className="profile-context">
                               <p>{nutrData.firstname} {nutrData.lastname}</p>
                               <p className="info">{nutrData.email}</p>   
+                              
                           </div>
                       </div>  
   

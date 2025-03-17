@@ -21,12 +21,12 @@ function EditProfile() {
      useEffect(() => {
           const fetchUserData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/users", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/nutrs", { timeout: 10000 });
                     setUser(response.data);
                } catch (error) {
-                    console.log("Error fetching menus data", error.message)
+                    console.log("Error fetching menus data", error.message);
                }
-          }
+          };
 
           if (nutrData) {
                console.log("nutrData: ", nutrData);
@@ -38,15 +38,51 @@ function EditProfile() {
                setPassword(nutrData.password);
           }
 
-          fetchUserData()
-     }, []);
+          fetchUserData();
+     }, [nutrData]);
+
+     // const handleUpdateProfile = async () => {
+     //      if (!nutrData || !nutrData._id) {
+     //           alert("User ID is not available.");
+     //           return;
+     //      }
+
+     //      try {
+     //           const updateData = {
+     //                firstname,
+     //                lastname,
+     //                license_number,
+     //                tel,
+     //                email,
+     //                ...(password ? { password } : {}),
+     //           };
+
+     //           console.log("Updated User Data:", updateData);
+
+     //           const response = await axios.put(
+     //                `http://localhost:5500/nutrs/${nutrData._id}`, updateData
+     //           );
+
+     //           console.log("User updated", response.data);
+
+     //           if (response.status === 200) {
+     //                alert("แก้ไขสำเร็จ");
+     //                navigate("/profile");
+     //           } else {
+     //                alert("การอัปเดตไม่สำเร็จ");
+     //           }
+     //      } catch (error) {
+     //           console.error("Error updating user:", error.response || error.message);
+     //           alert("แก้ไขไม่สำเร็จ: " + (error.response?.data?.message || error.message));
+     //      }
+     // };
 
      const handleUpdateProfile = async () => {
           if (!nutrData || !nutrData._id) {
                alert("User ID is not available.");
                return;
           }
-      
+     
           try {
                const updateData = {
                     firstname,
@@ -56,38 +92,46 @@ function EditProfile() {
                     email,
                     ...(password ? { password } : {}),
                };
-          
+     
                console.log("Updated User Data:", updateData);
-          
+     
                const response = await axios.put(
-                    `http://localhost:5500/user/${nutrData._id}`, updateData
+                    `http://localhost:5500/nutrs/${nutrData._id}`, updateData
                );
-          
+     
                console.log("User updated", response.data);
-          
+     
                if (response.status === 200) {
                     alert("แก้ไขสำเร็จ");
+                    
+                    // อัปเดต state ของ user ที่ React ใช้แสดงผล
+                    setUser((prevUser) => ({
+                         ...prevUser,
+                         ...updateData,
+                    }));
+                    
                     navigate("/profile");
+               } else {
+                    alert("การอัปเดตไม่สำเร็จ");
                }
           } catch (error) {
                console.error("Error updating user:", error.response || error.message);
-               alert(
-                    "แก้ไขไม่สำเร็จ: " + (error.response?.data?.message || error.message)
-               );
+               alert("แก้ไขไม่สำเร็จ: " + (error.response?.data?.message || error.message));
           }
      };
-      
+     
+
      return (
           <>
                <div className="container">
                     <SideBar />
                     <div className="content">
                          <div className="nav">
-                              <Navbar />
+                              {/* <Navbar /> */}
                          </div>
                          <div className="main-content">
                               <div className="profile-card">
-                                   
+
                                    {nutrData && (
                                         <>
                                              <div className="profile-content--edit">
@@ -97,7 +141,7 @@ function EditProfile() {
                                                             <img
                                                                  src={nutrData.image_profile}
                                                                  alt={`${nutrData.firstname} ${nutrData.lastname}`}
-                                                                 />
+                                                            />
                                                             <button className="profile-image--upload">
                                                                  อัปโหลดรูปโปรไฟล์
                                                             </button>
@@ -105,8 +149,8 @@ function EditProfile() {
                                                                  นำรูปโปรไฟล์ออก
                                                             </button>
                                                        </div>
-                                                       
-                                                       <hr className="hr-line"/>
+
+                                                       <hr className="hr-line" />
                                                   </div>
 
                                                   <div className="profile-data">
@@ -116,7 +160,7 @@ function EditProfile() {
                                                                  name="firstname"
                                                                  value={firstname}
                                                                  onChange={(e) => setFirstname(e.target.value)}
-                                                                 />
+                                                            />
                                                        </div>
                                                        <div>
                                                             <p>นามสกุล:</p>
@@ -124,9 +168,9 @@ function EditProfile() {
                                                                  name="lastname"
                                                                  value={lastname}
                                                                  onChange={(e) => setLastname(e.target.value)}
-                                                                 />
+                                                            />
                                                        </div>
-                                                       
+
                                                   </div>
 
                                                   <div className="profile-data">
@@ -136,7 +180,7 @@ function EditProfile() {
                                                                  name="license_number"
                                                                  value={license_number}
                                                                  onChange={(e) => setLicense_number(e.target.value)}
-                                                                 />
+                                                            />
                                                        </div>
                                                        <div>
                                                             <p>เบอร์โทรศัพท์:</p>
@@ -144,29 +188,29 @@ function EditProfile() {
                                                                  name="tel"
                                                                  value={tel}
                                                                  onChange={(e) => setTel(e.target.value)}
-                                                                 />  
+                                                            />
                                                        </div>
                                                   </div>
 
                                                   <div className="profile-data">
-                                                  <div>
-                                                       <p>อีเมล:</p>
-                                                       <input
-                                                            name="email"
-                                                            value={email}
-                                                            onChange={(e) => setEmail(e.target.value)}
+                                                       <div>
+                                                            <p>อีเมล:</p>
+                                                            <input
+                                                                 name="email"
+                                                                 value={email}
+                                                                 onChange={(e) => setEmail(e.target.value)}
                                                             />
-                                                  </div>
-                                                  <div>
-                                                       <p>รหัสผ่าน (ถ้าต้องการเปลี่ยน):</p>
-                                                       <input
-                                                            name="password"
-                                                            type="password"
-                                                            value={password}
-                                                            onChange={(e) => setPassword(e.target.value)}
-                                                       />
-                                                  </div>
-                                                       
+                                                       </div>
+                                                       <div>
+                                                            <p>รหัสผ่าน (ถ้าต้องการเปลี่ยน):</p>
+                                                            <input
+                                                                 name="password"
+                                                                 type="password"
+                                                                 value={password}
+                                                                 onChange={(e) => setPassword(e.target.value)}
+                                                            />
+                                                       </div>
+
                                                   </div>
                                                   <button className="edt-profile-btn" onClick={handleUpdateProfile}>บันทึกข้อมูล</button>
                                              </div>

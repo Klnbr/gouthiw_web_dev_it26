@@ -176,12 +176,40 @@ app.get("/users", async (req, res) => {
 app.get("/nutrs", async (req, res) => {
     try {
         const users = await myNutr.find({ isDeleted: false });
-        return res.json(users);
+        return res.json(users);  // ส่งข้อมูลของผู้ใช้ที่ไม่ได้ถูกลบ
     } catch (error) {
         console.error("Error fetching users data", error);
         res.status(500).json({ message: "Failed to retrieve the users" });
     }
 });
+
+app.put("/nutrs/:id", async (req, res) => {  // เปลี่ยนจาก /user/:id เป็น /nutrs/:id
+    try {
+        const { id } = req.params;
+        const { firstname, lastname, license_number, tel, email, password } = req.body;
+    
+        const updateData = {
+            firstname,
+            lastname,
+            license_number,
+            tel,
+            email,
+            ...(password ? { password } : {}),
+        };
+    
+        const updatedUser = await myNutr.findByIdAndUpdate(id, updateData, { new: true }); // ใช้ updateData เพื่ออัปเดต
+    
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+    
+        res.status(200).json({ message: "Update User successfully", updatedUser });
+    } catch (error) {
+        console.log("Error update User", error);
+        res.status(500).json({ message: "Error update User" });
+    }
+});
+
 
 // ดึง id ผู้ใช้ มา 1 id
 app.get("/admin/:role/:id", async (req, res) => {
@@ -443,48 +471,52 @@ app.get("/ingrs", async (req, res) => {
     }
 });
 
-app.get("/ingrs/:id", async (req, res) => {
+// ดึงวัตถุดิบที่ nutritionist เพิ่ม
+app.get("/ingrs/auth/:nutrId", async (req, res) => {
     try {
-        const { id } = req.params;
+        const { nutrId } = req.params;
+        const nutrientId = new mongoose.Types.ObjectId(nutrId);
 
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Invalid user ID" });
-        }
-
-        const ingrs = await myIngr.aggregate([
-            { 
-                $match: { _id: new mongoose.Types.ObjectId(id) } 
-            },
+        // ค้นหาวัตถุดิบที่ nutrId เป็นเจ้าของ
+        const ingredients = await myIngr.aggregate([
             {
-                $unwind: "$ingr_owner",
+                $match: { isDeleted: false }  // กรองเฉพาะวัตถุดิบที่ไม่ถูกลบ
             },
             {
                 $lookup: {
-                    from: "ingrs",
-                    localField: "ingr_owner.ingr_id",
-                    foreignField: "_id",
-                    as: "ingrDetails",
-                },
+                    from: 'nutrs',             // ชื่อตาราง nutritionists
+                    localField: '_id',         // เชื่อมกับ _id ของวัตถุดิบใน myIngr
+                    foreignField: 'ingr_owner.ingr_id', // เชื่อมกับ ingr_id ใน nutr_owner ของ nutritionist
+                    as: 'owners'
+                }
             },
             {
-                $unwind: "$ingrDetails",
+                $unwind: "$owners"  // แยกข้อมูลของเจ้าของออกมา
+            },
+            {
+                $match: {
+                    "owners._id": nutrientId  // กรองเฉพาะวัตถุดิบที่ nutrId เป็นเจ้าของ
+                }
             },
             {
                 $project: {
-                    _id: "$ingrDetails._id",
-                    name: "$ingrDetails.name",
-                    purine: "$ingrDetails.purine",
-                    uric: "$ingrDetails.uric",
-                    ingr_type: "$ingrDetails.ingr_type"
-                },
-            },
+                    name: 1,  // แสดงชื่อของวัตถุดิบ
+                    purine: 1,  // แสดงค่าพิวรีน
+                    ingr_type: 1,  // แสดงประเภทของวัตถุดิบ
+                    "owner_name": {
+                        $concat: ['$owners.firstname', ' ', '$owners.lastname']  // รวมชื่อและนามสกุลของ nutritionist
+                    }
+                }
+            }
         ]);
-        return res.json(ingrs);
+
+        res.status(200).json(ingredients);
     } catch (error) {
-        console.error("Error fetching ingrs data", error);
-        res.status(500).json({ message: "Failed to retrieve the ingrs" });
+        console.error("❌ Error fetching user ingredients:", error);
+        res.status(500).json({ message: "Error fetching user ingredients" });
     }
 });
+
 
 // เพิ่มวัตถุดิบ
 app.post("/ingr/:id", async (req, res) => {
@@ -750,11 +782,11 @@ app.delete("/trivia/:id", async (req, res) => {
 });
 
 // แก้ไขโปรไฟล์
-app.put("/user/:id", async (req, res) => {
+app.put("/nutrs/:id", async (req, res) => {
     try {
         const { id } = req.params;
         const { firstname, lastname, license_number, tel, email, password } = req.body;
-    
+
         // สร้างข้อมูลที่จะอัปเดต
         const updateData = {
             firstname,
@@ -764,21 +796,22 @@ app.put("/user/:id", async (req, res) => {
             email,
             ...(password ? { password } : {}),
         };
-    
+
         // อัปเดตข้อมูลในฐานข้อมูล
-        const updatedUser = await myNutr.findByIdAndUpdate(id, {firstname, lastname, license_number, tel, email, password});
-    
+        const updatedUser = await myNutr.findByIdAndUpdate(id, updateData, { new: true });
+
         // ตรวจสอบว่าผู้ใช้ถูกอัปเดต
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }
-    
+
         res.status(200).json({ message: "Update User successfully", updatedUser });
     } catch (error) {
         console.log("Error update User", error);
         res.status(500).json({ message: "Error update User" });
     }
 });
+
 
 // ดึงกระทู้มาโชว์
 app.get("/topics", async (req, res) => {
@@ -954,6 +987,30 @@ app.put("/topic/answer/:id", upload.array("answer_image", 5), async (req, res) =
         res.status(500).json({ message: "Error adding reply to topic" });
     }
 });
+
+app.get('/topics/replied-by/:nutrId', async (req, res) => {
+    try {
+        const { nutrId } = req.params;
+
+        // แปลง nutrId เป็น ObjectId โดยใช้ new
+        const nutrientId = new mongoose.Types.ObjectId(nutrId);
+
+        const result = await myTopic.aggregate([
+            { $unwind: "$answer" },  // แยกแต่ละคำตอบใน array answer
+            { $match: { "answer.nutr_id": nutrientId } },  // ค้นหาคำตอบที่ nutr_id ตรงกับ nutrId ที่ส่งมา
+            { $count: "total_answers" }  // นับจำนวนคำตอบ
+        ]);
+
+        // ส่งผลลัพธ์กลับไป
+        res.json({ count: result.length > 0 ? result[0].total_answers : 0 });
+    } catch (error) {
+        console.log("Error fetching replied topics:", error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+
 
 // ดึงการรายงานมาแสดง
 app.get("/report/trivias", async (req, res) => {
