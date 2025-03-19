@@ -7,6 +7,8 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
+const crypto = require('crypto'); 
+const nodemailer = require('nodemailer');
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
@@ -20,48 +22,31 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static("uploads"));
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(
-      null,
-      file.fieldname +
-        "-" +
-        uniqueSuffix +
-        "-" +
-        path.extname(file.originalname)
-    );
-  },
+    destination: function (req, file, cb) {
+        cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+        cb(
+            null,
+            file.fieldname +
+            "-" +
+            uniqueSuffix +
+            "-" +
+            path.extname(file.originalname)
+        );
+    },
 });
 
 const upload = multer({ storage: storage });
 
-// const client = new MongoClient(uri, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   }
-// });
-// async function run() {
-//   try {
-//     await client.connect();
-//     await client.db("admin").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//   } finally {
-//     await client.close();
-//   }
-// }
-// run().catch(console.dir);
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB successfully'))
-  .catch(err => console.error('Failed to connect to MongoDB', err));
+    .then(() => console.log('Connected to MongoDB successfully'))
+    .catch(err => console.error('Failed to connect to MongoDB', err));
 
-app.listen(port, () => {
-  console.log("Server is running on port 5500");
+app.listen(port,"0.0.0.0", () => {
+    console.log("Server is running on port 5500");
 });
 
 const myIngr = require("./models/ingredient");
@@ -73,58 +58,8 @@ const myUser = require("./models/user");
 const myReport = require("./models/report");
 const myNoti = require("./models/noti");
 
-const sendNotification = require("../src/notification");
 const { title } = require("process");
 const { notification } = require("antd");
-
-// signup
-app.post("/signup", async (req, res) => {
-    try {
-        const {firstname, lastname, password, license_number, tel, email, image_profile, image_background, isDeleted } = req.body;
-        const nutr = await myNutr.findOne({ email });
-
-        if (!firstname || !lastname || !password || !email) {
-            return res.status(400).json({ message: "กรุณาใส่ข้อมูลให้ครบถ้วน" });
-        }
-
-        const existingNutr = await myNutr.findOne({ email: email.toLowerCase() });
-        if (existingNutr) {
-            return res.status(409).json({ message: "อีเมลนี้ถูกใช้ไปแล้ว" });
-        }
-
-        let hashPassword = await bcrypt.hash(password, 10);
-
-        const newNutr = new myNutr({
-            firstname,
-            lastname,
-            password: hashPassword,
-            license_number,
-            tel,
-            email: email.toLowerCase(),
-            image_profile,
-            role: '0',
-            image_background,
-            menu_owner: [],
-            triv_owner: [],
-            ingr_owner: [],
-            isDeleted,
-        });
-
-        await newNutr.save();
-
-        const token = jwt.sign({ _id: newNutr._id }, "secretkey123", {
-            expiresIn: "90d",
-        });
-
-        res.status(201).json({
-            message: "ลงทะเบียนสำเร็จ",
-            token,
-        });
-    } catch (error) {
-        console.error("Sign up Error: ", error);
-        res.status(500).json({ message: "ลงทะเบียนไม่สำเร็จ" });
-    }
-});
 
 // signin
 app.post("/signin", async (req, res) => {
@@ -161,6 +96,203 @@ app.post("/signin", async (req, res) => {
     }
 });
 
+app.post("/register", async (req, res) => {
+    try {
+        const { firstname, lastname, password, license_number, tel, email, image_profile, image_background, isDeleted } = req.body;
+
+        if (!firstname || !lastname || !password || !email) {
+            return res.status(400).json({ message: "กรุณาใส่ข้อมูลให้ครบถ้วน" });
+        }
+
+        const existingNutr = await myNutr.findOne({ email: email.toLowerCase() });
+        if (existingNutr) {
+            return res.status(409).json({ message: "อีเมลนี้ถูกใช้ไปแล้ว" });
+        }
+
+        let hashPassword;
+        try {
+            hashPassword = await bcrypt.hash(password, 10);
+        } catch (error) {
+            console.error("Password hashing error:", error);
+            return res.status(500).json({ message: "เกิดข้อผิดพลาดในการเข้ารหัสรหัสผ่าน" });
+        }
+
+        const verificationToken = crypto.randomBytes(32).toString("hex"); 
+        console.log("🔑 สร้าง verificationToken:", verificationToken);
+
+        const newNutr = new myNutr({
+            firstname,
+            lastname,
+            password: hashPassword,
+            license_number,
+            tel,
+            email: email.toLowerCase(),
+            image_profile,
+            role: '0',
+            image_background,
+            menu_owner: [],
+            triv_owner: [],
+            ingr_owner: [],
+            isDeleted,
+            verificationToken,
+            emailVerificationTokenCreatedAt: new Date(),
+        });
+
+        await newNutr.save();
+
+        const token = jwt.sign({ _id: newNutr._id }, "secretkey123", { expiresIn: "90d" });
+
+        try {
+            await sendVerificationEmail(newNutr.email, newNutr.verificationToken);
+        } catch (error) {
+            console.error("❌ Email sending error:", error);
+            return res.status(500).json({ message: "เกิดข้อผิดพลาดในการส่งอีเมลยืนยัน" });
+        }
+
+        res.status(201).json({
+            message: "ลงทะเบียนสำเร็จ",
+            token,
+        });
+
+    } catch (error) {
+        console.error("❌ Sign up Error: ", error); // ✅ เพิ่ม log
+        res.status(500).json({ message: "ลงทะเบียนไม่สำเร็จ", error: error.message }); // ✅ เพิ่ม error.message เพื่อตรวจสอบปัญหา
+    }
+});
+
+//ส่งอีเมล
+const sendVerificationEmail = async (email, verificationToken) => {
+    console.log("📩 ส่งอีเมลยืนยันไปที่:", email);
+    console.log("🔑 verificationToken:", verificationToken); // ✅ เพิ่มเพื่อตรวจสอบค่า
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'gouthiw.dev@gmail.com',
+            pass: 'nmrw lqwg ihsu hfhg', 
+        },
+    });
+
+    const mailOptions = {
+        from: 'gouthiw.dev@gmail.com',
+        to: email,
+        subject: 'กรุณายืนยันอีเมลของคุณ',
+        html: `
+       <div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <!-- Header with Logo -->
+    <div style="text-align: center; padding: 20px 0; border-bottom: 2px solid #eee;">
+        <img src="https://firebasestorage.googleapis.com/v0/b/gouthiw-246ad.appspot.com/o/logo-gh.png?alt=media&token=627a65f4-375a-4871-9bc3-e21249ae155f" alt="Logo" style="width: 200px; max-width: 100%; height: auto;"/>
+    </div>
+    
+    <!-- Main Content -->
+    <div style="text-align: center; color: #333; padding: 30px 0;">
+        <h2 style="color: #FFA13F; font-size: 28px; font-weight: bold; margin-bottom: 20px;">ยืนยันอีเมลของคุณ</h2>
+        <p style="font-size: 18px; margin: 0;">สวัสดีค่ะ</p>
+        <p style="font-size: 16px; margin: 20px 0;">กรุณาคลิกที่ปุ่มด้านล่างเพื่อยืนยันอีเมลของคุณ:</p>
+        <p style="margin-top: 20px;">
+            <a href="http://10.53.48.191:5500/verify/${verificationToken}"
+                style="display: inline-block; padding: 15px 30px; background-color:#FFA13F; color: white; text-decoration: none; border-radius: 30px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease;">
+                คลิกที่นี่เพื่อยืนยัน
+            </a>
+        </p>
+    </div>
+    
+    <!-- Footer -->
+    <div style="background-color: white; padding: 20px; margin-top: 30px; border-top: 1px solid #ddd; text-align: center;">
+        <p style="font-size: 14px; color: #999; margin: 0;">ขอบคุณที่ใช้บริการของเรา!</p>
+    </div>
+</div>
+
+    `,
+
+    };
+
+    try {
+        const info = await transporter.sendMail(mailOptions);
+        console.log('✅ อีเมลส่งสำเร็จ:', info);
+    } catch (error) {
+        console.log('❌ เกิดข้อผิดพลาดในการส่งอีเมล:', error);
+    }
+};
+
+//endpoint ยืนยันอีเมล
+app.get("/verify/:token", async (req, res) => {
+    try {
+        const { token } = req.params;
+        console.log("ได้รับ token แล้ว:", token);
+
+        const user = await myNutr.findOne({ verificationToken: token });
+
+        if (!user) {
+            return res.status(404).json({ message: "ข้อมูลไม่ถูกต้อง" });
+        }
+
+        const EMAIL_VERIFICATION_EXPIRY = 5 * 60 * 1000; 
+
+        const tokenAge = Date.now() - new Date(user.emailVerificationTokenCreatedAt).getTime();
+        if (tokenAge > EMAIL_VERIFICATION_EXPIRY) {
+            user.verificationToken = crypto.randomBytes(32).toString("hex"); 
+            user.emailVerificationTokenCreatedAt = new Date();
+            await user.save();
+        
+            try {
+                await sendVerificationEmail(user.email, user.verificationToken);
+            } catch (error) {
+                console.error("❌ ส่งอีเมลล้มเหลว:", error);
+            }
+            
+            return res.status(400).send(`<p>หมดเวลายืนยันอีเมล กรุณาตรวจสอบอีเมลของคุณสำหรับโทเค็นใหม่</p>`);
+        }
+        
+        console.log("รหัสนี้ใช้ไม่ได้แล้ว กรุณาขอรหัสใหม่เพื่อยืนยันอีเมลของคุณ");
+        return res.status(400).send(`<p>หมดเวลายืนยันอีเมล กรุณาส่งรหัสยืนยันอีเมลอีกครั้ง...</p>`);
+        
+        user.verificationToken = undefined;
+        await user.save();
+        
+
+
+    } catch (error) {
+        console.log("เกิดข้อผิดพลาด", error);
+        if (!res.headersSent) {
+            return res.status(500).json({ message: "ยืนยันอีเมลล้มเหลว กรุณาลองอีกครั้ง" });
+        }
+    }
+});
+
+
+//endpoint ตรวจสอบการยืนยันอีเมล
+app.get("/verify-status/:email", async (req, res) => {
+    try {
+        const email = req.params.email;
+        console.log("ได้รับอีเมล์แล้ว:", email);
+        const user = await myNutr.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "ไม่พบผู้ใช้หรือ email ไม่ถูกต้อง" });
+        }
+
+        const EMAIL_VERIFICATION_EXPIRY = 5 * 60 * 1000; // 5 นาที
+        const tokenAge = Date.now() - new Date(user.createdAt).getTime();
+
+        if (!user.verified && tokenAge > EMAIL_VERIFICATION_EXPIRY) {
+            // ลบผู้ใช้ที่ยังไม่ได้ยืนยันและหมดเวลา
+            await myNutr.deleteOne({ email });
+            console.log("ลบผู้ใช้ที่ไม่ได้ยืนยันอีเมลแล้ว:", email);
+            return res.status(410).json({ message: "หมดเวลายืนยันอีเมล ผู้ใช้ถูกลบออกจากระบบ" });
+        }
+
+        if (user.verified) {
+            return res.status(200).json({ message: "ผู้ใช้ยืนยันอีเมลแล้ว" });
+        } else {
+            return res.status(400).json({ message: "ผู้ใช้ยังไม่ได้ยืนยันอีเมล" });
+        }
+    } catch (error) {
+        console.log("เกิดข้อผิดพลาด:", error);
+        return res.status(500).json({ message: "ตรวจสอบสถานะการยืนยันอีเมลล้มเหลว กรุณาลองอีกครั้ง" });
+    }
+});
+
+
 // ดึง users มาแสดง
 app.get("/users", async (req, res) => {
     try {
@@ -187,7 +319,7 @@ app.put("/nutrs/:id", async (req, res) => {  // เปลี่ยนจาก /
     try {
         const { id } = req.params;
         const { firstname, lastname, license_number, tel, email, password } = req.body;
-    
+
         const updateData = {
             firstname,
             lastname,
@@ -196,13 +328,13 @@ app.put("/nutrs/:id", async (req, res) => {  // เปลี่ยนจาก /
             email,
             ...(password ? { password } : {}),
         };
-    
+
         const updatedUser = await myNutr.findByIdAndUpdate(id, updateData, { new: true }); // ใช้ updateData เพื่ออัปเดต
-    
+
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }
-    
+
         res.status(200).json({ message: "Update User successfully", updatedUser });
     } catch (error) {
         console.log("Error update User", error);
@@ -222,9 +354,9 @@ app.get("/admin/:role/:id", async (req, res) => {
         } else if (role == 1) {
             res_info = await myNutr.findById(id);
         }
-        
+
         if (!res_info) {
-        return res.status(404).json({ message: "ไม่พบข้อมูล" });
+            return res.status(404).json({ message: "ไม่พบข้อมูล" });
         }
 
         res.status(200).json(res_info);
@@ -234,19 +366,19 @@ app.get("/admin/:role/:id", async (req, res) => {
     }
 });
 
-app.get("/user/:userId", async (req,res)=>{
-    try{
+app.get("/user/:userId", async (req, res) => {
+    try {
         const loggedInuser = req.params.userId;
 
-        await myUser.findOne({_id:loggedInuser})
-        .then((user) => {
-            if (!user){
-                return res.status(404).json({message:"User not found"});
-            }
-            res.status(200).json(user);
-        })
-    }catch (error){
-        res.status(500).json({messagge:"Error getting user"})
+        await myUser.findOne({ _id: loggedInuser })
+            .then((user) => {
+                if (!user) {
+                    return res.status(404).json({ message: "User not found" });
+                }
+                res.status(200).json(user);
+            })
+    } catch (error) {
+        res.status(500).json({ messagge: "Error getting user" })
     }
 });
 
@@ -271,8 +403,9 @@ app.get("/menus/auth/:id", async (req, res) => {
         }
 
         const userMenu = await myNutr.aggregate([
-            { 
-                $match: { _id: new mongoose.Types.ObjectId(id) } },
+            {
+                $match: { _id: new mongoose.Types.ObjectId(id) }
+            },
             {
                 $unwind: "$menu_owner",
             },
@@ -353,7 +486,7 @@ app.get("/menu/:id", async (req, res) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ message: "Invalid topic ID" });
         }
-        
+
         const objectId = new mongoose.Types.ObjectId(id);
 
         const menus = await myMenu.aggregate([
@@ -387,7 +520,7 @@ app.get("/menu/:id", async (req, res) => {
                 }
             }
         ]);
-        
+
         res.status(200).json(menus[0]);
     } catch (error) {
         console.log("error fetching all the menus", error);
@@ -424,7 +557,7 @@ app.delete("/menu/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const softDeletedMenu = await myMenu.findByIdAndUpdate(id, { isDeleted: true, });
-        
+
         if (!softDeletedMenu) {
             return res.status(404).json({ message: "Menu not found" });
         }
@@ -439,30 +572,30 @@ app.delete("/menu/:id", async (req, res) => {
 app.get("/ingrs", async (req, res) => {
     try {
         const ingrs = await myIngr.aggregate([
-        { 
-            $match: { isDeleted: false }  // Filter out deleted ingredients
-        },
-        {
-            $lookup: {
-            from: 'nutrs',              // Collection name for nutritionists
-            localField: '_id',          // Ingredient's ID
-            foreignField: 'ingr_owner.ingr_id', // Field in nutritionist collection that references ingredient ID
-            as: 'owners'
+            {
+                $match: { isDeleted: false }  // Filter out deleted ingredients
+            },
+            {
+                $lookup: {
+                    from: 'nutrs',              // Collection name for nutritionists
+                    localField: '_id',          // Ingredient's ID
+                    foreignField: 'ingr_owner.ingr_id', // Field in nutritionist collection that references ingredient ID
+                    as: 'owners'
+                }
+            },
+            {
+                $unwind: '$owners'             // Unwind to get individual nutritionist-owner details
+            },
+            {
+                $project: {
+                    name: 1,                     // Ingredient name
+                    purine: 1,                   // Purine level
+                    ingr_type: 1,                // Ingredient type
+                    "owner_name": {
+                        $concat: ['$owners.firstname', ' ', '$owners.lastname']  // Concatenate first and last names
+                    }
+                }
             }
-        },
-        {
-            $unwind: '$owners'             // Unwind to get individual nutritionist-owner details
-        },
-        {
-            $project: {
-            name: 1,                     // Ingredient name
-            purine: 1,                   // Purine level
-            ingr_type: 1,                // Ingredient type
-            "owner_name": { 
-                $concat: ['$owners.firstname', ' ', '$owners.lastname']  // Concatenate first and last names
-            }
-            }
-        }
         ])
         res.status(200).json(ingrs);
     } catch (error) {
@@ -616,11 +749,11 @@ app.get("/trivias/auth/:id", async (req, res) => {
         }
 
         const userTrivia = await myNutr.aggregate([
-            { 
-                $match: { 
+            {
+                $match: {
                     _id: new mongoose.Types.ObjectId(id),
                     isDeleted: false
-                } 
+                }
             },
             {
                 $unwind: "$triv_owner",
@@ -698,7 +831,7 @@ app.get("/trivia/:id", async (req, res) => {
 
         const trivias = await myTrivia.aggregate([
             {
-                $match: { _id: objectId  }
+                $match: { _id: objectId }
             },
             {
                 $lookup: {
@@ -845,8 +978,8 @@ app.get("/topics", async (req, res) => {
 
         if (topics.length === 0) {
             return res.status(404).json({ message: "No topics found" });
-        }    
-        
+        }
+
         return res.json(topics);
     } catch (error) {
         console.error("Error fetching topics data", error);
@@ -867,8 +1000,8 @@ app.get("/topic/:id", async (req, res) => {
         const objectId = new mongoose.Types.ObjectId(id);
 
         const topics = await myTopic.aggregate([
-            { 
-                $match: { _id: objectId } 
+            {
+                $match: { _id: objectId }
             },
             {
                 $lookup: {
@@ -878,8 +1011,8 @@ app.get("/topic/:id", async (req, res) => {
                     as: "userDetails"
                 }
             },
-            { 
-                $unwind: "$userDetails" 
+            {
+                $unwind: "$userDetails"
             },
             {
                 $unwind: {
@@ -902,7 +1035,7 @@ app.get("/topic/:id", async (req, res) => {
                 }
             },
             {
-                
+
                 $group: {
                     _id: "$_id",
                     title: { $first: "$title" },
@@ -921,7 +1054,7 @@ app.get("/topic/:id", async (req, res) => {
                             answer_image: "$answer.answer_image"
                         }
                     },
-                    userDetails: { 
+                    userDetails: {
                         $first: {
                             name: "$userDetails.name",
                             image_profile: "$userDetails.image_profile"
@@ -964,7 +1097,7 @@ app.put("/topic/answer/:id", upload.array("answer_image", 5), async (req, res) =
 
         const updatedTopic = await myTopic.findByIdAndUpdate(
             id,
-            { 
+            {
                 $push: {
                     answer: {
                         nutr_id,
@@ -1185,10 +1318,10 @@ app.get("/reports/:nutrId", async (req, res) => {
         }
 
         const reports = await myReport.aggregate([
-            { 
+            {
                 $match: { // เป็นการดึงเอา id ที่เราส่งมาพร้อม path มาเทียบกับอะไรสักอย่างใน myReport
-                    nutr_id: new mongoose.Types.ObjectId(nutrId) 
-                } 
+                    nutr_id: new mongoose.Types.ObjectId(nutrId)
+                }
             },
             // ขั้นตอนนี้คือได้ก้อน report ทั้งหลายที่มี nutr_id ตรงกันแล้ว
             {
@@ -1250,10 +1383,10 @@ app.get("/report-detail/trivia/:id", async (req, res) => {
         }
 
         const reports = await myReport.aggregate([
-            { 
+            {
                 $match: { // เป็นการดึงเอา id ที่เราส่งมาพร้อม path มาเทียบกับอะไรสักอย่างใน myReport
-                    _id: new mongoose.Types.ObjectId(id) 
-                } 
+                    _id: new mongoose.Types.ObjectId(id)
+                }
             },
             // ขั้นตอนนี้คือได้ก้อน report 1 ก้อน ที่มี id ตรงกันแล้ว
             {
@@ -1318,7 +1451,7 @@ app.get("/report-detail/topic/:id", async (req, res) => {
 
         const reports = await myReport.aggregate([
             {
-                $match: { _id: new mongoose.Types.ObjectId(id) } 
+                $match: { _id: new mongoose.Types.ObjectId(id) }
             },
             {
                 $lookup: {
@@ -1353,7 +1486,7 @@ app.get("/report-detail/topic/:id", async (req, res) => {
                     "topicDetails.title": 1,
                     "topicDetails.image": 1,
                     "topicDetails.detail": 1,
-                    "topicDetails.answer": 1, 
+                    "topicDetails.answer": 1,
                     "userDetails.image_profile": 1
                 },
             },
@@ -1373,7 +1506,7 @@ app.get("/report-detail/topic/:id", async (req, res) => {
 // อัปเดตสถานะของรายงาน, เกร็ดความรู้
 app.put("/report/:id/trivia/status", async (req, res) => {
     const { id } = req.params;
-    const { triv_id, status, reminderDate  } = req.body;
+    const { triv_id, status, reminderDate } = req.body;
 
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -1383,14 +1516,14 @@ app.put("/report/:id/trivia/status", async (req, res) => {
         let updatedReport;
         let updatedTrivia;
 
-        if (status === 1) { 
-            updatedReport = await myReport.findByIdAndUpdate( id, { status, reminderDate }, { new: true });
-            updatedTrivia = await myTrivia.findByIdAndUpdate( triv_id, { isVisible: false, edit_deadline: reminderDate }, { new: true });
+        if (status === 1) {
+            updatedReport = await myReport.findByIdAndUpdate(id, { status, reminderDate }, { new: true });
+            updatedTrivia = await myTrivia.findByIdAndUpdate(triv_id, { isVisible: false, edit_deadline: reminderDate }, { new: true });
         } else if (status === 2) {
-            updatedReport = await myReport.findByIdAndUpdate( id, { status, isDeleted: true }, { new: true });
+            updatedReport = await myReport.findByIdAndUpdate(id, { status, isDeleted: true }, { new: true });
         } else if (status === 3) {
-            updatedReport = await myReport.findByIdAndUpdate( id, { status }, { new: true });
-            updatedTrivia = await myTrivia.findByIdAndUpdate( triv_id, { isVisible: false, isDeleted: true }, { new: true });
+            updatedReport = await myReport.findByIdAndUpdate(id, { status }, { new: true });
+            updatedTrivia = await myTrivia.findByIdAndUpdate(triv_id, { isVisible: false, isDeleted: true }, { new: true });
         } else {
             console.log("Ststus is 0 or others")
         }
@@ -1402,7 +1535,7 @@ app.put("/report/:id/trivia/status", async (req, res) => {
         // if (!updatedTrivia) {
         //     return res.status(404).send({ error: "Trivia not found" });
         // }
-    
+
         res.status(200).send(updatedReport);
     } catch (error) {
         res.status(500).send({ error: error.message });
@@ -1433,14 +1566,14 @@ app.put("/report/notifications/:id/read", async (req, res) => {
 // อัปเดตสถานะของรายงานเป็น 0 (แอดมินรับเรื่อง)
 app.put("/report/:id/status", async (req, res) => {
     const { id } = req.params;
-    const { status  } = req.body;
+    const { status } = req.body;
 
     try {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).send({ error: "Invalid report ID" });
         }
 
-        const updatedReport = await myReport.findByIdAndUpdate( id, { status }, { new: true });
+        const updatedReport = await myReport.findByIdAndUpdate(id, { status }, { new: true });
 
         if (!updatedReport) {
             return res.status(404).send({ error: "Report not found" });
@@ -1454,11 +1587,11 @@ app.put("/report/:id/status", async (req, res) => {
 
 // สร้างการแจ้งเตือน
 app.post("/report/trivia/notification", async (req, res) => {
-    const { report_id, triv_id, title, note, status, nutr_id, reminderDate  } = req.body;
-    
+    const { report_id, triv_id, title, note, status, nutr_id, reminderDate } = req.body;
+
     try {
         const nutr = await myNutr.findOne({ "triv_owner.triv_id": triv_id });
-    
+
         if (!nutr && !status) {
             return res.status(404).json({ message: "Owner of trivia not found" });
         }
@@ -1468,22 +1601,22 @@ app.post("/report/trivia/notification", async (req, res) => {
         if (status === 0) {
             noti = new myNoti({
                 report_id,
-                triv_id, 
+                triv_id,
                 recipients: [
                     {
                         nutr_id: nutr_id,
                         message: "ได้รับการรายงานของคุณแล้ว",
                         report_role: "reporter"
                     }
-                ], 
-                title, 
+                ],
+                title,
                 note,
                 status_report: status
             });
         } else if (status === 1) {
             noti = new myNoti({
                 report_id,
-                triv_id, 
+                triv_id,
                 recipients: [
                     {
                         nutr_id: nutr_id,
@@ -1495,16 +1628,16 @@ app.post("/report/trivia/notification", async (req, res) => {
                         message: "มีผู้รายงานเกร็ดความรู้ของคุณ กรุณาตรวจสอบ",
                         report_role: "reported"
                     }
-                ], 
-                title, 
-                note, 
+                ],
+                title,
+                note,
                 reminderDate,
                 status_report: status
             });
         } else if (status === 2) {
             noti = new myNoti({
                 report_id,
-                triv_id, 
+                triv_id,
                 recipients: [
                     {
                         nutr_id: nutr_id,
@@ -1512,14 +1645,14 @@ app.post("/report/trivia/notification", async (req, res) => {
                         report_role: "reporter"
                     },
                 ],
-                title, 
+                title,
                 note,
                 status_report: status
             });
         } else if (status === 3) {
             noti = new myNoti({
                 report_id,
-                triv_id, 
+                triv_id,
                 recipients: [
                     {
                         nutr_id: nutr_id,
@@ -1532,19 +1665,19 @@ app.post("/report/trivia/notification", async (req, res) => {
                         report_role: "reported"
                     }
                 ],
-                title, 
+                title,
                 note,
                 status_report: status
             });
         }
-        
+
         if (noti) {
             await noti.save();
             return res.status(201).json({ message: "Notification created successfully" });
         } else {
             return res.status(400).json({ message: "Invalid status value" });
         }
-        
+
     } catch (error) {
         console.log("Error creating notification", error);
         res.status(500).json({ message: "Error creating notification" });
@@ -1556,7 +1689,7 @@ app.delete("/report-detail/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const softDeletedReport = await myReport.findByIdAndUpdate(id, {
-            isDeleted: true, 
+            isDeleted: true,
         });
 
         if (!softDeletedReport) {
@@ -1578,7 +1711,7 @@ app.delete("/report-detail/:id", async (req, res) => {
 //       .populate("content_id") 
 //       .lean();
 //       notifications.forEach((notification) => {
-       
+
 //     });
 //     res.json(notifications);
 //   } catch (error) {
@@ -1592,13 +1725,13 @@ app.get("/report/notifications/:id", async (req, res) => {
         const { id } = req.params;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).send({ error: "Invalid nutr ID" });
+            return res.status(400).send({ error: "Invalid nutr ID" });
         }
 
         const notifications = await myNoti.aggregate([
             {
                 $match: {
-                    "recipients.nutr_id": new mongoose.Types.ObjectId(id) ,
+                    "recipients.nutr_id": new mongoose.Types.ObjectId(id),
                     isDeleted: false
                 },
             },
@@ -1606,7 +1739,7 @@ app.get("/report/notifications/:id", async (req, res) => {
                 $unwind: "$recipients", // แยก recipients ออกมา
             },
             {
-                $match: { 
+                $match: {
                     "recipients.nutr_id": new mongoose.Types.ObjectId(id) // คัดกรองเฉพาะผู้ที่เกี่ยวข้อง
                 }
             },
@@ -1636,7 +1769,7 @@ app.get("/report/notifications/:id", async (req, res) => {
                     updatedAt: 1,
                 }
             }
-        ]) 
+        ])
 
         if (!notifications.length) {
             return res.status(404).json({ message: "No notifications found for this nutr_id" });

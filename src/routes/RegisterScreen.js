@@ -60,7 +60,7 @@ function RegisterScreen() {
         
             console.log("User Data:", nutrData);
         
-            const response = await axios.post("http://localhost:5500/signup", nutrData);
+            const response = await axios.post("http://localhost:5500/register", nutrData);
             console.log("Response from server:", response);
         
             if (response.status === 201) {
