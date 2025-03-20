@@ -5,7 +5,6 @@ import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import axios from "axios";
 import '../../components/profile.css'
-import ImgProfile from '../../images/homebanner.jpg'
 
 function UserInformation() {
        const navigate = useNavigate();
@@ -30,7 +29,7 @@ function UserInformation() {
          useEffect(() => {
              const fetchUserData = async () => {
                  try {
-                      const response = await axios.get("http://localhost:5500/users", { timeout: 10000 });
+                      const response = await axios.get("http://localhost:5500/users", { timeout: 1000 });
                       setUser(response.data);
                  } catch (error) {
                       console.log("Error fetching menus data", error.message)
@@ -39,7 +38,7 @@ function UserInformation() {
      
              const fetchMenuDataUser = async () => {
                   try {
-                       const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                       const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
                        console.log(response.data)
                        setMenusUser(response.data);
      
@@ -60,7 +59,7 @@ function UserInformation() {
                          <button onClick={() => handleDelete(item._id)}>ลบ</button>
                      </div>
                  )}
-                 <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
+                 <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} loading="lazy"/>
                  <h1>{item.menuName}</h1>
                  <div className='layout'>
                      <p className='purine'>พิวรีน: {item.purine_total}</p>
@@ -104,6 +103,7 @@ function UserInformation() {
                           <img
                               src={nutrData.image_background}
                               alt={`${nutrData.image_background}`}
+                              loading="lazy"
                               />
                       </div>
                       <div className="profile-layout">
@@ -112,6 +112,7 @@ function UserInformation() {
                                       className="profile-image"
                                       src={nutrData.image_profile}
                                       alt={`${nutrData.firstname} ${nutrData.lastname}`}
+                                      loading="lazy"
                                       /> 
                               <p className="name">{nutrData.firstname} {nutrData.lastname}</p>
   

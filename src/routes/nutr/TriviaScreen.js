@@ -42,7 +42,7 @@ function TriviaScreen() {
      useEffect(() => {
           const fetchTriviaData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/trivias", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/trivias", { timeout: 1000 });
                     setTrivia(response.data);
                } catch (error) {
                     console.log("Error fetching trivias data", error.message)
@@ -50,7 +50,7 @@ function TriviaScreen() {
           }
           const fetchTriviaDataUser = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/trivias/auth/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/trivias/auth/${nutrData._id}`, { timeout: 1000 });
                     setTriviaUser(response.data);
                } catch (error) {
                     console.log("Error fetching trivias data", error.message)
@@ -116,7 +116,7 @@ function TriviaScreen() {
 
      const renderItem = (item) => (
           <div className='trivia-card' onClick={() => handleItemPress(item._id)} key={item._id}>
-               <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} />
+               <img className='trivia-pic' alt={`รูปภาพของ ${item.head}`} src={item.image} loading="lazy"/>
                <div className='trivia-info'>
                     <h1>{item.head}</h1>
                     <p className='trivia-date'>อัพเดตล่าสุด {calculateTimeAgo(item.updatedAt)}</p>
@@ -124,11 +124,6 @@ function TriviaScreen() {
                          <p>{stripHTML(item.content)}</p>
                     </div>
                </div>
-               {item.edit_deadline && (
-                    <div className='trivia-deadline'>
-                         <p>{calculateTimeRemaining(item.edit_deadline)}</p>
-                    </div>
-               )}
           </div>
      );
 
@@ -181,6 +176,7 @@ function TriviaScreen() {
                                                             type='text'
                                                             placeholder='ค้นหาเกร็ดความรู้ที่นี่' 
                                                             onChange={(e) => setSearchTriv(e.target.value)} 
+                                                            
                                                             className='trivia-search-input' />
                                                   </div>
 

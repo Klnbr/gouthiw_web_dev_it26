@@ -86,6 +86,7 @@ function ReportDetail() {
                       <img
                         src={reportData.nutrDetails.image_profile}
                         alt={`${reportData.nutrDetails.firstname} ${reportData.nutrDetails.lastname}`}
+                        loading="lazy"
                       />
                       <div className="report-info">
                         <p>
@@ -105,9 +106,10 @@ function ReportDetail() {
                       <b>เกร็ดความรู้ที่ถูกรายงาน: </b>
                       <div className="tv-rp">
                         <h4>{reportData.triviaDetails.head}</h4>
-                        <hr className="hr-line-90" />
+                        <hr className="hr-line" />
                         <div className="img-rp">
                          <img className="img-tv"
+                         loading="lazy"
                           src={reportData.triviaDetails.image}
                           alt={reportData.triviaDetails.head}
                         /> 

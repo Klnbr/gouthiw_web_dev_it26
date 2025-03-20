@@ -15,7 +15,7 @@ function AdminHome() {
      useEffect(() => {
           const fetchData = async () => {
                try {
-                    const resUser = await axios.get("http://localhost:5500/users", { timeout: 10000 });
+                    const resUser = await axios.get("http://localhost:5500/users", { timeout: 1000 });
                     setUser(resUser.data)
                     const usersData = resUser.data.map((user) => ({
                          id: user._id,
@@ -25,7 +25,7 @@ function AdminHome() {
                          createdAt: user.createdAt
                     }))
                     
-                    const resNutr = await axios.get("http://localhost:5500/nutrs", { timeout: 10000 });
+                    const resNutr = await axios.get("http://localhost:5500/nutrs", { timeout: 1000 });
                     setNutr(resNutr.data)
                     const nutrsData = resNutr.data.map((nutr) => ({
                          id: nutr._id,
@@ -41,19 +41,6 @@ function AdminHome() {
 
                     setData(dataJoined);
 
-                    // dataJoined.map((t) => {
-                    //      const date = new Date(t.createdAt);
-                    //      console.log("date: ", date)
-
-                    //      const monthFromData = date.getMonth();
-                    //      const currentMonth = 10;
-
-                    //      console.log("monthFromData:", monthFromData, "currentMonth", currentMonth)
-
-                    //      if (monthFromData = currentMonth) {
-                    //           setNewRegis(t)
-                    //      }
-                    // })
 
                     const newRegisData = dataJoined.filter((t) => {
                          const date = new Date(t.createdAt);
@@ -114,9 +101,10 @@ function AdminHome() {
                          <div className="content--admin">
                               <div className="head-content--home">
                                    <img
+                                   loading="lazy"
                                         className="image-home"
                                         src="https://www.naturemade.com/cdn/shop/articles/healthy-foods-to-eat.jpg?v=1611988563"
-                                        alt="head image"
+                                        alt="head-image"
                                         />
                               </div>
                               <div className='dash--4'>

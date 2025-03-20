@@ -4,7 +4,7 @@ import '../../components/Modal.css';
 import '../../../src/App.css';
 import Navbar from '../../components/Navbar/Navbar';
 import SideBar from '../../components/SideBar/SideBar';
-import { Input, Select } from "antd";
+import { Select } from "antd";
 import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 
@@ -55,7 +55,7 @@ function IngrScreen() {
      useEffect(() => {
           const fetchIngrData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
                     setIngrs(response.data);
                } catch (error) {
                     console.log("Error fetching ingrs data", error.message);
@@ -63,7 +63,7 @@ function IngrScreen() {
           };
           const fetchIngrNutrData = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/ingrs/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/ingrs/${nutrData._id}`, { timeout: 1000 });
                     setIngrsNutr(response.data);
                } catch (error) {
                     console.log("Error fetching ingrs data", error.message);
@@ -91,6 +91,7 @@ function IngrScreen() {
                return;
           }
 
+
           const ingreData = {
                name: name,
                purine: purine,
@@ -114,7 +115,7 @@ function IngrScreen() {
                setType("");
                setModal(false);
                setCurrentItemId(null);
-               const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+               const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
                setIngrs(response.data);
           } catch (error) {
                alert("การบันทึกไม่สำเร็จ", error.response?.data?.message || "Unknown error");
@@ -148,7 +149,7 @@ function IngrScreen() {
 
                if (response.status === 200) {
                     alert("ลบสำเร็จ");
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
                     setIngrs(response.data);
                }
           } catch (error) {
@@ -184,6 +185,20 @@ function IngrScreen() {
 
      const totalPages = Math.ceil(filterDisplay.length / itemsPerPage);
 
+     const handleNameChange = (e) => {
+          const regex = /^[A-Za-zก-ฮะ-์\s]+$/;  // Allows only Thai and English letters
+          if (regex.test(e.target.value) || e.target.value === '') {
+              setName(e.target.value);
+     
+          }
+      };
+    
+      const handlePurineChange = (e) => {
+          const regex = /^[0-9]*$/;  // Allows only numbers
+          if (regex.test(e.target.value) || e.target.value === '') {
+              setPurine(e.target.value);
+          }
+      };
      return (
           <>
                <div className='container'>
@@ -242,8 +257,8 @@ function IngrScreen() {
                                                             onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
                                                             options={[
                                                                  { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
-                                                                 { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
-                                                                 { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
+                                                                 { value: "top_purine", label: "ค่าพิวรีนมากสุด" },
+                                                                 { value: "low_purine", label: "ค่าพิวรีนน้อยสุด" }
                                                             ]}
                                                        />
                                                   </div>
@@ -253,24 +268,27 @@ function IngrScreen() {
                                    {modal && (
                                         <div className="modal">
                                              <div className="modal-content">
-                                                  <button className="ingr-cancel--btn" onClick={toggleModal}>X</button>
+                                                  <button className="ingr-cancel--btn" onClick={toggleModal}>
+                                                  <i class="fa-solid fa-xmark"></i>
+                                                  </button>
                                                   <h1>เพิ่มวัตถุดิบ</h1>
                                                   
                                                   <label>ชื่อวัตถุดิบ</label>
                                                   <input
-                                                       type="text"
-                                                       className="modal--input"
-                                                       value={name}
-                                                       onChange={(e) => setName(e.target.value)}
-                                                  />
+                                            type="text"
+                                            className="modal--input"
 
-                                                  <label>ค่าพิวรีน</label>
+                                            value={name}
+                                            onChange={handleNameChange}
+                                        />
+
+                                                  <label>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</label>
                                                   <input
-                                                       type="text"
-                                                       className="modal--input"
-                                                       value={purine}
-                                                       onChange={(e) => setPurine(e.target.value)}
-                                                  />
+                                            type="text"
+                                            className="modal--input"
+                                            value={purine}
+                                            onChange={handlePurineChange}
+                                        />
 
                                                   <label>ประเภท</label>
                                                   <select

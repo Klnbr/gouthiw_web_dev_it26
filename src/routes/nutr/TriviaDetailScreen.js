@@ -16,12 +16,16 @@ function TriviaDetailScreen() {
     const { triviaData } = location.state || {};
     const { nutrData } = useAuth();
     const [editButton, setEditButton] = useState(false);
+    const [hasDeadLine, setHasDeadLine] = useState(null)
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [pendingReports, setPendingReports] = useState(0);
 
     useEffect(() => {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
+            if (triviaData.edit_deadline) {
+                setHasDeadLine(triviaData.edit_deadline)
+            }
         }
     }, [nutrData]);
 
@@ -101,13 +105,7 @@ function TriviaDetailScreen() {
                 <div className='content-no-sidebar'>
                     <button className="btn-goback" onClick={() => navigate(-1)}>
                         <i className="fa-solid fa-angle-left"></i>
-                       
                     </button>
-                    {triviaData.edit_deadline && (
-                            <div>
-                                <p>{calculateTimeRemaining(triviaData.edit_deadline)}</p>
-                            </div>
-                        )}
                     {editButton &&
                             <button className="btn-edit" 
                                 onClick={() => handleItemPress(triviaData._id)}>
@@ -128,17 +126,20 @@ function TriviaDetailScreen() {
                             )}
                         </div>
                         <div className='triv-detail'>
-                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
+                            <div>
+                            {hasDeadLine && (
+                                <div>
+                                    <p>{calculateTimeRemaining(triviaData.edit_deadline)}</p>
+                                </div>
+                            )}
+                            </div>
+                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} loading="lazy"/>
+                            <h1>{triviaData.head}</h1>
                             <div className='triv-detail-flex'>
-                                <div>
-                                    <h1>{triviaData.head}</h1>
-                                    <p>เขียนโดย: {triviaData.creator.firstname} {triviaData.creator.lastname}</p>
-                                </div>
-                                <div>
-                                    <p>วันที่สร้าง: {calculateTimeAgo(triviaData.createdAt)}</p>
-                                    <p>อัพเดตล่าสุด: {calculateTimeAgo(triviaData.updatedAt)}</p>
-                                </div>
-
+                                <p>เขียนโดย: {triviaData.creator.firstname} {triviaData.creator.lastname}</p>
+                                {/* <p>วันที่สร้าง: {calculateTimeAgo(triviaData.createdAt)}</p> */}
+                                <p>อัพเดตล่าสุด: {calculateTimeAgo(triviaData.updatedAt)}</p>
+                            
                             </div>
                             <hr className='hr-line' />
                             <div className='triv-info' dangerouslySetInnerHTML={{ __html: triviaData.content }} />

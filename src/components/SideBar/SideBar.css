@@ -1,34 +1,66 @@
-.side-bar--container {
-     background-color: #4AB4A2;
-     min-width: 248px;
-     height: 100vh; 
-     /* position: relative; */
-     position: fixed; /* Fix the sidebar position */
-     top: 0; /* Align to the top */
-     left: 0; /* Align to the left */
-     z-index: 1000; /* Make sure it's above other elements */
+
+.logo-container {
+     display: flex;
+     align-items: center;
+     justify-content: flex-start;
+     font-size: 24px;
+     cursor: pointer;
+}
+ 
+.user-info {
+     color: white;
+     font-size: 16px;
+     margin-left: 10px;
 }
 
+.app-logo {
+     text-align: center;
+     color: white;
+     font-weight: bold;
+     font-size: 30px;
+     margin-top: 80px;
+}
+ 
 .side-bar--content {
      display: flex;
-     flex-direction: column;
-     /* align-items: center; */
-     /* position: absolute; */
-     /* top: 10px; */
+     justify-content: space-between;
+     align-items: center; 
+     width: 100%;
 }
-
-
+ 
+ 
 .side-bar--content .logo {
      font-size: 30px;
      text-align: center;
-     margin-top: 80px;
+     margin-top: 20px; 
      font-weight: bold;
      color: white;
+     align-items: center;
 }
 
 .side-bar--logo {
      width: 200px;
      height: 180px;
+}
+
+.logo-container .logo {
+     /* display: flex; */
+     margin-left: 60px;
+     margin-top: 80px;
+}
+.logo-container .logo p {
+     font-size: 1.5rem;
+     font-weight: bold;
+     margin-top: 10px;
+}
+
+.logo-container .logo img {
+     width: 25px;
+     height: 25px;
+     display: block;
+     border-radius: 50%;
+     margin-left: auto;
+     margin-right: auto;
 }
 
 .side-bar--menu {
@@ -44,49 +76,56 @@
      position: absolute;
      bottom: 0;
      width: 60%;
-}
+ }
 
-.side-bar--links {
+
+.side-bar--links, .side-bar--focus {
      display: flex;
      flex-direction: column;
      width: 232px;
+     color: #ffffff;
      height: 56px;
-     background-color: rgba(255, 255, 255, 0);
      border-top-right-radius: 32px;
      border-bottom-right-radius: 32px;
      cursor: pointer;
-}
+     position: relative;
+     transition: width 0.3s ease, background-color 0.3s ease;
+ }
+ 
+ /* เพิ่มการแสดงผลเต็มขนาดเมื่อ hover */
+ .side-bar--links:hover, .side-bar--focus:hover {
+     width: 100%; 
+     background-color: #8dcec5; 
+     border-top-right-radius: 0; 
+     border-bottom-right-radius: 0; 
+ }
+ 
 
-.side-bar--links .side-bar--title, 
-.side-bar--links i {
-     color: #ffffff;
-}
+ .side-bar--links:hover .side-bar--title, 
+ .side-bar--links:hover i,
+ .side-bar--focus:hover .side-bar--title, 
+ .side-bar--focus:hover i {
+     color: #ffffff; 
+ }
+ 
 
-.side-bar--links:hover {
-     background-color: #89bcb4;
-}
-
-.side-bar--focus {
-     display: flex;
-     flex-direction: column;
-     width: 232px;
-     height: 56px;
+ .side-bar--focus {
      background-color: white;
      border-top-right-radius: 32px;
      border-bottom-right-radius: 32px;
-     cursor: pointer;
-}
-
-.side-bar--focus .side-bar--title, 
-.side-bar--focus i {
+ }
+ 
+ .side-bar--focus .side-bar--title, 
+ .side-bar--focus i {
      color: #4AB4A2;
      font-weight: 700;
      font-size: 16px;
-}
-
+ }
+ 
 .side-bar--item {
      width: 100%;
      position: relative;
+     color: #ffffff;
 }
 
 .side-bar--item i {
@@ -103,14 +142,9 @@
      position: absolute;
      top: 16px;
      left: 44px;
+     color: #ffffff;
 }
 
-.nav-links:hover {
-     background-color: #4AB4A2;
-     color: aliceblue;
-     border-radius: 4px;
-     transition: all 0.2s ease-in-out;
-}
 
 .nav-links-mobile {
      display: none;
@@ -135,10 +169,6 @@
      display: none;
 }
  
-.menu-icons {
-     display: none;
-}
- 
 .hidden {
      display: none;
 }
@@ -151,122 +181,129 @@
      margin-top: 80px;
 }
 
+.side-bar--container {
+     background-color: #4AB4A2;
+     width: 248px;
+     height: 100vh;
+     position: fixed;
+     top: 0;
+     left: 0;
+     z-index: 1000;
+     transition: transform 0.3s ease-in-out; /* เพิ่ม Animation */
+ }
+ 
+.side-bar--container.collapsed {
+     transform: translateX(-100%); /* ซ่อน Sidebar */
+}
+
+.logo-container .logo-img img {
+     display: none;
+}
+ 
+.menu-icons {
+     display: none;
+}
+
 @media screen and (max-width: 1024px) {
      .side-bar--container {
-          min-width: 180px;
+         min-width: 180px;
      }
-
+ 
      .side-bar--focus,
      .side-bar--item i,
      .side-bar--links {
-          width: 160px;
+         width: 160px;
      }
 }
  
 @media screen and (max-width: 850px) {
      .side-bar--container {
-          background-color: #4AB4A2;
-          min-width: 100%;
-          position: relative;
-          height: 50px;
-     }
+         width: 100%;
+         height: 60px;
+         position: fixed;
 
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         padding: 10px 15px;
+     }
+ 
      .side-bar--content {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          /* position: absolute; */
-          top: 0;
-          left: 0;
-          gap: 8px;
-          width: 100%;
-          padding: 10px 0;
+         flex-direction: row;
+         align-items: center;
+         width: 100%;
+         justify-content: space-between;
+     }
+ 
+     .side-bar--links, .side-bar--focus {
+          width: 100%; /* ปรับขนาดให้เต็มความกว้างของ sidebar */
+          border-top-right-radius: 0; 
+          border-bottom-right-radius: 0;  
      }
 
      .side-bar--menu {
-          display: flex;
-          flex-direction: row;
-          gap: 8px;
-          position: relative;
-          top: 0;
-          width: 100%;
-          justify-content: center;
+         display: none;
+         position: absolute;
+         top: 50px;
+         left: 0;
+         width: 100%;
+         background-color: #4AB4A2;
+         padding: 10px 0;
+         transition: all 0.3s ease-in-out;
      }
-
-     .side-bar--btm,
-     .side-bar--logo {
-          display: none;
+ 
+     .side-bar--menu.active {
+         display: flex;
      }
-
+ 
      .menu-icons {
-          display: block; /* Make the toggle icon visible on mobile */
+          display: block;
+          font-size: 24px; /* Adjust size for the icon */
           cursor: pointer;
-     }
-
-     /* .Nav-menu {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          background: white;
-          width: 100%;
-          height: auto;
-          position: absolute;
-          top: 0;
-          left: -100%;
-          opacity: 0;
-          align-items: stretch;
-          padding: 80px 0 30px 0;
-          margin: 0;
-          transition: 0.3s ease-in-out;
-          border-radius: 13px;
-     }
-
-     .Nav-menu.active {
-          left: 0;
-          opacity: 1;
-          z-index: -1;
-          transition: 0.3s ease-in-out;
-     }
-
-     .nav-links {
-          display: block;
-          width: 100%;
-          font-size: 1.2rem;
-          padding: 2rem 0; 
-     }
-
-     .nav-links:hover {
-          background-color: #4AB4A2;
-          transition: none;
-     }
-
-     .nav-links-mobile {
-          display: block;
-          text-align: center;
-          padding-left: 1.5rem;
-          margin: auto;
-          border-radius: 4px;
-          width: 80%;
-          background: #4AB4A2;
-          text-decoration: none;
           color: white;
-          font-size: 1.2rem;
-          font-weight: 700;
-          letter-spacing: 2px;
-          padding: 10px;
      }
 
-     .button {
+     .logo-container .logo {
           display: none;
      }
 
-     .menu-icons {
+     .logo-container .logo-img img {
+          width: 35px;
+          height: 35px;
           display: block;
-          cursor: pointer;
+          border-radius: 50%;
      }
 
-     .menu-icons i {
-          font-size: 1.2rem;
-          color: black;
-     } */
+     .side-bar--btm {
+          display: none; /* ซ่อน .side-bar--btm เมื่อหน้าจอย่อ */
+      }
+
+
+      .logo-container {
+          display: flex;
+          align-items: center;  /* Align vertically */
+          justify-content: space-between; /* Put space between the logo and the menu icon */
+          width: 100%;
+          padding: 10px 20px; /* Adjust padding for spacing */
+      }
+
+      .side-bar--links:hover, .side-bar--focus:hover {
+          width: 100%; 
+          background-color: #8dcec5; 
+          border-top-right-radius: 0; 
+          border-bottom-right-radius: 0; 
+     }
+     
 }
+
+
+ @media screen and (max-width: 480px) {
+     .side-bar--container {
+         height: 45px;
+     }
+ 
+     .menu-icons {
+         font-size: 1.2rem;
+          color: #ffffff;
+     }
+ }

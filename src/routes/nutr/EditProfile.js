@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../middleware/Auth";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import axios from "axios";
 import "../../components/profile.css"
@@ -21,7 +20,7 @@ function EditProfile() {
      useEffect(() => {
           const fetchUserData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/nutrs", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/nutrs", { timeout: 1000 });
                     setUser(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message);
@@ -41,41 +40,7 @@ function EditProfile() {
           fetchUserData();
      }, [nutrData]);
 
-     // const handleUpdateProfile = async () => {
-     //      if (!nutrData || !nutrData._id) {
-     //           alert("User ID is not available.");
-     //           return;
-     //      }
-
-     //      try {
-     //           const updateData = {
-     //                firstname,
-     //                lastname,
-     //                license_number,
-     //                tel,
-     //                email,
-     //                ...(password ? { password } : {}),
-     //           };
-
-     //           console.log("Updated User Data:", updateData);
-
-     //           const response = await axios.put(
-     //                `http://localhost:5500/nutrs/${nutrData._id}`, updateData
-     //           );
-
-     //           console.log("User updated", response.data);
-
-     //           if (response.status === 200) {
-     //                alert("แก้ไขสำเร็จ");
-     //                navigate("/profile");
-     //           } else {
-     //                alert("การอัปเดตไม่สำเร็จ");
-     //           }
-     //      } catch (error) {
-     //           console.error("Error updating user:", error.response || error.message);
-     //           alert("แก้ไขไม่สำเร็จ: " + (error.response?.data?.message || error.message));
-     //      }
-     // };
+   
 
      const handleUpdateProfile = async () => {
           if (!nutrData || !nutrData._id) {
@@ -139,6 +104,7 @@ function EditProfile() {
                                                   <div className="profile--edit">
                                                        <div className="profile-image--edit">
                                                             <img
+                                                            loading="lazy"
                                                                  src={nutrData.image_profile}
                                                                  alt={`${nutrData.firstname} ${nutrData.lastname}`}
                                                             />

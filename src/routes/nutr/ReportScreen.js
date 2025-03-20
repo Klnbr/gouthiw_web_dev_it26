@@ -4,7 +4,7 @@ import axios from 'axios';
 import TextArea from 'antd/es/input/TextArea';
 import Navbar from '../../components/Navbar/Navbar'
 import { useAuth } from '../../middleware/Auth';
-import { notification } from 'antd';
+import ReadMore from "../../components/Readmore";
 
 function Report() {
      const navigate = useNavigate();
@@ -49,23 +49,43 @@ function Report() {
                          <button className="btn-goback" onClick={() => navigate(-1)}>
                               <i className="fa-solid fa-angle-left"></i>
                          </button>
-                         <div className='form-trivia'>
+                         <div className='form-report'>
                               <h2>รายงาน</h2>
-                              <div>
-                                   หัวข้อ: {triviaData.head}{" "} <br />
-                                   ผู้เขียน: {triviaData.creator.firstname} {triviaData.creator.lastname}
+                              <div className="report-details">
+                                   <div className="rp-dt">
+                                        <b>เกร็ดความรู้ที่ถูกรายงาน: </b>
+                                        <div className="tv-rp">
+                                             <h4>{triviaData.head}</h4>
+                                             <p>ผู้เขียน: {triviaData.creator.firstname} {triviaData.creator.lastname}</p>
+                                             <hr className="hr-line" />
+                                             <div className="img-rp">
+                                                  <img
+                                                       className="img-tv"
+                                                       src={triviaData.image}
+                                                       alt={triviaData.head}
+                                                       loading="lazy"
+                                                  />
+                                             </div>
+                                             <ReadMore
+                                                  text={triviaData.content}
+                                                  dangerouslySetInnerHTML={{
+                                                  __html: triviaData.content,
+                                                  }}
+                                             />
+                                        </div>
+                                   </div>
                               </div>
-                              <br />
-                              <div className='form--input'>
+
+                              <div className="rp-dt">
                                    <label htmlFor='menu-type'>
                                         หมายเหตุ
                                    </label>
-                                   <TextArea className='form--inputbox' rows='6' value={note} onChange={(e) => setNote(e.target.value)} />
+                                   <TextArea rows='6' value={note} onChange={(e) => setNote(e.target.value)} />
                               </div>
                               
                               <div className='form-group form-bt'>
                                    <button type='button' className='btn-addtv' onClick={handleReport}>ส่งรายงาน</button>
-                                   {/* <button type='button' className='btn-cancel' onClick={() => navigate('/trivias')}>ยกเลิก</button> */}
+                                
                               </div>
                          </div>
                     </div>

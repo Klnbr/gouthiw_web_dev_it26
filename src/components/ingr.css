@@ -20,7 +20,6 @@
 
 .add-ingr-btn {
      width: 14%;
-     font-size: 0.9vw;
      padding: 10px;
      border: none;
      color: white;
@@ -239,13 +238,8 @@
      }
 }
 
-@media screen and (max-width: 1024px) {
-     .ingr-content {
-          margin-left: auto;
-          margin-right: auto;
-          width: 100%;
-          justify-content: space-between;
-     }
+/* @media screen and (max-width: 1024px) {
+     
      
      .ingr-content .display-flex .breadcumb {
           font-size: 1.3vw;
@@ -273,5 +267,36 @@
      .table-ingr,
      .above-table {
           width: 100%;
+     }
+} */
+
+@media screen and (max-width: 850px) {
+     .ingr-search-wrapper {
+          width: 56%;
+     }
+
+     .ingr-select-wrapper {
+          width: 22%;
+     }
+
+     .display-flex {
+          margin-top: 10%;
+     }
+
+     .ingr-content .display-flex .breadcumb {
+          color: black;
+          font-size: 1.5vw;
+          width: 15%;
+     }
+     
+     .ingr-content .display-flex .divider {
+          height: 1px;
+          width: 60%;
+          background-color: #ccc;
+          margin: 0 10px;
+     }
+
+     .add-ingr-btn {
+          width: 25%;
      }
 }

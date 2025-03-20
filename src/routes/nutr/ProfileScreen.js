@@ -100,7 +100,7 @@ function ProfileScreen() {
                     <button onClick={() => handleDelete(item._id)}>ลบ</button>
                 </div>
             )}
-            <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
+            <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} loading="lazy"/>
             <h1>{item.menuName}</h1>
             <div className='layout'>
                 <p className='purine'>พิวรีน: {item.purine_total}</p>
@@ -142,13 +142,14 @@ function ProfileScreen() {
                     </button>
                     <div className="profile-image-background">
                         <img
+                        loading="lazy"
                             src={nutrData.image_background}
                             alt={`${nutrData.image_background}`}
                         />
                     </div>
                     <div className="profile-layout">
                         <div className="profile-info">
-                            <img
+                            <img loading="lazy"
                                 className="profile-image"
                                 src={nutrData.image_profile}
                                 alt={`${nutrData.firstname} ${nutrData.lastname}`}
@@ -182,27 +183,27 @@ function ProfileScreen() {
                         <div className="profile-context">
                             <div className="profile-context-layout">
                                 <i class="fa-solid fa-burger"></i>
-                                <p  className="user-info"> เมนูอาหารของฉัน </p>
-                                <p>{menusUser.length}</p>
+                                <p  className="user-info-me"> เมนูอาหารของฉัน </p>
+                                <p>{menusUser.length}  เมนู</p>
                             </div>
                             <hr className="hr-line-100" />
                             <div className="profile-context-layout">
                                 <i class="fa-solid fa-carrot"></i>
-                                <p className="user-info"> วัตถุดิบของฉัน </p>
-                                <p>{ingrsNutr.length} </p>
+                                <p className="user-info-me"> วัตถุดิบของฉัน </p>
+                                <p>{ingrsNutr.length}   วัตถุดิบ</p>
 
                             </div>
                             <hr className="hr-line-100" />
                             <div className="profile-context-layout">
                                 <i class="fa-solid fa-book"></i>
-                                <p className="user-info">เกร็ดความรู้ของฉัน</p>
-                                <p>{trivsUser.length} </p>
+                                <p className="user-info-me">เกร็ดความรู้ของฉัน</p>
+                                <p>{trivsUser.length}   เกร็ดความรู้</p>
                             </div>
                             <hr className="hr-line-100" />
                             <div className="profile-context-layout">
                                 <i class="fa-solid fa-question"  ></i>
-                                <p className="user-info">การตอบกลับกระทู้ของฉัน</p>
-                                <p>{ans.count || 0}</p>
+                                <p className="user-info-me">การตอบกลับกระทู้ของฉัน</p>
+                                <p>{ans.count || 0}   กระทู้</p>
                             </div>
                         </div>
                     </div>

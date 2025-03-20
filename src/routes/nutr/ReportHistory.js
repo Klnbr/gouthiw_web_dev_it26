@@ -6,6 +6,7 @@ import { useAuth } from '../../middleware/Auth';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css'
 import "../../components/report.css";
+import { Input, Select } from "antd";
 
 const optionsDMY = {
      timeZone: "Asia/Bangkok",
@@ -23,6 +24,10 @@ function ReportHistory() {
      const [itemsPerPage] = useState(5);
      const [type, setType] = useState(null);
 
+     const [searchreport, setSearchreport] = useState('');
+     const [selectedType, setSelectedType] = useState("ทั้งหมด");
+     const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
+
      const statusMap = {
           0: "รอตรวจสอบ",
           1: "กำลังรอการแก้ไข",
@@ -35,7 +40,7 @@ function ReportHistory() {
      useEffect(() => {
           const fetchReportData = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/reports/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/reports/${nutrData._id}`, { timeout: 1000 });
                     setReports(response.data);
                     if (response.data.triv_id) {
                          setType("trivia");
@@ -132,47 +137,91 @@ function ReportHistory() {
                <div className='sidebar-content-wrapper'>
                     <SideBar />
                     <div className='content'>
-                         <div className='above-table'>
-                              <p>รวมทั้งหมด {reports.length} การรายงาน</p>
-                         </div>
-                         <div className='trivia-render'>
-                              {currentReports.length > 0 ? (
-                                   currentReports.map(item => renderItem(item))
-                              ) : (
-                                   <h2>ยังไม่มีประวัติการรายงาน</h2>
-                              )}
+                         <div className='main-content'>
+                              <div className='report-content'>
+                                   <div className='display-flex'>
+                                        <p className='breadcumb'>
+                                             <span className='press-to-back'>หน้าหลัก</span>
+                                             <span className='gray-color'> &#62;</span> ประวัติการรายงาน
+                                        </p>
+                                        <div className='divider' />
+                                   </div>
 
-                                {/* Pagination Controls */}
-                              <div className="pagination">
-                                   {/* Previous Button */}
-                                   <button 
-                                        onClick={() => handlePageChange(currentPage - 1)} 
-                                        disabled={currentPage === 1}
-                                        className="pagination-button"
-                                   >
-                                        ย้อนกลับ
-                                   </button>
+                                   <h1 className='head-content'>ประวัติการรายงาน</h1>
+                                        {/* Search and filter controls */}
+                                   <div className='report-manage'>
+                                        <div className='report-search'>
+                                             <div className='report-search-wrapper'>
+                                                  <i className="fa-solid fa-magnifying-glass report-search-icon"></i>
+                                                  <input
+                                                       type='text'
+                                                       placeholder='ค้นหาการรายงานที่นี่'
+                                                       onChange={(e) => setSearchreport(e.target.value)}
+                                                       className='report-search-input' />
+                                             </div>
 
-                                   {/* Page Numbers */}
-                                   {pageNumbers.map(number => (
-                                        <button
-                                             key={number}
-                                             onClick={() => handlePageChange(number)}
-                                             className={`pagination-button ${currentPage === number ? "active" : ""}`}
-                                        >
-                                             {number}
-                                        </button>
-                                   ))}
-
-                                   {/* Next Button */}
-                                   <button 
-                                        onClick={() => handlePageChange(currentPage + 1)} 
-                                        disabled={currentPage === pageNumbers.length}
-                                        className="pagination-button"
-                                   >
-                                        ถัดไป
-                                   </button>
+                                             <div className='report-select-wrapper'>
+                                                  <i className="fa-solid fa-filter report-search-icon"></i>
+                                                  <Select
+                                                       className='report-search-select'
+                                                       value={selectedType}
+                                                       onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                                       options={[
+                                                            { value: 0, label: "ทั้งหมด" },
+                                                            { value: 1, label: "รอตรวจสอบ" },
+                                                            { value: 2, label: "รอการแก้ไข" },
+                                                            { value: 3, label: "ดำเนินการเสร็จสิ้น" }
+                                                       ]}
+                                                  />
+                                             </div>
+                                        </div>
+                                   </div>
                               </div>
+                                   
+                                   {/* Table section */}
+                              <div className='above-table'>
+                                        <p>รวมทั้งหมด {reports.length} การรายงาน</p>
+                              </div>
+
+                              <div className='report-render'>
+                                   {currentReports.length > 0 ? (
+                                        currentReports.map(item => renderItem(item))
+                                   ) : (
+                                        <h2>ยังไม่มีประวัติการรายงาน</h2>
+                                   )}
+
+                                   {/* Pagination Controls */}
+                                   <div className="pagination">
+                                        {/* Previous Button */}
+                                        <button 
+                                             onClick={() => handlePageChange(currentPage - 1)} 
+                                             disabled={currentPage === 1}
+                                             className="pagination-button"
+                                        >
+                                             ย้อนกลับ
+                                        </button>
+
+                                        {/* Page Numbers */}
+                                        {pageNumbers.map(number => (
+                                             <button
+                                                  key={number}
+                                                  onClick={() => handlePageChange(number)}
+                                                  className={`pagination-button ${currentPage === number ? "active" : ""}`}
+                                             >
+                                                  {number}
+                                             </button>
+                                        ))}
+
+                                        {/* Next Button */}
+                                        <button 
+                                             onClick={() => handlePageChange(currentPage + 1)} 
+                                             disabled={currentPage === pageNumbers.length}
+                                             className="pagination-button"
+                                        >
+                                             ถัดไป
+                                        </button>
+                                   </div>
+                              </div>  
                          </div>
                     </div>
                </div>

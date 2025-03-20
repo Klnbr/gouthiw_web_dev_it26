@@ -222,6 +222,7 @@ function ReportDetail() {
                                 <div className="report-flex">
                                     <div className="report-details">
                                         <img
+                                        loading="lazy"
                                             src={reportData.nutrDetails.image_profile}
                                             alt={`${reportData.nutrDetails.firstname} ${reportData.nutrDetails.lastname}`}
                                             />
@@ -245,6 +246,7 @@ function ReportDetail() {
                                             <hr className="hr-line-100" />
                                             <div className="img-rp">
                                                 <img
+                                                loading="lazy"
                                                     className="img-tv"
                                                     src={reportData.triviaDetails.image}
                                                     alt={reportData.triviaDetails.head}

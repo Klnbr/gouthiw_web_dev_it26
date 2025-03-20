@@ -22,6 +22,7 @@ function AuthProvider({ children }) {
                setIsAuthenticated(true);
           }
      }, [])
+     
 
      const handleSignin = async ({ email, password }) => {
           try {

@@ -5,7 +5,6 @@ import Navbar from '../../components/Navbar/Navbar'
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
-import { Button } from 'antd';
 
 function MenuDetailScreen() {
      const navigate = useNavigate();
@@ -18,7 +17,7 @@ function MenuDetailScreen() {
      useEffect(() => {
           const fetchMenu = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
                     setMenu(response.data)
 
                     if (menuData && response.data.some((menuItem) => menuItem._id === menuData._id)) {
@@ -51,15 +50,12 @@ function MenuDetailScreen() {
                                         <h1>{menuData.menuName}</h1>
                                         <h2>ประเภท: {menuData.category}</h2>
                                    </div>
-                                   <img src={menuData.image} alt='รูปอาหาร' />
+                                   <img src={menuData.image} alt='รูปอาหาร' loading="lazy" />
                                    <div className='menu-detail-flex'>
                                         <p>พิวรีน (โดยเฉลี่ย) :</p>
                                         <p>{menuData.purine_total} มิลลิกรัม</p>
                                    </div>
-                                   {/* <div className='menu-detail-flex'>
-                                        <p>กรดยูริก (โดยเฉลี่ย) :</p>
-                                        <p>{menuData.uric_total} มิลลิกรัม</p>
-                                   </div> */}
+                                 
                               </div>
                               <div className='card-right'>
                                    <div>

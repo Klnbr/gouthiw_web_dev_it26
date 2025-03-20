@@ -37,12 +37,12 @@ function TopicScreen() {
      useEffect(() => {
         const fetchTopicData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/topics", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/topics", { timeout: 1000 });
                     setTopics(response.data);
-                    setLoading(false);  // เมื่อดึงข้อมูลสำเร็จ เปลี่ยนสถานะการโหลด
+                    setLoading(false);  
                } catch (error) {
                     console.log("Error fetching topics data", error.message)
-                    setError("ไม่สามารถดึงข้อมูลกระทู้ได้");  // ตั้งค่าสถานะ error
+                    setError("ไม่สามารถดึงข้อมูลกระทู้ได้");  
                     setLoading(false);
                }
           }
@@ -88,18 +88,18 @@ function TopicScreen() {
 
      const renderItem = (item) => (
           <div className='topic-card' onClick={() => handleItemPress(item._id)} key={item._id}>
-               <div className='topic-content'>
-                    <h1>{item.title}</h1>
-                    <p>{calculateTimeAgo(item.createdAt)}</p>
+               <div className='topic-info'>
+                    <h2>{item.title}</h2>
+                    <p>สร้างเมื่อ: {calculateTimeAgo(item.createdAt)}</p>
                </div>
                <div className='topic-user'>
                     <div className='flex'>
                          <i className="fa-solid fa-user"></i>
-                         <p>{item.userDetails?.name || "ไม่ทราบชื่อผู้ใช้"}</p>
+                         <p>{item.userDetails?.username}</p>
                     </div>
                     <div className='flex'>
                          <i className="fa-solid fa-reply"></i>
-                         <p>{item.answer?.length}</p>
+                         <p>การตอบกลับ ({item.answer?.length})</p>
                     </div>
                </div>
           </div>
@@ -122,7 +122,7 @@ function TopicScreen() {
                          <SideBar />
                          <div className='content'>
                               <div className='main-content'>
-                                   <div className='trivia-content'>
+                                   <div className='topic-content'>
                                         <div className='display-flex'>
                                              <p className='breadcumb'>
                                                   <span className='press-to-back'>หน้าหลัก</span>
@@ -132,21 +132,21 @@ function TopicScreen() {
                                         </div>
 
                                         <h1 className='head-content'>กระทู้</h1>
-                                        <div className='trivia-manage'>
-                                             <div className='trivia-search'>
-                                                  <div className='trivia-search-wrapper'>
-                                                       <i className="fa-solid fa-magnifying-glass trivia-search-icon"></i>
+                                        <div className='topic-manage'>
+                                             <div className='topic-search'>
+                                                  <div className='topic-search-wrapper'>
+                                                       <i className="fa-solid fa-magnifying-glass topic-search-icon"></i>
                                                        <input 
                                                             type='text'
                                                             placeholder='ค้นหากระทู้ที่นี่' 
                                                             onChange={(e) => setSearchTopic(e.target.value)} 
-                                                            className='trivia-search-input' />
+                                                            className='topic-search-input' />
                                                   </div>
 
-                                                  <div className='trivia-select-wrapper'>
-                                                       <i className="fa-solid fa-sort trivia-search-icon"></i>
+                                                  <div className='topic-select-wrapper'>
+                                                       <i className="fa-solid fa-sort topic-search-icon"></i>
                                                        <Select 
-                                                            className='trivia-search-select'
+                                                            className='topic-search-select'
                                                             value={selectedDisplay} 
                                                             onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
                                                             options={[
@@ -158,30 +158,24 @@ function TopicScreen() {
                                              </div>
                                         </div>
                                    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                   {loading ? (
-                                        <h2>กำลังโหลด...</h2>
-                                   ) : error ? (
-                                        <h2>{error}</h2>
-                                   ) : (
-                                        currentItems.length > 0 ? (
-                                             currentItems.map(item => renderItem(item))
+                                   <div className='above-table'>
+                                        <p>รวมทั้งหมด {topics.length} กระทู้</p>
+                                   </div>
+                                   <div className='topic-list'>
+                                        
+                                        {loading ? (
+                                             <h2>กำลังโหลด...</h2>
+                                        ) : error ? (
+                                             <h2>{error}</h2>
                                         ) : (
-                                             <h2>ยังไม่มีกระทู้</h2>
-                                        )
-                                   )}
+                                             currentItems.length > 0 ? (
+                                                  currentItems.map(item => renderItem(item))
+                                             ) : (
+                                                  <h2>ยังไม่มีกระทู้</h2>
+                                             )
+                                        )}
+                                   </div>
+                                   
                                    {/* Pagination controls */}
                                    <div className="pagination">
                                         <button

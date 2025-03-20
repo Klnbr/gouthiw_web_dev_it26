@@ -4,12 +4,10 @@ import SideBar from "../../components/SideBar/SideBar";
 import "../../App.css";
 import { useAuth } from "../../middleware/Auth";
 import { useNavigate } from "react-router-dom";
-// import HomeBanner from "../images/homebanner.jpg";
 import axios from "axios";
 
 function HomeScreen() {
     const navigate = useNavigate();
-    const { nutrData, logout } = useAuth();
     const [menus, setMenus] = useState([]);
     const [ingrs, setIngrs] = useState([]);
     const [trivs, setTrivs] = useState([]);
@@ -21,16 +19,16 @@ function HomeScreen() {
         const fetchData = async () => {
             try {
                 const res_menus = await axios.get("http://localhost:5500/menus", {
-                    timeout: 10000,
+                    timeout: 1000,
                 });
                 const res_ingrs = await axios.get("http://localhost:5500/ingrs", {
-                    timeout: 10000,
+                    timeout: 1000,
                 });
                 const res_trivs = await axios.get("http://localhost:5500/trivias", {
-                    timeout: 10000,
+                    timeout: 1000,
                 });
                 const res_topics = await axios.get("http://localhost:5500/topics", {
-                    timeout: 10000,
+                    timeout: 1000,
                 });
                 setMenus(res_menus.data);
                 setIngrs(res_ingrs.data);
@@ -55,6 +53,7 @@ function HomeScreen() {
                                 className="image-home"
                                 src="https://blog-images-1.pharmeasy.in/blog/production/wp-content/uploads/2021/01/25180542/shutterstock_1545283778-1.jpg"
                                 alt="head image"
+                                loading="lazy"
                                 />
                             <div className="text-over-image">
                                 สร้างเมนูอาหารที่ปลอดภัย

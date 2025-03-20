@@ -10,10 +10,7 @@ function SideBar () {
      return (
           <div className='side-bar--container'>
                <div className='side-bar--content'>
-                    <img className='side-bar--logo' alt='' src={SidebarLogo} />
-                         {/* <div className='menu-icons' onClick={this.handleClick}>
-                              <i className={this.state.clicked ? 'fas fa-times' : 'fas fa-bars'}></i>
-                         </div> */}
+                 
 
                     <div className='side-bar--menu'>
                          { MenuItems.map((item, index) => {
@@ -29,7 +26,7 @@ function SideBar () {
                          {/* <button className='button' to='/signup'>Sign up</button> */}
                     </div>
                </div>
-               <img className='side-bar--btm' alt='' src={SidebarBottom} />
+               <img className='side-bar--btm' alt='SidebarBottom' src={SidebarBottom} loading="lazy"/>
           </div>
      )
 }

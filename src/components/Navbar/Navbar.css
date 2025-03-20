@@ -97,13 +97,13 @@
 
 .nav-btn {
      display: flex;
-     width: 17%;
+     width: 100%;
      justify-content: space-between;
      /* margin: 20px; */
 }
 
 .nav-btn button {
-     margin:10px;
+     margin: 10px;
 }
 
 .nav--username {
@@ -184,3 +184,82 @@
      margin-left: 8px;
      margin-bottom: -7px;
 }
+
+@media screen and (max-width: 1024px) {
+     .nav--container {
+         padding: 8px 15px;
+     }
+ 
+     .nav--logo p {
+         font-size: 24px;
+     }
+ 
+     .nav--signin, .nav--signup {
+         font-size: 0.9rem;
+         padding: 4px 10px;
+     }
+ 
+     .nav-btn {
+         width: auto;
+     }
+ }
+ 
+ @media screen and (max-width: 768px) {
+     .nav--container {
+         flex-direction: row;
+         justify-content: space-between;
+         padding: 10px;
+     }
+ 
+     .nav--logo {
+         flex-grow: 1;
+     }
+ 
+     .nav--username {
+         font-size: 14px;
+         padding: 5px;
+     }
+ 
+     .noti--content {
+         margin-right: 10px;
+     }
+ 
+     .notification-popup {
+         width: 80%;
+         right: 10%;
+     }
+
+     .side-bar--content{
+          display: hidden;
+     }
+ }
+ 
+ @media screen and (max-width: 480px) {
+     .nav--container {
+         padding: 5px;
+         height: auto;
+     }
+ 
+     .nav--logo p {
+         font-size: 20px;
+     }
+ 
+     .nav--username p {
+         font-size: 12px;
+     }
+ 
+     .nav--noti {
+         width: 4px;
+         height: 4px;
+     }
+ 
+     .notification-popup {
+         width: 90%;
+         right: 5%;
+     }
+
+     .side-bar--content{
+          display: hidden;
+     }
+ }
+ 

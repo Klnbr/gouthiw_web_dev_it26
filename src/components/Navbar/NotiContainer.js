@@ -31,34 +31,6 @@ const NotiContainer = () => {
     
     const latestNotifications = sortedNotifications.slice(0, 5);
 
-    // const handleItemPress = async (itemId, type) => {
-    //     try {
-    //       const response = await axios.get(`http://localhost:5500/report-detail/${type}/${itemId}`);
-    //       const reportData = response.data;
-    //       if (!reportData || !reportData._id) {
-    //         alert("ข้อมูลรายงานไม่ถูกต้องหรือไม่พบ ID");
-    //         return;
-    //       }
-    //       if (type === "trivia") {
-    //         if (nutrData?.role === '1') {
-    //           navigate('/admin/report-trivia-detail', { state: { reportData } });
-    //         } else {
-    //           navigate('/report-trivia-detail', { state: { reportData } });
-    //         }
-    //       } else if (type === "topic") {
-    //         if (nutrData?.role === '1') {
-    //           navigate('/admin/report-topic-detail', { state: { reportData } });
-    //         } else {
-    //           navigate('/report-topic-detail', { state: { reportData } });
-    //         }
-    //       } else {
-    //         alert("ประเภทของรายงานไม่ถูกต้อง");
-    //       }
-    //     } catch (error) {
-    //       console.error("Error fetching report data:", error.message);
-    //       alert("เกิดข้อผิดพลาดในการดึงข้อมูลรายงาน");
-    //     }
-    // };
 
     const adminItemPress = async (reportId, notiId) => {
         try {
@@ -224,9 +196,9 @@ const NotiContainer = () => {
                     
                 ))}
             </ul>
-            <div className='see-all-noti'>
+            {/* <div className='see-all-noti'>
                 <p>ดูแจ้งเตือนทั้งหมด</p>
-            </div>
+            </div> */}
         </div>
     );
 };

@@ -201,49 +201,7 @@ function ReportManage() {
                                             
                             <h1 className='head-content'>การรายงาน</h1>
 
-                            {/* search engine */}
-                            {/* <div className='menu-manage'>
-                                <div className='menu-search'>
-                                    <div className='menu-search-wrapper'>
-                                        <i className="fa-solid fa-magnifying-glass menu-search-icon"></i>
-                                        <input 
-                                            type='text'
-                                            placeholder='ค้นหาหัวข้อการรายงาน' 
-                                            onChange={(e) => setSearchMenu(e.target.value)} 
-                                            className='menu-search-input' />
-                                    </div>
-
-                                    <div className='menu-select-wrapper'>
-                                        <i className="fa-solid fa-filter menu-search-icon"></i>
-                                        <Select 
-                                            className='menu-search-select'
-                                            value={selectedType} 
-                                            onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                            options={[
-                                                { value: "ทั้งหมด", label: "ทั้งหมด" },
-                                                { value: "ผัด", label: "ผัด" },
-                                                { value: "แกง", label: "แกง" },
-                                                { value: "ทอด", label: "ทอด" },
-                                                { value: "ตุ๋น", label: "ตุ๋น" },
-                                            ]}
-                                        />
-                                    </div>
-
-                                    <div className='menu-select-wrapper'>
-                                        <i className="fa-solid fa-sort menu-search-icon"></i>
-                                        <Select 
-                                            className='menu-search-select'
-                                            value={selectedDisplay} 
-                                            onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                            options={[
-                                                { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
-                                                { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
-                                                { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
-                                            ]}
-                                        />
-                                    </div>
-                                </div>
-                            </div> */}
+        
                         </div>
                     
                         <div className="above-table">

@@ -194,7 +194,7 @@
 
 .modal-ingr-content {
      position: absolute;
-     top: 40%;
+     top: 50%;
      left: 50%;
      transform: translate(-50%, -50%);
      line-height: 1.4;
@@ -237,8 +237,7 @@
 
 .ingr-head {
      display: flex;
-     justify-content: space-between;
-     width: 50%;
+     width: 40%;
      margin-left: auto;
      margin-right: auto;
      margin-bottom: 50px;
@@ -253,19 +252,11 @@
      text-align: center;
 }
 
-.ingr-head-l, .ingr-head-r {
-     background-color: antiquewhite;
-     width: 48%;
+.ingr-head-l {
+     width: 100%;
      padding: 20px;
      border-radius: 10px;
-}
-
-.ingr-head-l {
      background-color: #b4d3ce;
-}
-
-.ingr-head-r {
-     background-color: #e2c2a0;
 }
 
 .form2--input {
@@ -318,4 +309,15 @@
 
 .form3-containner TextArea {
      margin-bottom: 20px;
+}
+
+@media screen and (max-width: 850px) {
+     .step-container {
+          margin-top: 2%;
+     }
+
+     .modal-ingr-content {
+          max-width: 900px;
+          min-width: 700px;
+     }
 }

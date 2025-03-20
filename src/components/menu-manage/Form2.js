@@ -43,7 +43,7 @@ function Form2({ formData, setFormData }) {
      useEffect(() => {
           const fetchIngrData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
                     setIngrs(response.data);
                } catch (error) {
                     console.log("Error fetching ingrs data", error.message);
@@ -85,14 +85,7 @@ function Form2({ formData, setFormData }) {
                const purine = convertToGrams(quantity, unit) * purinePerUnit / 100;
                return total + purine;
           }, 0);
-       
-          // const newTotalUric = ingredients.reduce((total, ingredient) => {
-          //      const quantity = parseFloat(ingredient.qty) || 0;
-          //      const unit = ingredient.unit;
-          //      const uricPerUnit = parseFloat(getUricValue(ingredient.ingr_id)) || 0;
-          //      const uric = convertToGrams(quantity, unit) * uricPerUnit / 100;
-          //      return total + uric;
-          // }, 0);
+
        
           setTotalPurine(newTotalPurine);
           // setTotalUric(newTotalUric);
@@ -108,26 +101,39 @@ function Form2({ formData, setFormData }) {
 
      const handleIngredientChange = (index, field, value) => {
           const newIngrs = [...formData.ingredients];
-          newIngrs[index] = { ...newIngrs[index], [field]: value };
           
-          if (field === 'qty') {
-               newIngrs[index][field] = value.replace(/[^0-9.]/g, '');
+          // ตรวจสอบว่า qty เป็นตัวเลขและไม่ต่ำกว่า 0
+          if (field === 'qty' && value !== '' && !/^\d+(\.\d+)?$/.test(value)) {
+              alert("ปริมาณต้องเป็นตัวเลขเท่านั้น");
+              return; // หยุดการทำงานหากไม่ใช่ตัวเลข
           }
-
+      
+          if (field === 'qty' && parseFloat(value) < 0) { // ตรวจสอบว่า qty ต้องไม่น้อยกว่า 0
+              alert("ปริมาณต้องมากกว่าหรือเท่ากับ 0");
+              return; // หยุดการทำงานหากค่าต่ำกว่า 0
+          }
+      
+          newIngrs[index] = { ...newIngrs[index], [field]: value };
           setFormData({
-               ...formData,
-               ingredients: newIngrs
+              ...formData,
+              ingredients: newIngrs
           });
-     };
+      };
+      
 
-     const handleAddIngredient = () => {
+      const handleAddIngredient = () => {
+          // ตรวจสอบทุกๆ ingredient.qty ว่ามีค่าต่ำกว่า 0 หรือไม่
+          if (formData.ingredients.some(ingredient => parseFloat(ingredient.qty) < 0)) {
+              alert("ปริมาณต้องมากกว่าหรือเท่ากับ 0");
+              return; // หยุดการทำงานหากมีค่าที่น้อยกว่า 0
+          }
+      
           setFormData({
               ...formData,
               ingredients: [...formData.ingredients, { ingr_id: '', qty: '', unit: 'กรัม' }]
           });
-
-          console.log("formData FORM2: ", formData)
-     };
+      };
+      
 
      const handleSelectIngr = (itemId) => {
           const selectedIngr = ingrs.find(ingr => ingr._id === itemId);
@@ -174,10 +180,6 @@ function Form2({ formData, setFormData }) {
                          <h1>รวมพิวรีน: </h1>
                          <p>{totalPurine.toFixed(2)} mg</p>
                     </div>
-                    {/* <div className='ingr-head-r'>
-                         <h1>รวมยูริก: </h1>
-                         <p>{totalUric.toFixed(2)} mg</p>
-                    </div> */}
                </div>
                {modal && (
                     <div className='modal-ingr'>
@@ -188,65 +190,64 @@ function Form2({ formData, setFormData }) {
                               <h1>รายชื่อวัตถุดิบ</h1>
 
                               <div className='ingr-search'>
-                                                  <div className='ingr-search-wrapper'>
-                                                       <i className="fa-solid fa-magnifying-glass ingr-search-icon"></i>
-                                                       <input 
-                                                            type='text'
-                                                            placeholder='ค้นหาวัตถุดิบที่นี่' 
-                                                            onChange={(e) => setSearchIngr(e.target.value)} 
-                                                            className='ingr-search-input' />
-                                                  </div>
+                                   <div className='ingr-search-wrapper'>
+                                        <i className="fa-solid fa-magnifying-glass ingr-search-icon"></i>
+                                        <input 
+                                             type='text'
+                                             placeholder='ค้นหาวัตถุดิบที่นี่' 
+                                             onChange={(e) => setSearchIngr(e.target.value)} 
+                                             className='ingr-search-input' />
+                                   </div>
 
-                                                  <div className='ingr-select-wrapper'>
-                                                       <i className="fa-solid fa-filter ingr-search-icon"></i>
-                                                       <Select 
-                                                            className='ingr-search-select'
-                                                            value={selectedType} 
-                                                            onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                                            options={[
-                                                                 { value: "ทั้งหมด", label: "ทั้งหมด" },
-                                                                 { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
-                                                                 { value: "ผัก", label: "ผัก" },
-                                                                 { value: "ผลไม้", label: "ผลไม้" },
-                                                                 { value: "อื่น ๆ", label: "อื่น ๆ" },
-                                                            ]}
-                                                       />
-                                                  </div>
+                                   <div className='ingr-select-wrapper'>
+                                        <i className="fa-solid fa-filter ingr-search-icon"></i>
+                                        <Select 
+                                             className='ingr-search-select'
+                                             value={selectedType} 
+                                             onChange={(value) => setSelectedType(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                             options={[
+                                                  { value: "ทั้งหมด", label: "ทั้งหมด" },
+                                                  { value: "เนื้อสัตว์", label: "เนื้อสัตว์" },
+                                                  { value: "ผัก", label: "ผัก" },
+                                                  { value: "ผลไม้", label: "ผลไม้" },
+                                                  { value: "อื่น ๆ", label: "อื่น ๆ" },
+                                             ]}
+                                        />
+                                    </div>
 
-                                                  <div className='ingr-select-wrapper'>
-                                                       <i className="fa-solid fa-sort ingr-search-icon"></i>
-                                                       <Select 
-                                                            className='ingr-search-select'
-                                                            value={selectedDisplay} 
-                                                            onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
-                                                            options={[
-                                                                 { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
-                                                                 { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
-                                                                 { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
-                                                            ]}
-                                                       />
-                                                  </div>
-                                             </div>
-                              <div className='table-ingr-container'>
-                                   <table className='table-ingr'>
-                                        <thead>
-                                             <tr>
-                                                  <th>ชื่อวัตถุดิบ</th>
-                                                  <th>ค่าพิวรีน (โดยเฉลี่ย)</th>
-                                                  <th>ค่ากรดยูริก (โดยเฉลี่ย)</th>
-                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                             {filterDisplay.length > 0 ? (
-                                                  filterDisplay.map(item => renderItem(item))
-                                             ) : (
-                                                  <tr>
-                                                       <td colSpan="3">ยังไม่มีข้อมูลวัตถุดิบ</td>
-                                                  </tr>
-                                             )}
-                                        </tbody>
-                                   </table>                                    
+                                   <div className='ingr-select-wrapper'>
+                                        <i className="fa-solid fa-sort ingr-search-icon"></i>
+                                        <Select 
+                                             className='ingr-search-select'
+                                             value={selectedDisplay} 
+                                             onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
+                                             options={[
+                                                  { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
+                                                  { value: "top_purine", label: "ค่าพิวรีนมากสุด" },
+                                                  { value: "low_purine", label: "ค่าพิวรีนน้อยสุด" }
+                                             ]}
+                                        />
+                                   </div>
                               </div>
+                                   <div className='table-ingr-container'>
+                                        <table className='table-ingr'>
+                                             <thead>
+                                                  <tr>
+                                                       <th>ชื่อวัตถุดิบ</th>
+                                                       <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
+                                                  </tr>
+                                             </thead>
+                                             <tbody>
+                                                  {filterDisplay.length > 0 ? (
+                                                       filterDisplay.map(item => renderItem(item))
+                                                  ) : (
+                                                       <tr>
+                                                            <td colSpan="3">ยังไม่มีข้อมูลวัตถุดิบ</td>
+                                                       </tr>
+                                                  )}
+                                             </tbody>
+                                        </table>                                    
+                                   </div>
                          </div>
                     </div>
                )}
@@ -278,10 +279,12 @@ function Form2({ formData, setFormData }) {
                                         ปริมาณ
                                    </label>
                                    <Input 
-                                        className='form--inputbox' 
-                                        placeholder='ระบุปริมาณ'
-                                        value={ingredient.qty}
-                                        onChange={(e) => handleIngredientChange(index, 'qty', e.target.value)} />
+    className='form--inputbox' 
+    placeholder='ระบุปริมาณ'
+    value={ingredient.qty}
+    onChange={(e) => handleIngredientChange(index, 'qty', e.target.value)} 
+/>
+
                               </div>
                               <div className='form--input-1-col'>
                                    <label htmlFor='ingr-amount'>

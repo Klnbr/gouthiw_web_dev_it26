@@ -67,7 +67,7 @@ export default function TriviaDetailAdmin() {
                         
 
                         <div className='triv-detail'>
-                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
+                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} loading="lazy"/>
                             <div className='triv-detail-flex'>
                                 <div>
                                     <h1>{triviaData.head}</h1>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
-import '../../components/Detail.css';
 import { useAuth } from '../../middleware/Auth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -58,36 +57,37 @@ function Navbar() {
                 {/* <div className='nav--noti'/> */}
             </div>
             <div className='flex'>
-                <div className='noti--content'>
-                    {notiCount > 0 && 
-                        <div className='nav--noti'/>
-                    }
-                    <i className="fa-regular fa-bell" onClick={toggleNotifications}></i>
-                </div>
-                {notificationVisible && (
-                    <div className="notification-popup">
-                        <h3>การแจ้งเตือน</h3>
-                        <NotiContainer setNotiCount={setNotiCount} />
-                    </div>
-                )}
-
                 {nutrData ? (
-                    <div className='nav--username' onClick={toggleDropdown}>
-                        <p>{nutrData.firstname} {nutrData.lastname}</p>
-                        <i className="fa-solid fa-angle-down"></i>
-                        {dropdownVisible && (
-                            <div className='dropdown-menu'>
-                                <button onClick={() => {
-                                    if (nutrData?.role === '1') {
-                                        navigate('/admin/information');  // ถ้า role เป็น '1' ไปที่หน้า /admin/noti
-                                    } else {
-                                        navigate('/profile');  // ถ้าไม่ใช่แอดมิน, ไปที่หน้า /noti
-                                    }
-                                }}>โปรไฟล์ของฉัน</button>
-                                <button onClick={handleLogout}>ออกจากระบบ</button>
+                    <>
+                        <div className='noti--content'>
+                            {notiCount > 0 && 
+                                <div className='nav--noti'/>
+                            }
+                            <i className="fa-regular fa-bell" onClick={toggleNotifications}></i>
+                        </div>
+                        {notificationVisible && (
+                            <div className="notification-popup">
+                                <h3>การแจ้งเตือน</h3>
+                                <NotiContainer setNotiCount={setNotiCount} />
                             </div>
                         )}
-                    </div>
+                        <div className='nav--username' onClick={toggleDropdown}>
+                            <p>{nutrData.firstname} {nutrData.lastname}</p>
+                            <i className="fa-solid fa-angle-down"></i>
+                            {dropdownVisible && (
+                                <div className='dropdown-menu'>
+                                    <button onClick={() => {
+                                        if (nutrData?.role === '1') {
+                                            navigate('/admin/information');  // ถ้า role เป็น '1' ไปที่หน้า /admin/noti
+                                        } else {
+                                            navigate('/profile');  // ถ้าไม่ใช่แอดมิน, ไปที่หน้า /noti
+                                        }
+                                    }}>โปรไฟล์ของฉัน</button>
+                                    <button onClick={handleLogout}>ออกจากระบบ</button>
+                                </div>
+                            )}
+                        </div>
+                    </>
                 ) : (
                     <div className='nav-btn'>
                         <button className='nav--signin' onClick={() => navigate('/signin')}>เข้าสู่ระบบ</button>

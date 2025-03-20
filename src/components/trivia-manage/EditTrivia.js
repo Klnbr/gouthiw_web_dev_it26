@@ -92,6 +92,7 @@ function EditTrivia() {
                               <div className="form--drop-pic" onClick={triggerFileInputClick}>
                                    {image && (
                                         <img
+                                        loading="lazy"
                                              alt={`รูปภาพของ ${head}`}
                                              src={typeof image === 'string' ? image : URL.createObjectURL(image)}
                                              className="form--pic"

@@ -971,7 +971,7 @@ app.get("/topics", async (req, res) => {
                     detail: 1,             // แสดงฟิลด์ detail ของ topic
                     answer: 1,
                     createdAt: 1,
-                    "userDetails.name": 1  // แสดงเฉพาะชื่อผู้ใช้จาก userDetails
+                    "userDetails.username": 1  // แสดงเฉพาะชื่อผู้ใช้จาก userDetails
                 }
             }
         ]);
@@ -1056,7 +1056,7 @@ app.get("/topic/:id", async (req, res) => {
                     },
                     userDetails: {
                         $first: {
-                            name: "$userDetails.name",
+                            name: "$userDetails.username",
                             image_profile: "$userDetails.image_profile"
                         }
                     }

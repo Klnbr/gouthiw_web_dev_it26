@@ -52,38 +52,19 @@ function CreateMenu() {
      }));
 
      const nextStepper = () => {
+          if (/[^ก-ฮะ-์]/.test(formData.menuName) || /\s/.test(formData.menuName)) {
+              alert("ชื่ออาหารต้องเป็นภาษาไทยเท่านั้น ห้ามมีตัวเลขหรืออักขระพิเศษ");
+              return;
+          }
+
           setCurrent(current + 1);
-     };
+      };
+      
 
      const prevStepper = () => {
           setCurrent(current - 1);
      };
 
-     // const handleSubmit = async () => {
-     //      if (isNaN(formData.purine_total) || isNaN(formData.uric_total)) {
-     //          alert("Purine or Uric total is not valid.");
-     //          return;
-     //      }
-      
-     //      try {
-     //          const response = await fetch(`/menus/${id}`, {
-     //              method: "POST",
-     //              headers: {
-     //                  "Content-Type": "application/json",
-     //              },
-     //              body: JSON.stringify(formData),
-     //          });
-      
-     //          if (response.ok) {
-     //              const data = await response.json();
-     //              console.log("Menu saved successfully", data);
-     //          } else {
-     //              console.error("Failed to save menu", await response.json());
-     //          }
-     //      } catch (error) {
-     //          console.error("Error submitting menu", error);
-     //      }
-     // };    
 
      const handleSave = async () => {
           const { menuName, category, ingredients, method, image } = formData;

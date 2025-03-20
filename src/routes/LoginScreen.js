@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import '../components/Login.css';
 import { Input } from "antd";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../middleware/Auth';
 import Logo from '../images/logo_temporary.png'
-import BottomScreen from '../images/bottom_screen.png'
 
 function LoginScreen() {
     const navigate = useNavigate();
@@ -17,7 +15,7 @@ function LoginScreen() {
     return (
         <div className='sign-in--container'>
             <div className='signin-card'>
-                <img alt='gouthiw logo' src={Logo} />
+                <img alt='gouthiw-logo' src={Logo} loading="lazy"/>
                 <h1>เข้าสู่ระบบ</h1>
                 <div className='signin-form'>
                     <label htmlFor='signin-email'>อีเมล</label>
@@ -30,7 +28,7 @@ function LoginScreen() {
                     <b>ยังไม่มีมีบัญชี?  <p onClick={() => navigate('/signup')}>ลงทะเบียน</p></b>
                 </div>
             </div>
-            {/* <img className='screen--btm' alt='' src={BottomScreen} /> */}
+           
         </div>
     );
 }

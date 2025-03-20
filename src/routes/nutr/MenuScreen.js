@@ -3,7 +3,7 @@ import Navbar from '../../components/Navbar/Navbar'
 import SideBar from '../../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../middleware/Auth';
-import { Input, Select } from "antd";
+import {  Select } from "antd";
 import axios from 'axios';
 import '../../../src/components/menu.css'
 
@@ -18,18 +18,14 @@ function MenuScreen() {
      const [selectedType, setSelectedType] = useState('ทั้งหมด');
      const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
 
-     const [dropdownVisible, setDropdownVisible] = useState(null);
 
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
-     // const toggleDropdown = (menuId) => {
-     //      setDropdownVisible(dropdownVisible === menuId ? null : menuId);
-     // };
 
      useEffect(() => {
           const fetchMenuData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/menus", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/menus", { timeout: 1000 });
                     setMenus(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message)
@@ -37,7 +33,7 @@ function MenuScreen() {
           }
           const fetchMenuDataUser = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
                     console.log(response.data)
                     setMenusUser(response.data);
 
@@ -82,7 +78,6 @@ function MenuScreen() {
                <h1>{item.menuName}</h1>
                <div className='layout'>
                     <p className='purine'>พิวรีน: {item.purine_total}</p>
-                   
                </div>
           </div>
      );
@@ -145,8 +140,8 @@ function MenuScreen() {
                                                             onChange={(value) => setSelectedDisplay(value)} // อัปเดต selectedFilterType เมื่อเลือกประเภท
                                                             options={[
                                                                  { value: "last_add", label: "เพิ่มเข้าล่าสุด" },
-                                                                 { value: "top_purine", label: "ค่าพิวรีน มาก -> น้อย" },
-                                                                 { value: "low_purine", label: "ค่าพิวรีน น้อย -> มาก" }
+                                                                 { value: "top_purine", label: "ค่าพิวรีนมากสุด" },
+                                                                 { value: "low_purine", label: "ค่าพิวรีนน้อยสุด" }
                                                             ]}
                                                        />
                                                   </div>

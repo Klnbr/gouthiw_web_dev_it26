@@ -210,8 +210,8 @@
      display: flex;
      flex-wrap: wrap;
      width: 100%;
-     height: 24vh;
-     padding: 13px;
+     height: 28vh;
+     padding: 20px;
      justify-content: space-between;
      margin-bottom: 10px;
      box-shadow: 0 2px 2px 1px lightgrey;
@@ -319,4 +319,55 @@
 .triv-detail-content .btn-goback {
      margin-top: 5px;
      margin-left: 5px;
+}
+
+@media screen and (max-width: 850px) {
+     .trivia-search-wrapper {
+          width: 56%;
+     }
+
+     .trivia-select-wrapper {
+          width: 22%;
+     }
+
+     .trivia-pic {
+          width: 30%;
+          object-fit: cover;
+     }
+
+     .trivia-info {
+          width: 65%;
+     }
+     
+     .trivia-date {
+          font-size: 0.8rem;
+          margin-top: 8px;
+          color: gray;
+     }
+        
+     .trivia-des p {
+          -webkit-line-clamp: 3;
+     }
+
+     .display-flex {
+          margin-top: 10%;
+     }
+
+     .trivia-content .display-flex .breadcumb {
+          color: black;
+          font-size: 1.5vw;
+          width: 18%;
+     }
+     
+     .trivia-content .display-flex .divider {
+          height: 1px;
+          width: 60%;
+          background-color: #ccc;
+          margin: 0 10px;
+     }
+
+     .add-trivia-btn {
+          width: 25%;
+     }
+        
 }

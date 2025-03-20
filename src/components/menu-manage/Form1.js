@@ -14,6 +14,12 @@ function Form1({ formData, setFormData }) {
 
      const handleInputChange = (e) => {
           const { name, value } = e.target;
+
+          // if (/[^ก-ฮะ-์]/.test(formData.name) || /\s/.test(formData.name)) {
+          //      alert("ชื่ออาหารต้องเป็นภาษาไทยเท่านั้น ห้ามมีตัวเลขหรืออักขระพิเศษ");
+          //      return;
+          //  }
+
           setFormData({ ...formData, [name]: value });
      };
   
@@ -78,6 +84,7 @@ function Form1({ formData, setFormData }) {
                     <div className='form--drop-pic-menu' onClick={triggerFileInputClick}>
                          {formData.image ? (
                               <img
+                              loading="lazy"
                                    className='form--pic'
                                    alt={`url: ${formData.image.name}`}
                                    src={typeof formData.image === 'string' ? formData.image : URL.createObjectURL(formData.image)}

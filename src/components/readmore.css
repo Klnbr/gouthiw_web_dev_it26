@@ -33,8 +33,7 @@
    }
    
    .read-more-button {
-     width: 16%;
-     font-size: 0.9vw;
+     width: 15%;
      padding: 10px;
      border: none;
      color: white;
@@ -47,6 +46,12 @@
    
    .read-more-button:hover {
      text-decoration: none;
+   }
+
+   @media screen and (max-width: 850px) {
+    .read-more-button {
+      width: 20%;
+    }
    }
 
   

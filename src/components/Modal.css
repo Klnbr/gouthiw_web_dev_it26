@@ -68,14 +68,7 @@
      position: absolute;
      top: 10px;
      right: 10px;
-     padding: 5px 7px;
-     border-radius: 100%;
-     border: 1px solid rgb(94, 94, 94);
-     color: rgb(94, 94, 94);
      cursor: pointer;
-}
-
-.ingr-cancel--btn:hover {
-     color: rgb(67, 67, 67);
-     border: 1px solid rgb(67, 67, 67);
+     border: none;
+     font-size: 16px;
 }

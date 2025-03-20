@@ -1,5 +1,5 @@
 .form-trivia {
-    width: 80%;
+    width: 100%;
     background-color: white;
     justify-content: center;
     align-items: center;
@@ -28,7 +28,6 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
-    width: 98%;
 }
 
 .btn-addtv, .btn-cancel {
@@ -105,4 +104,10 @@
 
 .form--wysiwyg {
     height: 300px;
+}
+
+@media screen and (max-width: 850px) {
+    .form-trivia {
+        width: 95%;
+    }
 }

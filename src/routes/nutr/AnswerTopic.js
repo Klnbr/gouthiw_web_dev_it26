@@ -29,10 +29,10 @@ const AnswerTopic = () => {
     };
 
     const handleAnswer = async () => {
-        if (!answer || image.length === 0) {
-            alert("กรุณาใส่คำตอบและเลือกรูปภาพ");
-            return;
-        }
+        // if (!answer || image.length === 0) {
+        //     alert("กรุณาใส่คำตอบและเลือกรูปภาพ");
+        //     return;
+        // }
 
         try {
             setLoading(true);
@@ -72,26 +72,29 @@ const AnswerTopic = () => {
         }
     };
 
+    const calculateTimeAgo = (createdAt) => {
+        const currentTime = new Date();
+        const postTime = new Date(createdAt);
+        const timeDiff = Math.abs(currentTime - postTime) / 36e5;  // คำนวณต่างเป็นชั่วโมง
+        
+        if (timeDiff < 1) {
+             return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
+        } else if (timeDiff < 24) {
+             return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
+        } else {
+             return postTime.toLocaleString("th-TH", optionsDMY);
+        }
+    };
+
     const renderItem = (item) => (
         <div className='topic-answer-card' key={item._id}>
-            <div className='topic-content'>
-                <h1>{item.answer_detail}</h1>
-                <div className='topic-user'>
+            <div className='topic-answer'>
+                <p className='topic-answer-detail'>{item.answer_detail}</p>
+                <div className='topic-bottom'>
                     <div className='flex'>
                         <i className="fa-solid fa-user-nurse"></i>
                         <p>{item.nutrDetails?.firstname} {item.nutrDetails?.lastname}</p>
                     </div>
-                    <div className='topic-images'>
-                    {Array.isArray(item.answer_image) && item.answer_image.length > 0 ? (
-  item.answer_image.map((img, index) => (
-    <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='topic-img' />
-  ))
-) : (
-  <p>ไม่มีรูปภาพ</p>
-)}
-
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -103,6 +106,9 @@ const AnswerTopic = () => {
                 <Navbar />
                 <div className='content-no-sidebar'>
                     <div className='main-content'>
+                        <button className="btn-goback" onClick={() => navigate(-1)}>
+                            <i className="fa-solid fa-angle-left"></i>
+                        </button>
                         <div className='topic-detail-card'>
                             <div className='topic-detail-content'>
                                 <h1>{topicData.title}</h1>
@@ -114,11 +120,20 @@ const AnswerTopic = () => {
                             <div className='topic-images'>
                                 {Array.isArray(topicData.image) && topicData.image.length > 0 ? (
                                     topicData.image.map((img, index) => (
-                                        <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='trivia-pic' />
+                                        <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='trivia-pic' loading="lazy"/>
                                     ))
                                 ) : (
                                     <p>ไม่มีรูปภาพ</p>
                                 )}
+                            </div>
+                            <div className='topic-btn'>
+                                <div className='topic-bottom'>
+                                    <i className="fa-solid fa-user"></i>
+                                    <p>{topicData.userDetails.name}</p>
+                                </div>
+                                <div>
+                                    <p>{calculateTimeAgo(topicData.createdAt)}</p>
+                                </div>
                             </div>
                         </div>
 
@@ -132,9 +147,9 @@ const AnswerTopic = () => {
                                 value={answer}
                                 onChange={(e) => setAnswer(e.target.value)}
                             />
-                            <input type="file" multiple onChange={handleImageChange} />
+                            {/* <input type="file" multiple onChange={handleImageChange} /> */}
                             <div className='topic-btn'>
-                                <div className='topic-user'>
+                                <div className='topic-bottom'>
                                     <i className="fa-solid fa-user-nurse"></i>
                                     <p>{nutrData.firstname} {nutrData.lastname}</p>
                                 </div>
@@ -143,7 +158,7 @@ const AnswerTopic = () => {
                         </div>
 
                         <div className='width-80'>
-                            <p>การตอบกลับทั้งหมด</p>
+                            <p>การตอบกลับทั้งหมด ({topicData.answer?.length})</p>
                         </div>
                         {Array.isArray(topicData.answer) && topicData.answer.filter(item => item && item.answer_detail).length > 0 ? (
                             topicData.answer.map(item => renderItem(item))

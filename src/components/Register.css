@@ -97,10 +97,33 @@
     font-size: 16px;
 }
 
+.signup-form label {
+    color: black;
+    text-align: left;
+    display: block;
+    margin: 15px 0 5px 0;
+}
+
 .signup-form--right b {
     text-align: center;
     font-size: 0.9rem;
     margin-top: 10px;
+}
+
+.signup-form b {
+    text-align: center;
+    font-size: 0.9rem;
+    
+}
+
+.signup-form p {
+    color: #3a9286;
+    font-weight: 600;
+    font-size: 15.5px;
+    margin-top: 10px;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 /* Responsive Design */

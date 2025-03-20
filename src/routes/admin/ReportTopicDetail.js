@@ -134,6 +134,7 @@ function ReportTopicDetail() {
                 <div className="report-flex">
                   <div className="report-details">
                     <img
+                    loading="lazy"
                       src={reportData.userDetails.image_profile}
                       alt={`${reportData.userDetails.firstname} ${reportData.userDetails.lastname}`}
                     />
@@ -157,6 +158,7 @@ function ReportTopicDetail() {
                       <hr className="hr-line-90" />
                       <div className="img-rp">
                         <img
+                        loading="lazy"
                           className="img-tv"
                           src={reportData.topicDetails.image}
                           alt={reportData.topicDetails.head}

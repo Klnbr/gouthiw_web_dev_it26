@@ -22,14 +22,10 @@ function MenuScreenAdmin() {
 
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
-     // const toggleDropdown = (menuId) => {
-     //      setDropdownVisible(dropdownVisible === menuId ? null : menuId);
-     // };
-
      useEffect(() => {
           const fetchMenuData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/menus", { timeout: 10000 });
+                    const response = await axios.get("http://localhost:5500/menus", { timeout: 1000 });
                     setMenus(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message)
@@ -37,7 +33,7 @@ function MenuScreenAdmin() {
           }
           const fetchMenuDataUser = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                    const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
                     console.log(response.data)
                     setMenusUser(response.data);
 
@@ -78,7 +74,7 @@ function MenuScreenAdmin() {
 
      const renderItem = (item) => (
           <div className='menu-card' onClick={() => handleItemPress(item._id)} key={item._id}>
-               <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} />
+               <img className='menu-pic' alt={`รูปภาพของ ${item.menuName}`} src={item.image} loading="lazy"/>
                <h1>{item.menuName}</h1>
                <div className='layout'>
                     <p className='purine'>พิวรีน: {item.purine_total}</p>

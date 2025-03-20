@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
-import SideBar from '../../components/SideBar/SideBar'
 import { useAuth } from '../../middleware/Auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Input } from "antd";
@@ -52,10 +51,10 @@ export default function TopicDetail() {
                     <div className='topic-images'>
                         {Array.isArray(item.image) ? (
                             item.image.map((img, index) => (
-                                <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='topic-img' />
+                                <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='topic-img' loading="lazy" />
                             ))
                         ) : (
-                            item.image && <img src={item.image} alt="รูปกระทู้" className='topic-img' />
+                            item.image && <img src={item.image} alt="รูปกระทู้" className='topic-img' loading="lazy"/>
                         )}
                     </div>
                     <div className='flex'>
@@ -130,7 +129,7 @@ export default function TopicDetail() {
                             <div className='topic-images'>
                                 {topicData.image && Array.isArray(topicData.image) && topicData.image.length > 0 ? (
                                     topicData.image.map((img, index) => (
-                                        <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='trivia-pic' />
+                                        <img key={index} src={img} alt={`รูปที่ ${index + 1}`} className='trivia-pic' loading="lazy"/>
                                     ))
                                 ) : (
                                     <p>ไม่มีรูปภาพ</p>

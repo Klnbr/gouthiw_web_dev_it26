@@ -134,10 +134,10 @@ function ReportDetailNutr() {
         <div className="sidebar-content-wrapper">
             <SideBar />
             <div className="content-rp">
-            <div className="report-render">
-                <button className="btn-goback" onClick={() => navigate(-1)}>
+               <button className="btn-goback" onClick={() => navigate(-1)}>
                 <i className="fa-solid fa-angle-left"></i>
-                </button>
+                </button> 
+            <div className="report-render">
                 <div className="report-card">
                 <div className="report-info">
                     <div className="report-header">
@@ -153,6 +153,7 @@ function ReportDetailNutr() {
                     <div className="report-flex">
                     <div className="report-details">
                         <img
+                        loading="lazy"
                         src={reportData.nutrDetails.image_profile}
                         alt={`${reportData.nutrDetails.firstname} ${reportData.nutrDetails.lastname}`}
                         />
@@ -173,13 +174,14 @@ function ReportDetailNutr() {
                         <b>เกร็ดความรู้ที่ถูกรายงาน: </b>
                         <div className="tv-rp">
                         <h4>{reportData.triviaDetails.head}</h4>
-                        <hr className="hr-line-90" />
+                        <hr className="hr-line" />
                         <div className="img-rp">
                             <img
+                            loading="lazy"
                             className="img-tv"
                             src={reportData.triviaDetails.image}
                             alt={reportData.triviaDetails.head}
-                            />
+                        />
                         </div>
                         <ReadMore
                             text={reportData.triviaDetails.content}

@@ -75,6 +75,10 @@ function CreateTrivia() {
             const imageUrl = await getDownloadURL(storageRef);
             console.log("Image uploaded successfully. URL:", imageUrl);
 
+            if (!head || !content || !type) {
+                alert("กรุณากรอกข้อมูลให้ครบ")
+            }
+
             const trivData = {
                 head: head,
                 image: imageUrl,
@@ -120,6 +124,9 @@ function CreateTrivia() {
                 <Navbar />
                 <div className='content-no-sidebar'>
                     <div className='main-content'>
+                    <button className="btn-goback" onClick={() => navigate(-1)}>
+                        <i className="fa-solid fa-angle-left"></i>
+                    </button>
                         <div className='form-trivia'>
                             <h1>เพิ่มเกร็ดความรู้</h1>
                             <div className='trivia-flex'>
@@ -172,6 +179,7 @@ function CreateTrivia() {
                             <div className='form--drop-pic' onClick={triggerFileInputClick}>
                                 {image ? (
                                     <img
+                                    loading="lazy"
                                         className='form--pic'
                                         alt={`url: ${image.name}`}
                                         src={typeof image === 'string' ? image : URL.createObjectURL(image)}
@@ -187,16 +195,18 @@ function CreateTrivia() {
                                     id="imageUpload"
                                     onChange={handleImageChange} />
                             </div>
+
+                            <div className='form-group form-bt'>
+                                <button
+                                    className='btn-cancel'
+                                    onClick={() => navigate('/trivias')}>ยกเลิก</button>
+                                <button
+                                    className='btn-addtv'
+                                    onClick={handleAddTrivId}>บันทึกข้อมูล</button>
+                            </div>
                         </div>
 
-                        <div className='form-group form-bt'>
-                            <button
-                                className='btn-cancel'
-                                onClick={() => navigate('/trivias')}>ยกเลิก</button>
-                            <button
-                                className='btn-addtv'
-                                onClick={handleAddTrivId}>บันทึกข้อมูล</button>
-                        </div>
+                        
                     </div>
                 </div>
 

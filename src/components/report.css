@@ -1,3 +1,17 @@
+.report-content {
+  margin-left: auto;
+  margin-right: auto;
+  width: 95%;
+}
+
+.report-manage {
+  display: flex;
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+}
+
 .report-detail-content {
   box-shadow: 0 2px 2px 1px lightgrey;
   padding: 20px;
@@ -15,6 +29,12 @@
   height: 90%;
 }
 
+.report-search {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .report-render {
   width: 90%;
   margin-left: auto;
@@ -25,7 +45,7 @@
 .report-card {
   /* display: flex; */
   /* flex-wrap: wrap; */
-  width: 100%;
+  width: 95%;
   height:24;
   margin-bottom:90px;
   box-shadow: 0 2px 2px 1px lightgrey;
@@ -53,7 +73,7 @@
 .report-card-admin {
   display: flex;
   /* flex-wrap: wrap; */
-  width: 95%;
+  width: 100%;
   /* height: 20vh; */
   padding: 20px;
   justify-content: space-between;
@@ -105,6 +125,13 @@
   color: gray;
 }
 
+.report-render {
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
+
 .trivia-info h1 {
   font-size: 1.2rem;
   color: #4AB4A2;
@@ -115,6 +142,7 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
 
 .content-rp {
   display: flex;
@@ -162,6 +190,77 @@
   font-weight: 500;
 }
 
+.report-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  /* border-radius: 10px; */
+  width: 80%;
+  border: 1px solid #ccc;
+}
+
+.report-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  /* border-radius: 10px; */
+  width: 20%;
+  border: 1px solid #ccc;
+  border-left: none;
+}
+
+.report-search-icon {
+  position: absolute;
+  left: 20px;
+  color: #FFA13F;
+}
+
+.report-search-input {
+  padding-left: 50px;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-radius: 10px;
+}
+
+.report-search-input:focus {
+  outline: none;
+}
+
+.report-search-select {
+  padding-left: 40px;
+  width: 100%;
+  border-radius: 4px;
+  font-size: 14px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+
+.report-search-select .ant-select-single {
+  height: 52px;
+}
+
+.report-select-wrapper .ant-select-selector {
+  border: none !important;
+  box-shadow: none !important;
+  padding-left: 30px;
+  background-color: #4AB4A2;
+}
+
+.report-select-wrapper .ant-select-selection-item {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.report-search-input::placeholder {
+  color: #999;
+}
+
 
 
 .report-date {
@@ -174,7 +273,7 @@
 
 .rp-dt {
   /* display: flex; */
-  width: 110%;
+  width: 100%;
   height: 105%;
   box-shadow: 0 2px 2px 1px lightgrey;
   background-color: rgb(244, 239, 239);
@@ -182,6 +281,7 @@
   margin-left: 30px;
   margin-top: 20px;
 }
+
 .tv-rp {
   width: 90%;
   height: 65%;
@@ -276,16 +376,39 @@
   margin: 0;
 }
 
+.form-report {
+  width: 90%;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 30px;
+  margin: 60px auto;
+}
 
+.form-report rp-dt:nth-of-type(2) {
+  width: 80%;
+}
 
-@media (max-width: 768px) {
-  .report-flex {
-    flex-direction: column;
-    align-items: flex-start;
+@media screen and (max-width: 850px) {
+  .report-search-wrapper {
+    width: 70%;
+}
+
+  .report-select-wrapper {
+      width: 30%;
   }
 
-  .report-date {
-    text-align: left; /* แสดงเวลาชิดซ้ายในหน้าจอเล็ก */
-    margin-top: 0.5rem;
+  .content-rp {
+    margin-left: 0;
+  }
+
+  .rp-dt {
+    margin-left: 5px;
+  }
+
+  .tv-rp {
+    width: 100%;
+    margin-left: 0;
   }
 }
