@@ -218,6 +218,10 @@
      cursor: pointer;
      background-color: white;
 }
+.form--drop-pic {
+     width: 20%;
+     height: 20vh;
+}
    
 .trivia-pic {
      width: 20%;

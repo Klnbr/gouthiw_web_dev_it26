@@ -8,6 +8,29 @@
      justify-content: space-between;
 }
 
+.menu-edit-container {
+     display: flex;
+     justify-content: flex-end; /* ชิดขวา */
+     margin-bottom: 10px; /* ให้มีระยะห่างจากเนื้อหา */
+}
+
+.menu-edit {
+     background-color: #FFA13F;
+     color: white;
+     border: none;
+     width: auto;
+     padding: 10px 20px;
+     font-size: 15px;
+     border-radius: 5px;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+   margin-right: 50px;
+   margin-top: 10px;
+}
+
+
+
 .card-left {
      box-shadow: 0 2px 2px 1px lightgrey;
      padding: 20px;

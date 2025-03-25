@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import '../../components/Detail.css'
+import React, { useEffect, useState } from 'react';
+import '../../components/Detail.css';
 import { useLocation } from 'react-router-dom';
-import Navbar from '../../components/Navbar/Navbar'
+import Navbar from '../../components/Navbar/Navbar';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
@@ -11,24 +11,29 @@ function MenuDetailScreen() {
      const { nutrData } = useAuth();
      const location = useLocation();
      const { menuData } = location.state || {};
-     const [menu, setMenu] = useState([])
-     const [editButton, setEditButton] = useState(false)
+     const [menu, setMenu] = useState([]);
+     const [editButton, setEditButton] = useState(false);
 
      useEffect(() => {
           const fetchMenu = async () => {
                try {
                     const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
-                    setMenu(response.data)
-
+                    setMenu(response.data);
+                    
                     if (menuData && response.data.some((menuItem) => menuItem._id === menuData._id)) {
                          setEditButton(true);
+                    } else {
+                         setEditButton(false);
                     }
                } catch (error) {
-                    console.log("Error fetching menus data", error.message)
+                    console.log("Error fetching menus data", error.message);
                }
+          };
+          
+          if (nutrData?._id && menuData?._id) {
+               fetchMenu();
           }
-          fetchMenu()
-     })
+     }, [nutrData, menuData]);
 
      return (
           <>
@@ -37,13 +42,16 @@ function MenuDetailScreen() {
                     <div className='content-no-sidebar'>
                          <button className="btn-goback" onClick={() => navigate(-1)}>
                               <i className="fa-solid fa-angle-left"></i>
-                              {editButton && (
-                                   <button >
-                                        แก้ไข
-                                   </button>
-                              )}
                          </button>
+                         <div className="menu-edit-container">
+     {editButton && (
+          <button className="menu-edit" onClick={() => navigate(`/menu`, { state: { menuData } })}>
+               <i className="fa-solid fa-pen-to-square"></i> แก้ไข
+          </button>                            
+     )}
+</div>
 
+                     
                          <div className='menu-detail-content'>
                               <div className='card-left'>
                                    <div className='menu-detail-flex'>
@@ -84,7 +92,7 @@ function MenuDetailScreen() {
                     </div>
                </div>
           </>
-     )
+     );
 }
 
-export default MenuDetailScreen
+export default MenuDetailScreen;

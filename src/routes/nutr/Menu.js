@@ -1,11 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import CreateMenu from '../../components/menu-manage/CreateMenu'
 import EditMenu from '../../components/menu-manage/EditMenu'
+import { useAuth } from '../../middleware/Auth';
+import axios from 'axios';
 
 function Menu() {
+ const navigate = useNavigate();
+     const { nutrData } = useAuth();
      const location = useLocation();
      const { menuData } = location.state || {};
+     const [menu, setMenu] = useState([])
+     const [editButton, setEditButton] = useState(false)
+
+      useEffect(() => {
+               const fetchMenu = async () => {
+                    try {
+                         const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
+                         setMenu(response.data)
+     
+                         if (menuData && response.data.some((menuItem) => menuItem._id === menuData._id)) {
+                              setEditButton(true);
+                         }
+                    } catch (error) {
+                         console.log("Error fetching menus data", error.message)
+                    }
+               }
+               fetchMenu()
+          }, [nutrData, menuData])
      return (
           <>
                { menuData ? (

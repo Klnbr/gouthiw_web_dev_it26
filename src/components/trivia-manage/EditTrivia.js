@@ -84,10 +84,7 @@ function EditTrivia() {
 
                          </button>
                          <div className="form-trivia">
-                              <button className="btn-goback" onClick={() => navigate(-1)}>
-                                   <i className="fa-solid fa-angle-left"></i>
-
-                              </button>
+                            
                               <h2>แก้ไขเกร็ดความรู้</h2>
                               <div className="form--drop-pic" onClick={triggerFileInputClick}>
                                    {image && (

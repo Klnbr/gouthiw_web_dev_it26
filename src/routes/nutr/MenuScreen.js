@@ -97,7 +97,7 @@ function MenuScreen() {
                                                   <span className='gray-color'> &#62;</span> เมนูอาหาร
                                              </p>
                                              <div className='divider' />
-                                             <button className='add-menu-btn' onClick={() => navigate('/menu')}>
+                                             <button className='add-menu-btn' onClick={() => navigate('/menu', { state: null })}>
                                                   <i className="fa-solid fa-plus"> เพิ่มอาหารของคุณ</i>
                                              </button> 
                                         </div>

@@ -17,6 +17,7 @@ import MenuScreen from './routes/nutr/MenuScreen';
 import TriviaScreen from './routes/nutr/TriviaScreen';
 import TopicScreen from './routes/nutr/TopicScreen'
 import Menu from './routes/nutr/Menu';
+// import EditMenu from './routes/nutr/EditMenu';
 import Trivia from './routes/nutr/Trivia';
 import IngrScreen from './routes/nutr/IngrScreen';
 import ProfileScreen from './routes/nutr/ProfileScreen';
