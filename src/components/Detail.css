@@ -7,27 +7,29 @@
      padding: 2% 40px 15%;
      justify-content: space-between;
 }
-
 .menu-edit-container {
      display: flex;
      justify-content: flex-end; /* ชิดขวา */
-     margin-bottom: 10px; /* ให้มีระยะห่างจากเนื้อหา */
+     gap: 10px;
 }
 
-.menu-edit {
-     background-color: #FFA13F;
+.menu-edit, .menu-delete {
+     background-color: #FFA13F; /* สีส้ม */
      color: white;
      border: none;
-     width: auto;
      padding: 10px 20px;
-     font-size: 15px;
+     font-size: 16px;
      border-radius: 5px;
      cursor: pointer;
      display: flex;
      align-items: center;
-   margin-right: 50px;
-   margin-top: 10px;
+     gap: 8px;
 }
+
+.menu-delete {
+     background-color: red; /* สีแดงสำหรับปุ่มลบ */
+}
+
 
 
 

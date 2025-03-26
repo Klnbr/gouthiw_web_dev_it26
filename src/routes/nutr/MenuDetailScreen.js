@@ -19,7 +19,7 @@ function MenuDetailScreen() {
                try {
                     const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 1000 });
                     setMenu(response.data);
-                    
+
                     if (menuData && response.data.some((menuItem) => menuItem._id === menuData._id)) {
                          setEditButton(true);
                     } else {
@@ -29,11 +29,32 @@ function MenuDetailScreen() {
                     console.log("Error fetching menus data", error.message);
                }
           };
-          
+
           if (nutrData?._id && menuData?._id) {
                fetchMenu();
           }
      }, [nutrData, menuData]);
+
+     const handleItemDelete = async (itemId) => {
+          const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
+          if (!confirmDelete) {
+               return; // ถ้าไม่ยืนยัน จะไม่ทำการลบ
+          }
+
+          try {
+               const response = await axios.delete(`http://localhost:5500/menu/${itemId}`);
+
+               if (response.status === 200) {
+                    alert("ลบสำเร็จ");
+                    const response = await axios.get("http://localhost:5500/menus", { timeout: 1000 });
+                    setMenu(response.data);
+                    navigate('/menus');
+               }
+          } catch (error) {
+               console.log('Error deleting menu', error);
+          }
+     };
+
 
      return (
           <>
@@ -47,11 +68,16 @@ function MenuDetailScreen() {
      {editButton && (
           <button className="menu-edit" onClick={() => navigate(`/menu`, { state: { menuData } })}>
                <i className="fa-solid fa-pen-to-square"></i> แก้ไข
-          </button>                            
+          </button>
      )}
+
+     <button className="menu-delete" onClick={() => handleItemDelete(menuData._id)}>
+          <i className="fa-solid fa-trash"></i> ลบ
+     </button>
 </div>
 
-                     
+
+
                          <div className='menu-detail-content'>
                               <div className='card-left'>
                                    <div className='menu-detail-flex'>
@@ -63,7 +89,7 @@ function MenuDetailScreen() {
                                         <p>พิวรีน (โดยเฉลี่ย) :</p>
                                         <p>{menuData.purine_total} มิลลิกรัม</p>
                                    </div>
-                                 
+
                               </div>
                               <div className='card-right'>
                                    <div>
@@ -75,17 +101,17 @@ function MenuDetailScreen() {
                                                        <td>{ingr.qty}</td>
                                                        <td>{ingr.unit}</td>
                                                   </tr>
-                                             ))}  
+                                             ))}
                                         </table>
                                    </div>
                                    <div>
                                         <h3>วิธีทำ:</h3>
                                         {menuData.method.map((step, index) => (
                                              <div className='menu-detail-method' key={index}>
-                                                  <p>{index+1}.</p>
-                                                  <p>{step}</p> 
+                                                  <p>{index + 1}.</p>
+                                                  <p>{step}</p>
                                              </div>
-                                        ))} 
+                                        ))}
                                    </div>
                               </div>
                          </div>

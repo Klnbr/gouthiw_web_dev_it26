@@ -15,7 +15,7 @@ function LoginScreen() {
     return (
         <div className='sign-in--container'>
             <div className='signin-card'>
-                <img alt='gouthiw-logo' src={Logo} loading="lazy"/>
+                <img alt="gouthiw-logo" src={Logo} loading="lazy" width="100" height="90"></img>
                 <h1>เข้าสู่ระบบ</h1>
                 <div className='signin-form'>
                     <label htmlFor='signin-email'>อีเมล</label>

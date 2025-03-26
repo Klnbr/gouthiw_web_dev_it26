@@ -19,7 +19,7 @@ function AdminHome() {
                     setUser(resUser.data)
                     const usersData = resUser.data.map((user) => ({
                          id: user._id,
-                         name: user.name,
+                         name: user.username,
                          email: user.email,
                          role: "ผู้ป่วยโรคเกาต์",
                          createdAt: user.createdAt

@@ -43,7 +43,7 @@
      align-items: center;
 }
 
-.btn-edit {
+.btn-edit, .btn-delete {
      display: flex;
      justify-content: center; 
      align-items: center; 
@@ -219,8 +219,8 @@
      background-color: white;
 }
 .form--drop-pic {
-     width: 20%;
-     height: 20vh;
+     width: 100%;
+     height: 4vh;
 }
    
 .trivia-pic {

@@ -613,35 +613,34 @@ app.get("/ingrs/auth/:nutrId", async (req, res) => {
         // ค้นหาวัตถุดิบที่ nutrId เป็นเจ้าของ
         const ingredients = await myIngr.aggregate([
             {
-                $match: { isDeleted: false }  // กรองเฉพาะวัตถุดิบที่ไม่ถูกลบ
+                $match: { isDeleted: false }
             },
             {
                 $lookup: {
-                    from: 'nutrs',             // ชื่อตาราง nutritionists
-                    localField: '_id',         // เชื่อมกับ _id ของวัตถุดิบใน myIngr
-                    foreignField: 'ingr_owner.ingr_id', // เชื่อมกับ ingr_id ใน nutr_owner ของ nutritionist
+                    from: 'nutrs', // ตาราง nutritionists
+                    localField: '_id', // ID ของวัตถุดิบ
+                    foreignField: 'ingr_owner.ingr_id', // ingr_owner ใน nutrs (ตรวจสอบให้ตรง)
                     as: 'owners'
                 }
             },
             {
-                $unwind: "$owners"  // แยกข้อมูลของเจ้าของออกมา
+                $unwind: "$owners" // แยกออกมาเป็น object เดียว
             },
             {
                 $match: {
-                    "owners._id": nutrientId  // กรองเฉพาะวัตถุดิบที่ nutrId เป็นเจ้าของ
+                    "owners._id": nutrientId // ตรวจสอบให้แน่ใจว่า _id ตรงกับ ObjectId จริงๆ
                 }
             },
             {
                 $project: {
-                    name: 1,  // แสดงชื่อของวัตถุดิบ
-                    purine: 1,  // แสดงค่าพิวรีน
-                    ingr_type: 1,  // แสดงประเภทของวัตถุดิบ
-                    "owner_name": {
-                        $concat: ['$owners.firstname', ' ', '$owners.lastname']  // รวมชื่อและนามสกุลของ nutritionist
-                    }
+                    name: 1,
+                    purine: 1,
+                    ingr_type: 1,
+                    owner_name: { $concat: ['$owners.firstname', ' ', '$owners.lastname'] }
                 }
             }
         ]);
+        
 
         res.status(200).json(ingredients);
     } catch (error) {

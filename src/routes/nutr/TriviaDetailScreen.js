@@ -5,7 +5,6 @@ import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
 
-
 const optionsDMY = {
     timeZone: "Asia/Bangkok", year: 'numeric', month: 'long', day: 'numeric',
 };
@@ -16,7 +15,7 @@ function TriviaDetailScreen() {
     const { triviaData } = location.state || {};
     const { nutrData } = useAuth();
     const [editButton, setEditButton] = useState(false);
-    const [hasDeadLine, setHasDeadLine] = useState(null)
+    const [hasDeadLine, setHasDeadLine] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [pendingReports, setPendingReports] = useState(0);
 
@@ -83,6 +82,15 @@ function TriviaDetailScreen() {
         }
     };
 
+    const handleDelete = async (itemId) => {
+        try {
+            await axios.delete(`http://localhost:5500/trivia/${itemId}`);
+            navigate('/trivia-list');  // หลังจากลบเสร็จแล้ว redirect ไปที่หน้ารายการ trivia
+        } catch (error) {
+            console.error("Error deleting trivia", error);
+        }
+    };
+
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
     };
@@ -109,7 +117,9 @@ function TriviaDetailScreen() {
                     {editButton &&
                             <button className="btn-edit" 
                                 onClick={() => handleItemPress(triviaData._id)}>
-                        แก้ไข</button>}  
+                        แก้ไข</button>} 
+
+                        <button className="btn-delete" onClick={() => handleDelete(triviaData._id)}>ลบ</button>  
                     
 
                     <div className='triv-detail-content'>
@@ -127,19 +137,17 @@ function TriviaDetailScreen() {
                         </div>
                         <div className='triv-detail'>
                             <div>
-                            {hasDeadLine && (
+                            {/* {hasDeadLine && (
                                 <div>
                                     <p>{calculateTimeRemaining(triviaData.edit_deadline)}</p>
                                 </div>
-                            )}
+                            )} */}
                             </div>
                             <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} loading="lazy"/>
                             <h1>{triviaData.head}</h1>
                             <div className='triv-detail-flex'>
                                 <p>เขียนโดย: {triviaData.creator.firstname} {triviaData.creator.lastname}</p>
-                                {/* <p>วันที่สร้าง: {calculateTimeAgo(triviaData.createdAt)}</p> */}
                                 <p>อัพเดตล่าสุด: {calculateTimeAgo(triviaData.updatedAt)}</p>
-                            
                             </div>
                             <hr className='hr-line' />
                             <div className='triv-info' dangerouslySetInnerHTML={{ __html: triviaData.content }} />
