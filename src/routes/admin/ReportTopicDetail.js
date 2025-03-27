@@ -37,21 +37,23 @@ function ReportTopicDetail() {
   const [reportstopic, setReportstopic] = useState([]);
   const [reportsTopic, setReportsTopic] = useState([]);
 
+  console.log("reportData:", reportData);
+
   const statusMap = {
-    0: "อยู่ระหว่างการตรวจสอบ",
-    1: "ดำเนินการเรียบร้อย",
+    0: "รอตรวจสอบ",
+    1: "ลบออกจากระบบ",
     2: "ปฏิเสธรายงาน",
   };
 
   const getStatusColor = (status) => {
     const numericStatus = Number(status); // แปลงเป็นตัวเลข
     switch (numericStatus) {
-      case 1:
-        return "#28a745"; // เขียว
       case 0:
-        return "#ffc107"; // เหลือง
+        return "#6c757d"; // เขียว
+      case 1:
+        return "#dc3545"; // เหลือง
       case 2:
-        return "#dc3545"; // แดง
+        return "#ffc107"; // แดง
       default:
         return "#6c757d"; // เทา
     }
@@ -61,37 +63,62 @@ function ReportTopicDetail() {
   
   const handleStatusChange = (newStatusNumber) => {
     if (Number(newStatusNumber) === status) return;
-  
-    // การยืนยันก่อนเปลี่ยนสถานะ
-    const confirmChange = window.confirm("คุณต้องการเปลี่ยนสถานะใช่หรือไม่?");
-    if (confirmChange) {
-      setStatus(Number(newStatusNumber));  // เปลี่ยนสถานะใน UI
-      updateStatus(Number(newStatusNumber));  // อัพเดตสถานะในฐานข้อมูล
-    } else {
-      // ถ้าไม่ยืนยันให้กลับไปสถานะเดิม
-      setStatus(status); 
-    }
+    setStatus(Number(newStatusNumber));
   };
-  
 
-  const updateStatus = async (newStatus) => {
+  const updateStatus = async () => {
     try {
-      const updatedReportData = {
-        ...reportData,
-        status: newStatus,
-        isDeleted: false,
-      };
-      const response = await axios.put(
-        `http://localhost:5500/report/${reportData._id}/status`,
-        updatedReportData
-      );
-      if (response.status === 200) {
-        alert("อัพเดตสถานะสำเร็จ!");
+      if (status === 0) {
+        return;
+      } else if (status === 1) {
+        handleItemDelete(reportData._id)
+      } else if (status === 2) {
+        const confirm = window.confirm("คุณต้องการปฏิเสธรายการนี้ใช่หรือไม่?");
+        if (!confirm) return;
+
+        const updateStatus = {
+          topic_id: reportData.topic_id,
+          status: status
+        };
+
+        const response = await axios.put(
+          `http://localhost:5500/report/${reportData._id}/topic/status`,
+          updateStatus
+        );
+
+        if (response.status === 200) {
+          alert("อัพเดตสถานะสำเร็จ!");
+          handleNotification()
+        }
       }
     } catch (error) {
       alert("อัพเดตสถานะไม่สำเร็จ");
     }
   };
+
+  const handleNotification = async () => {
+    try {
+              const notiData = {
+                  report_id: reportData._id,
+                  topic_id: reportData.topic_id,
+                  title: reportData.topicDetails.title,
+                  note: reportData.note,
+                  status: status,
+                  user_id: reportData.user_id
+              };
+
+              console.log("notiData:", notiData);
+  
+              const response = await axios.post("http://localhost:5500/report/topic/notification", notiData);
+              
+              if (response.status === 200) {
+                  alert("ส่งแจ้งเตือนสําเร็จ!");
+                  navigate("/admin/report");
+              }        
+          } catch (error) {
+              alert("ส่งแจ้งเตือนไม่สําเร็จ");
+          }
+      };
 
   const handleItemDelete = async (reportId) => {
     const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
@@ -187,16 +214,16 @@ function ReportTopicDetail() {
                       onChange={(e) => handleStatusChange(e.target.value)}
                       value={status}
                     >
-                      <option value={0}>อยู่ระหว่างการตรวจสอบ</option>
-                      <option value={1}>ดำเนินการเรียบร้อย</option>
+                      <option value={0} disabled hidden>รอตรวจสอบ</option>
+                      <option value={1}>ลบออกจากระบบ</option>
                       <option value={2}>ปฏิเสธรายงาน</option>
                     </select>
                   </div>
                   <button
                     className="btn-delete"
-                    onClick={() => handleItemDelete(reportData._id)}
+                    onClick={() => updateStatus()}
                   >
-                    ลบกระทู้
+                    เปลี่ยนสถานะ
                   </button>
                 </div>
               </div>

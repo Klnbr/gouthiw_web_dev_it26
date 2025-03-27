@@ -1,79 +1,51 @@
 const mongoose = require('mongoose');
 
-const diaryEntrySchema = new mongoose.Schema({
-    date: {
-        type: Date,
-        required: true,
-    },
-    menuBreakfast: [
-        {
-            menuName: { type: String, ref: 'Menu' },
-            purine: { type: Number },
-            uric: { type: Number },
-            qty: { type: Number, default: 1 }
-        }
-    ],
-    menuLunch: [
-        {
-            menuName: { type: String, ref: 'Menu' },
-            purine: { type: Number },
-            uric: { type: Number },
-            qty: { type: Number, default: 1 }
-        }
-    ],
-    menuDinner: [
-        {
-            menuName: { type: String, ref: 'Menu' },
-            purine: { type: Number },
-            uric: { type: Number },
-            qty: { type: Number, default: 1 }
-        }
-    ],
-    purine_diary: {
-        type: Number,
-        default: 0
-    },
-    uric_diary: {
-        type: Number,
-        default: 0
-    }
-}, { timestamps: true });
-
 const userSchema = new mongoose.Schema({
     username: {
+        type: String
+    },
+    firstname: {
         type: String,
         required: true,
     },
-    diary: [diaryEntrySchema],
-    topic_owner: [
-        {
-            topic_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Topic' }
-        }
-    ],
-    purine: {
-        type: Number
+    lastname: {
+        type: String,
+        required: true,
     },
-    age: {
-        type: Number
-    },
-    uric: {
-        type: Number,
+    birthday: {
+        type: Date,
         required: true
     },
-    isDeleted: {
-        type: Boolean,
-        default: false,
+    gender: {
+        type: String,
+        required: true
+    },
+    uric: {
+        type: Number
+    },
+    image_profile: {
+        type: String
+    },
+    image_background: {
+        type: String
     },
     email: {
         type: String,
-        required: true,
         unique: true
     },
     password: {
         type: String,
         required: true
     },
-    verified: {
+    phone:{
+        type: String,
+        require: true
+    },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    isDeleted: {
         type: Boolean,
         default: false,
     },

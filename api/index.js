@@ -60,6 +60,7 @@ const myNoti = require("./models/noti");
 
 const { title } = require("process");
 const { notification } = require("antd");
+const { truncate } = require("fs");
 
 // signin
 app.post("/signin", async (req, res) => {
@@ -430,8 +431,7 @@ app.get("/menus/auth/:id", async (req, res) => {
                     category: "$menuDetails.category",
                     ingredients: "$menuDetails.ingredients",
                     method: "$menuDetails.method",
-                    purine: "$menuDetails.purine",
-                    uric: "$menuDetails.uric",
+                    purine_total: "$menuDetails.purine_total",
                     image: "$menuDetails.image"
                 },
             },
@@ -1477,6 +1477,8 @@ app.get("/report-detail/topic/:id", async (req, res) => {
             {
                 $project: {
                     _id: 1,
+                    topic_id: 1,
+                    user_id: 1,
                     note: 1,
                     status: 1,
                     createdAt: 1,
@@ -1541,6 +1543,42 @@ app.put("/report/:id/trivia/status", async (req, res) => {
     }
 });
 
+// อัปเดตสถานะของรายงาน, กระทู้
+app.put("/report/:id/topic/status", async (req, res) => {
+    const { id } = req.params;
+    const { topic_id, status } = req.body;
+
+    try {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).send({ error: "Invalid report ID" });
+        }
+
+        let updatedReport;
+        let updatedTopic;
+
+        if (status === 1) {
+            updatedReport = await myReport.findByIdAndUpdate(id, { status }, { new: true });
+            updatedTopic = await myTopic.findByIdAndUpdate(topic_id, { isDeleted: true}, { new: true });
+        } else if (status === 2) {
+            updatedReport = await myReport.findByIdAndUpdate(id, { status, isDeleted: true }, { new: true });
+        } else {
+            console.log("Ststus is 0 or others")
+        }
+
+        // if (!updatedReport) {
+        //     return res.status(404).send({ error: "Report not found" });
+        // }
+
+        // if (!updatedTrivia) {
+        //     return res.status(404).send({ error: "Trivia not found" });
+        // }
+
+        res.status(200).send(updatedReport);
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
+
 app.put("/report/notifications/:id/read", async (req, res) => {
     const { id } = req.params;
     const { isRead, role } = req.body;
@@ -1584,7 +1622,85 @@ app.put("/report/:id/status", async (req, res) => {
     }
 });
 
-// สร้างการแจ้งเตือน
+app.post("/report/topic/notification", async (req, res) => {
+    const { report_id, topic_id, title, note, status, user_id } = req.body;
+
+    try {
+        const topic = await myTopic.findOne({ _id: topic_id }).select('user_id');
+        const userId = topic?.user_id;
+
+        if (!userId || !topic) {
+            return res.status(404).json({ message: "User or topic not found" });
+        }
+
+        let noti = null;
+
+        if (status === 0) {
+            noti = new myNoti({
+                report_id,
+                topic_id,
+                recipients: [
+                    {
+                        user_id: user_id,
+                        message: "ได้รับการรายงานของคุณแล้ว",
+                        report_role: "reporter"
+                    }
+                ],
+                title,
+                note,
+                status_report: status
+            });
+        } else if (status === 1) {
+            noti = new myNoti({
+                report_id,
+                topic_id,
+                recipients: [
+                    {
+                        user_id: user_id,
+                        message: "การรายงานของคุณถูกดำเนินการแล้ว กรุณาตรวจสอบ",
+                        report_role: "reporter"
+                    },
+                    {
+                        user_id: userId,
+                        message: "กระทู้ของคุณถูกลบเนื่องด้วยความไม่เหมาะสมบางประการ",
+                        report_role: "reported"
+                    }
+                ],
+                title,
+                note,
+                status_report: status
+            });
+        } else if (status === 2) {
+            noti = new myNoti({
+                report_id,
+                topic_id,
+                recipients: [
+                    {
+                        user_id: user_id,
+                        message: "การรายงานของคุณถูกปฏิเสธ เนื่องด้วยไม่พบการละเมิด",
+                        report_role: "reporter"
+                    },
+                ],
+                title,
+                note,
+                status_report: status
+            });
+        } 
+
+        if (noti) {
+            await noti.save();
+            return res.status(201).json({ message: "Notification created successfully" });
+        } else {
+            return res.status(400).json({ message: "Invalid status value" });
+        }
+
+    } catch (error) {
+        console.log("Error creating notification", error);
+        res.status(500).json({ message: "Error creating notification" });
+    }
+})
+
+// สร้างการแจ้งเตือนสำหรับเกร็ดความรู้
 app.post("/report/trivia/notification", async (req, res) => {
     const { report_id, triv_id, title, note, status, nutr_id, reminderDate } = req.body;
 
@@ -1701,23 +1817,6 @@ app.delete("/report-detail/:id", async (req, res) => {
         res.status(500).json({ message: "Error delete report" });
     }
 });
-
-//การแจ้งเตือนการรายงาน
-// app.get("/report/notifications", async (req, res) => {
-//   try {
-//     const notifications = await myReport.find()
-//       .populate("triv_id") 
-//       .populate("content_id") 
-//       .lean();
-//       notifications.forEach((notification) => {
-
-//     });
-//     res.json(notifications);
-//   } catch (error) {
-//     console.error("Error fetching notifications:", error);
-//     res.status(500).json({ message: "Error fetching notifications" });
-//   }
-// });
 
 app.get("/report/notifications/:id", async (req, res) => {
     try {

@@ -121,6 +121,8 @@ function ReportDetail() {
 
             if (status === 0) {
                 return;
+            } else if (status === 3) {
+                handleItemDelete(reportData._id)
             } else {
                 const confirm = window.confirm( 
                     status === 1 ? `คุณต้องการแจ้งให้นักโภชนาการแก้ไขรายการนี้ภายใน ${deadline} ใช่หรือไม่?` :
@@ -283,12 +285,6 @@ function ReportDetail() {
                                             <option value={3}>ลบออกจากระบบ</option>
                                         </select>
                                     </div>
-                                    <button
-                                        className="btn-delete"
-                                        onClick={() => handleItemDelete(reportData._id)}
-                                    >
-                                        ลบเกร็ดความรู้
-                                    </button>
                                     <button
                                         className="btn-delete"
                                         onClick={() => updateStatus()}

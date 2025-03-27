@@ -353,6 +353,7 @@
   border: none;
   padding: 10px 20px;
   cursor: pointer;
+  width: 20%;
 }
 
 .btn-delete:hover {

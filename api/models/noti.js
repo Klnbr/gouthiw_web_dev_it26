@@ -7,7 +7,8 @@ const notiSchema = new mongoose.Schema({
     },
     recipients: [
         {
-            nutr_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Nutr', required: true },
+            nutr_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Nutr' },
+            user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
             message: { type: String, required: true }, // ข้อความที่แตกต่างกัน
             report_role: { type: String, required: true },
             isRead: { type: Boolean, default: false }

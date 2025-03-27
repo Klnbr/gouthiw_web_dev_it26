@@ -58,7 +58,7 @@ function ProfileScreen() {
         const fetchMenuDataUser = async () => {
             try {
                 const response = await axios.get(`http://localhost:5500/menus/auth/${nutrData._id}`, { timeout: 10000 });
-                console.log(response.data)
+                console.log("menusUser: ", response.data)
                 setMenusUser(response.data);
 
             } catch (error) {
@@ -104,7 +104,6 @@ function ProfileScreen() {
             <h1>{item.menuName}</h1>
             <div className='layout'>
                 <p className='purine'>พิวรีน: {item.purine_total}</p>
-                <p className='uric'>กรดยูริก: {item.uric_total}</p>
             </div>
         </div>
     );

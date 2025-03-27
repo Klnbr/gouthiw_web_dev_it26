@@ -136,17 +136,32 @@ function ReportManage() {
 
                 await axios.put(`http://localhost:5500/report/${reportData._id}/status`,updateStatus);
 
-                const notiData = {
-                    report_id: reportData._id,
-                    triv_id: reportData.triv_id,
-                    title: reportData.triviaDetails.head,
-                    note: reportData.note,
-                    status: 0,
-                    nutr_id: reportData.nutr_id,
-                    reminderDate: null,  
-                };
+                if (type === "trivia") {
+                    const notiData = {
+                        report_id: reportData._id,
+                        triv_id: reportData.triv_id,
+                        title: reportData.triviaDetails.head,
+                        note: reportData.note,
+                        status: 0,
+                        nutr_id: reportData.nutr_id,
+                        reminderDate: null,  
+                    };
+
+                    await axios.post("http://localhost:5500/report/trivia/notification", notiData);
+                } else if (type === "topic") {
+                    const notiData = {
+                        report_id: reportData._id,
+                        topic_id: reportData.topic_id,
+                        title: reportData.topicDetails.title,
+                        note: reportData.note,
+                        status: 0,
+                        user_id: reportData.user_id,
+                        reminderDate: null,  
+                    };
+
+                    await axios.post("http://localhost:5500/report/topic/notification", notiData);
+                }
                 
-                await axios.post("http://localhost:5500/report/trivia/notification", notiData);
             }
 
             if (!reportData || !reportData._id) {
