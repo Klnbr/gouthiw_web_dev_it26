@@ -91,6 +91,11 @@ function IngrScreen() {
                return;
           }
 
+          const thaiRegex = /^[ก-๙\s]+$/;
+          if (!thaiRegex.test(name)) {
+              alert("สามารถกรอกได้เฉพาะตัวอักษรภาษาไทยเท่านั้น");
+              return;
+          }
 
           const ingreData = {
                name: name,
