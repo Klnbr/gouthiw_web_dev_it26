@@ -13,7 +13,7 @@ const nodemailer = require('nodemailer');
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const app = express();
-const port = 5500;
+const port = process.env.PORT || 5500;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,7 +45,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
     console.log("Server is running on port 5500");
 });
 
