@@ -15,9 +15,9 @@ function TriviaDetailScreen() {
     const { triviaData } = location.state || {};
     const { nutrData } = useAuth();
     const [editButton, setEditButton] = useState(false);
-    const [hasDeadLine, setHasDeadLine] = useState(null);
+    const [ setHasDeadLine] = useState(null);
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [pendingReports, setPendingReports] = useState(0);
+    const [ setPendingReports] = useState(0);
 
     useEffect(() => {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
@@ -28,14 +28,14 @@ function TriviaDetailScreen() {
         }
     }, [nutrData]);
 
-    const fetchDataReports = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5500/trivia/${triviaData._id}/reports`);
-            setPendingReports(response.data.length);
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    // const fetchDataReports = async () => {
+    //     try {
+    //         const response = await axios.get(`http://localhost:5500/trivia/${triviaData._id}/reports`);
+    //         setPendingReports(response.data.length);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
@@ -51,25 +51,25 @@ function TriviaDetailScreen() {
         }
     };
     
-    const calculateTimeRemaining = (reminderDate) => {
-        const currentTime = new Date();
-        const targetTime = new Date(reminderDate);
-        const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
+    // const calculateTimeRemaining = (reminderDate) => {
+    //     const currentTime = new Date();
+    //     const targetTime = new Date(reminderDate);
+    //     const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
     
-        if (timeDiff <= 0) {
-            return "ถึงกำหนดแล้ว";
-        }
+    //     if (timeDiff <= 0) {
+    //         return "ถึงกำหนดแล้ว";
+    //     }
     
-        const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    //     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    //     const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    //     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
     
-        if (days > 0) {
-            return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
-        } else {
-            return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
-        }
-    };
+    //     if (days > 0) {
+    //         return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
+    //     } else {
+    //         return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
+    //     }
+    // };
 
     const handleReport = async (itemId) => {
         try {

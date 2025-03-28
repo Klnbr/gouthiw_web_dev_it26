@@ -12,13 +12,6 @@ const optionsDMY = {
     day: 'numeric',
 };
 
-const optionsTime = {
-    timeZone: "Asia/Bangkok",
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
-};
-
 
 export default function TopicDetail() {
 
@@ -65,20 +58,6 @@ export default function TopicDetail() {
             </div>
         </div>
     );
-
-    const calculateTimeAgo = (createdAt) => {
-        const currentTime = new Date();
-        const postTime = new Date(createdAt);
-        const timeDiff = Math.abs(currentTime - postTime) / 36e5;
-
-        if (timeDiff < 1) {
-            return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-        } else if (timeDiff < 24) {
-            return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
-        } else {
-            return postTime.toLocaleString("th-TH", optionsDMY);
-        }
-    };
 
 
     const handleAnswer = async () => {

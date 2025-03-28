@@ -12,11 +12,6 @@ function SideBar() {
     const { nutrData } = useAuth();
     const [isOpen, setIsOpen] = useState(true); // Sidebar Toggle State
     const [isMobileOpen, setIsMobileOpen] = useState(false); // Mobile Menu State
-
-    const handleToggle = () => {
-        setIsOpen(!isOpen);
-    };
-
     const handleMobileToggle = () => {
         setIsMobileOpen(!isMobileOpen);
     };

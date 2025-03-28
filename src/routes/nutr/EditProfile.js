@@ -9,7 +9,7 @@ function EditProfile() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
 
-     const [user, setUser] = useState("");
+     const [ setUser] = useState("");
      const [firstname, setFirstname] = useState("");
      const [lastname, setLastname] = useState("");
      const [license_number, setLicense_number] = useState("");

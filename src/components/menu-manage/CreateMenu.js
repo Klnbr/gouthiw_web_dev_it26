@@ -3,11 +3,9 @@ import { Steps } from "antd";
 import Form1 from './Form1';
 import Form2 from './Form2';
 import Form3 from './Form3';
-import SideBar from '../SideBar/SideBar';
 import Navbar from '../Navbar/Navbar';
 import './CreateMenu.css';
 import { useNavigate } from 'react-router-dom';
-import { firebase } from '../.././firebase'
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { useAuth } from '../../middleware/Auth';
@@ -16,7 +14,6 @@ import axios from 'axios';
 function CreateMenu() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
-     const [loading, setLoading] = useState(false);
 
      const [formData, setFormData] = useState({
           menuName: '',

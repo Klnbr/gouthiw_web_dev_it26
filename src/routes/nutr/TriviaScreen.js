@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import SideBar from '../../components/SideBar/SideBar'
-import { Input, Select } from "antd";
+import { Select } from "antd";
 import '../../App.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../middleware/Auth';
@@ -15,21 +15,13 @@ const optionsDMY = {
      day: 'numeric',
 };
 
-const optionsTime = {
-     timeZone: "Asia/Bangkok",
-     hour: 'numeric',
-     minute: 'numeric',
-     second: 'numeric'
-};
-
 function TriviaScreen() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
 
      const [trivs, setTrivia] = useState([]);
      const [trivsUser, setTriviaUser] = useState([]);
-     const [showUserTrivias, setShowUserTrivias] = useState(false);
-
+   
      const [searchTriv, setSearchTriv] = useState('');
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
      const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
@@ -86,25 +78,25 @@ function TriviaScreen() {
           }
      };
 
-     const calculateTimeRemaining = (reminderDate) => {
-          const currentTime = new Date();
-          const targetTime = new Date(reminderDate);
-          const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
+     // const calculateTimeRemaining = (reminderDate) => {
+     //      const currentTime = new Date();
+     //      const targetTime = new Date(reminderDate);
+     //      const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
       
-          if (timeDiff <= 0) {
-              return "ถึงกำหนดแล้ว";
-          }
+     //      if (timeDiff <= 0) {
+     //          return "ถึงกำหนดแล้ว";
+     //      }
       
-          const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+     //      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+     //      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+     //      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
       
-          if (days > 0) {
-              return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
-          } else {
-              return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
-          }
-     };
+     //      if (days > 0) {
+     //          return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
+     //      } else {
+     //          return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
+     //      }
+     // };
 
      const stripHTML = (html) => {
           const div = document.createElement('div');

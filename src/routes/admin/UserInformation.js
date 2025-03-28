@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../middleware/Auth";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
-import SideBar from "../../components/SideBar/SideBar";
 import axios from "axios";
 import '../../components/profile.css'
 
@@ -17,14 +16,14 @@ function UserInformation() {
          const toggleDropdown = (menuId) => {
              setDropdownVisible(dropdownVisible === menuId ? null : menuId);
          };
-         const [user, setUser] = useState("");
+         const [ setUser] = useState("");
      
-         const [firstname, setFirstname] = useState("");
-         const [lastname, setLastname] = useState("");
-         const [license_number, setLicense_number] = useState("");
-         const [tel, setTel] = useState("");
-         const [email, setEmail] = useState("");
-         const [password, setPassword] = useState("");
+        //  const [firstname, setFirstname] = useState("");
+        //  const [lastname, setLastname] = useState("");
+        //  const [license_number, setLicense_number] = useState("");
+        //  const [tel, setTel] = useState("");
+        //  const [email, setEmail] = useState("");
+        //  const [password, setPassword] = useState("");
      
          useEffect(() => {
              const fetchUserData = async () => {

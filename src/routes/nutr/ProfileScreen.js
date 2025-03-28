@@ -23,8 +23,6 @@ function ProfileScreen() {
       const [ingrsNutr, setIngrsNutr] = useState([]);
        const [trivsUser, setTriviaUser] = useState([]);
     const [ans, setAns] = useState([]);
-    const [menus, setMenu] = useState([]);
-    const [ingrs, setIngrs] = useState([]);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -38,7 +36,6 @@ function ProfileScreen() {
                 try {
                     const response = await axios.get('http://${ipAddress}:3000/user/${userId}');
                     setUser(response.data);
-    
                 } catch (error) {
                     console.error("Error decoding token:", error.message);
                     throw new Error("Failed to decode token");

@@ -6,7 +6,7 @@ import { useAuth } from '../../middleware/Auth';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css'
 import "../../components/report.css";
-import { Input, Select } from "antd";
+import { Select } from "antd";
 
 const optionsDMY = {
      timeZone: "Asia/Bangkok",
@@ -22,12 +22,11 @@ function ReportHistory() {
      const [reports, setReports] = useState([]);
      const [currentPage, setCurrentPage] = useState(1);
      const [itemsPerPage] = useState(5);
-     const [type, setType] = useState(null);
+     const [setType] = useState(null);
 
-     const [searchreport, setSearchreport] = useState('');
+     const [setSearchreport] = useState('');
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
-     const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
-
+    
      const statusMap = {
           0: "รอตรวจสอบ",
           1: "กำลังรอการแก้ไข",

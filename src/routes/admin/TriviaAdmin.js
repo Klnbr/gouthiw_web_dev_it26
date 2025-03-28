@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import SideBar from '../../components/SideBar/SideBar'
-import { Input, Select } from "antd";
+import { Select } from "antd";
 import '../../App.css'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../middleware/Auth';
@@ -15,21 +15,13 @@ const optionsDMY = {
     day: 'numeric',
 };
 
-const optionsTime = {
-    timeZone: "Asia/Bangkok",
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
-};
-
 export default function TriviaAdmin() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
 
      const [trivs, setTrivia] = useState([]);
      const [trivsUser, setTriviaUser] = useState([]);
-     const [showUserTrivias, setShowUserTrivias] = useState(false);
-
+    
      const [searchTriv, setSearchTriv] = useState('');
      const [selectedType, setSelectedType] = useState("ทั้งหมด");
      const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");

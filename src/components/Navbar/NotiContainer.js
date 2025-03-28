@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './NotiContainer.css';
 import '../../components/Detail.css';
 import { useAuth } from '../../middleware/Auth';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {  useNavigate} from 'react-router-dom';
 import axios from 'axios';
 const NotiContainer = () => {
     const navigate = useNavigate();

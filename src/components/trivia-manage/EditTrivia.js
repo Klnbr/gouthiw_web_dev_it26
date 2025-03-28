@@ -4,7 +4,6 @@ import { Input } from "antd";
 import { useNavigate, useLocation } from 'react-router-dom';
 import TextArea from 'antd/es/input/TextArea';
 import Navbar from '../../components/Navbar/Navbar';
-import { firebase } from '../../firebase';
 import axios from 'axios';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 

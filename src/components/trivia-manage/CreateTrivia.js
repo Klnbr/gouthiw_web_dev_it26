@@ -3,9 +3,6 @@ import './CreateTrivia.css';
 import { Input, Select } from "antd";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../middleware/Auth';
-import TextArea from 'antd/es/input/TextArea';
-import { firebase } from '../../firebase'
-import SideBar from '../SideBar/SideBar';
 import Navbar from '../Navbar/Navbar';
 import axios from 'axios';
 import Editor from 'react-simple-wysiwyg';
@@ -20,45 +17,6 @@ function CreateTrivia() {
     const [image, setImage] = useState(null)
     const [content, setContent] = useState("")
     const [type, setType] = useState("")
-
-    const handleAddTriv = async () => {
-        try {
-            if (!image) {
-                alert("Please select an image!");
-                return;
-            }
-
-            const storage = getStorage();
-            const storageRef = ref(storage, `images/${image.name}`);
-            await uploadBytes(storageRef, image);
-
-            // ดึง URL ของภาพที่อัปโหลด
-            const imageUrl = await getDownloadURL(storageRef);
-            console.log("Image uploaded successfully. URL:", imageUrl);
-            const trivData = {
-                head: head,
-                image: imageUrl,
-                content: content,
-                isDeleted: false
-            };
-
-            console.log("Triv Data:", trivData);
-
-            const response = await axios.post("http://localhost:5500/addTrivia", trivData);
-            console.log("Response from server:", response);
-
-            if (response.status === 201) {
-                alert("เพิ่มเข้าสำเร็จ");
-                navigate('/trivias');
-            }
-        } catch (error) {
-            alert("เพิ่มเข้าไม่สำเร็จ");
-            console.log("error creating trivia", error);
-            if (error.response) {
-                console.log("Error response data:", error.response.data);
-            }
-        }
-    };
 
     const handleAddTrivId = async () => {
         try {

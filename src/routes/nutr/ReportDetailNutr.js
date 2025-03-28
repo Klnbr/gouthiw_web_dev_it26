@@ -31,7 +31,7 @@ const calculateTimeAgo = (createdAt) => {
 function ReportDetailNutr() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [reports, setReports] = useState([]);
+    const [setReports] = useState([]);
     const [reportData, setReportData] = useState(location.state?.reportData || null);
     const [status, setStatus] = useState(reportData?.status || 0);
 
@@ -77,19 +77,19 @@ function ReportDetailNutr() {
         }
     };
 
-    const handleStatusChange = (newStatusNumber) => {
-        if (Number(newStatusNumber) === status) return;
+    // const handleStatusChange = (newStatusNumber) => {
+    //     if (Number(newStatusNumber) === status) return;
     
-        // การยืนยันก่อนเปลี่ยนสถานะ
-        const confirmChange = window.confirm("คุณต้องการเปลี่ยนสถานะใช่หรือไม่?");
-        if (confirmChange) {
-        setStatus(Number(newStatusNumber));  // เปลี่ยนสถานะใน UI
-        updateStatus(Number(newStatusNumber));  // อัพเดตสถานะในฐานข้อมูล
-        } else {
-        // ถ้าไม่ยืนยันให้กลับไปสถานะเดิม
-        setStatus(status); 
-        }
-    };
+    //     // การยืนยันก่อนเปลี่ยนสถานะ
+    //     const confirmChange = window.confirm("คุณต้องการเปลี่ยนสถานะใช่หรือไม่?");
+    //     if (confirmChange) {
+    //     setStatus(Number(newStatusNumber));  // เปลี่ยนสถานะใน UI
+    //     updateStatus(Number(newStatusNumber));  // อัพเดตสถานะในฐานข้อมูล
+    //     } else {
+    //     // ถ้าไม่ยืนยันให้กลับไปสถานะเดิม
+    //     setStatus(status); 
+    //     }
+    // };
     
 
     const updateStatus = async (newStatus) => {
@@ -111,22 +111,22 @@ function ReportDetailNutr() {
         }
     };
 
-    const handleItemDelete = async (reportId) => {
-        const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
-        if (!confirmDelete) return;
+    // const handleItemDelete = async (reportId) => {
+    //     const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
+    //     if (!confirmDelete) return;
 
-        try {
-        const response = await axios.delete(`http://localhost:5500/report-detail/${reportId}`);
-        if (response.status === 200) {
-            alert("ลบสำเร็จ");
-            const updatedResponse = await axios.get("http://localhost:5500/report/trivias" , reportData);
-            setReports(updatedResponse.data);
-            navigate("/admin/report");
-        }
-        } catch (error) {
-        alert("เกิดข้อผิดพลาดในการลบ");
-        }
-    };
+    //     try {
+    //     const response = await axios.delete(`http://localhost:5500/report-detail/${reportId}`);
+    //     if (response.status === 200) {
+    //         alert("ลบสำเร็จ");
+    //         const updatedResponse = await axios.get("http://localhost:5500/report/trivias" , reportData);
+    //         setReports(updatedResponse.data);
+    //         navigate("/admin/report");
+    //     }
+    //     } catch (error) {
+    //     alert("เกิดข้อผิดพลาดในการลบ");
+    //     }
+    // };
 
     return (
         <div className="container">

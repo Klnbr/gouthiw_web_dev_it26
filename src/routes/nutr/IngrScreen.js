@@ -10,7 +10,7 @@ import { useAuth } from '../../middleware/Auth';
 
 function IngrScreen() {
      const [ingrs, setIngrs] = useState([]);
-     const [ingrsNutr, setIngrsNutr] = useState([]);
+     const [setIngrsNutr] = useState([]);
      const { nutrData } = useAuth();
 
      const [name, setName] = useState("");
@@ -26,8 +26,7 @@ function IngrScreen() {
      const [currentPage, setCurrentPage] = useState(1);
      const itemsPerPage = 13;
 
-     const [activeButton, setActiveButton] = useState('ทั้งหมด');
-
+    
      // Set modal
      const [modal, setModal] = useState(false);
      const toggleModal = () => {
@@ -42,9 +41,7 @@ function IngrScreen() {
      };
 
      const [dropdownVisible, setDropdownVisible] = useState(false);
-     const toggleDropdown = (ingrId) => {
-          setDropdownVisible(dropdownVisible === ingrId ? null : ingrId);
-     };
+
 
      if (modal) {
           document.body.classList.add('active-modal');

@@ -14,7 +14,7 @@ export default function TriviaDetailAdmin() {
     const location = useLocation();
     const { triviaData } = location.state || {};
     const { nutrData } = useAuth();
-    const [editButton, setEditButton] = useState(false);
+    const [ setEditButton] = useState(false);
     const [dropdownVisible, setDropdownVisible] = useState(false);
 
     useEffect(() => {
@@ -38,21 +38,6 @@ export default function TriviaDetailAdmin() {
         }
     };
 
-    const handleReport = async (itemId) => {
-        try {
-            const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
-            const triviaData = response.data;
-
-            console.log("triviaData: ", triviaData);
-            navigate('/report', { state: { triviaData } });
-        } catch (error) {
-            console.log('Error fetching trivia data', error.message);
-        }
-    };
-
-    const toggleDropdown = () => {
-        setDropdownVisible(!dropdownVisible);
-    };
 
   return (
     <>

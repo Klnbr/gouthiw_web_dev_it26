@@ -18,8 +18,7 @@ function RegisterScreen() {
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
     const [image, setImage] = useState(null);
-    const [background, setBackground] = useState(null);
-
+   
     const defaultImage = "https://cdn-icons-png.flaticon.com/512/147/147131.png";
     const defaultBackground = "https://jamie-wong.com/images/color/Purple.png";
 

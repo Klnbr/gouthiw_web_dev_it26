@@ -6,7 +6,6 @@ import "../../components/report.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReadMore from "../../components/Readmore";
 import axios from "axios";
-import { triggerFocus } from "antd/es/input/Input";
 
 const optionsDMY = {
     timeZone: "Asia/Bangkok",
@@ -53,7 +52,7 @@ const calculateTimeRemaining = (reminderDate) => {
 function ReportDetail() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [reports, setReports] = useState([]);
+    const [setReports] = useState([]);
     const [reportData, setReportData] = useState(location.state?.reportData || null);
     const [status, setStatus] = useState(reportData?.status || 0);
 

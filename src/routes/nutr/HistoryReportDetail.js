@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import "../../App.css";
@@ -31,7 +31,7 @@ function ReportDetail() {
     const navigate = useNavigate();
     const location = useLocation();
     const { reportData } = location.state || {}; // ดึงค่าจาก state
-    const [status, setStatus] = useState(reportData.status || 0);
+    const [status] = useState(reportData.status || 0);
 
     const statusMap = {
         0: "รอตรวจสอบ",

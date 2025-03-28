@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import firebaseapp from "firebase/compat/app";
 import 'firebase/storage' 
 import { getMessaging } from "firebase/messaging";
 

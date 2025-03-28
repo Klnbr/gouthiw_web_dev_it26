@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import "../../App.css";
@@ -31,11 +31,9 @@ const calculateTimeAgo = (createdAt) => {
 function ReportTopicDetail() {
  const navigate = useNavigate();
   const location = useLocation();
-  const [reports, setReports] = useState([]);
+  const [ setReports] = useState([]);
   const { reportData } = location.state || {}; // ดึงค่าจาก state
   const [status, setStatus] = useState(reportData?.status || 0);
-  const [reportstopic, setReportstopic] = useState([]);
-  const [reportsTopic, setReportsTopic] = useState([]);
 
   console.log("reportData:", reportData);
 

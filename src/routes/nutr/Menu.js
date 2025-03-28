@@ -7,12 +7,12 @@ import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
 
 function Menu() {
- const navigate = useNavigate();
+
      const { nutrData } = useAuth();
      const location = useLocation();
      const { menuData } = location.state || {};
-     const [menu, setMenu] = useState([])
-     const [editButton, setEditButton] = useState(false)
+     const [ setMenu] = useState([])
+     const [ setEditButton] = useState(false)
 
       useEffect(() => {
                const fetchMenu = async () => {

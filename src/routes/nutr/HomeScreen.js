@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import "../../App.css";
-import { useAuth } from "../../middleware/Auth";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 

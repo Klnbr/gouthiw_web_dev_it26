@@ -1,24 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import { useAuth } from '../../middleware/Auth';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NotiContainer from './NotiContainer';
 
-const optionsDMY = {
-    timeZone: "Asia/Bangkok",
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-};
 
 function Navbar() {
     const navigate = useNavigate();
     const { nutrData, logout } = useAuth();
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [notificationVisible, setNotificationVisible] = useState(false);
-    const [notifications, setNotifications] = useState([]);
-    const [pendingReports, setPendingReports] = useState(0);
+    const [setNotifications] = useState([]);
     const [notiCount, setNotiCount] = useState(0);
 
     useEffect(() => {

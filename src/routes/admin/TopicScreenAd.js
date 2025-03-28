@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import SideBar from '../../components/SideBar/SideBar'
 import { useNavigate } from 'react-router-dom';
-import { Input, Select } from "antd";
+import {  Select } from "antd";
 import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 import '../../components/topic.css'
@@ -13,13 +13,6 @@ const optionsDMY = {
      year: 'numeric',
      month: 'long',
      day: 'numeric',
-};
-
-const optionsTime = {
-     timeZone: "Asia/Bangkok",
-     hour: 'numeric',
-     minute: 'numeric',
-     second: 'numeric'
 };
 
 function TopicScreen() {
@@ -53,14 +46,6 @@ function TopicScreen() {
      const filteredTopics = topics.filter(topic => 
           topic.title.includes(searchTopic)
      );
-
-     const filterDisplay = selectedDisplay === "ใหม่ล่าสุด"
-          ? topics.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
-          : selectedDisplay === "newest"
-          ? topics.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // เรียงตามวันที่อัปเดตล่าสุด
-          : filteredTopics;
-
-
 
      const calculateTimeAgo = (createdAt) => {
           const currentTime = new Date();

@@ -30,17 +30,6 @@ function Form3({ formData, setFormData }) {
         });
     };
 
-    const handleSave = () => {
-        // ตรวจสอบว่า ทุกขั้นตอนถูกกรอกข้อมูลหรือไม่
-        if (formData.method.some(step => step.trim() === "  ")) {
-            alert("กรุณากรอกข้อมูลให้ครบถ้วน (ไม่ให้มีช่องว่าง)");
-            return; // ห้ามบันทึกถ้ายังมีช่องว่าง
-        }
-        // หากกรอกครบถ้วนแล้ว ทำการบันทึกข้อมูล
-        console.log("ข้อมูลครบถ้วนพร้อมบันทึก:", formData.method);
-        // บันทึกข้อมูลที่ต้องการ
-    };
-
     return (
         <div className='form3-containner'>
             <div className='form--hidden-ingr'>

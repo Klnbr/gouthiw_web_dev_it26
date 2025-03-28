@@ -18,15 +18,10 @@ const AnswerTopic = () => {
     const location = useLocation();
     const { topicData } = location.state || {};
     const { nutrData } = useAuth();
-    const [loading, setLoading] = useState(false);
+    const [setLoading] = useState(false);
     const { TextArea } = Input;
     const [answer, setAnswer] = useState('');
     const [image, setImage] = useState([]);
-
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        setImage(files);
-    };
 
     const handleAnswer = async () => {
         // if (!answer || image.length === 0) {

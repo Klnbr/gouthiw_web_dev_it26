@@ -11,7 +11,7 @@ function MenuDetailScreen() {
      const { nutrData } = useAuth();
      const location = useLocation();
      const { menuData } = location.state || {};
-     const [menu, setMenu] = useState([]);
+     const [setMenu] = useState([]);
      const [editButton, setEditButton] = useState(false);
 
      useEffect(() => {
