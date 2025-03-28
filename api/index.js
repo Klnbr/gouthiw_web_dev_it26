@@ -45,10 +45,6 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
-app.listen(port,"0.0.0.0", () => {
-    console.log("Server is running on port 5500");
-});
-
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
 const myMenu = require("./models/menu");
@@ -1896,4 +1892,11 @@ app.put("/check-and-delete-expired-reports", async (req, res) => {
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
+});
+
+
+
+
+app.listen(port, () => {
+    console.log("Server is running on port 5500");
 });
