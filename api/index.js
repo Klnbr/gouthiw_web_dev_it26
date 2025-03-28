@@ -45,7 +45,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
-app.listen(port, () => {
+app.listen(port,"0.0.0.0", () => {
     console.log("Server is running on port 5500");
 });
 
@@ -58,11 +58,6 @@ const myUser = require("./models/user");
 const myReport = require("./models/report");
 const myNoti = require("./models/noti");
 
-const { title } = require("process");
-const { notification } = require("antd");
-const { truncate } = require("fs");
-
-
 app.get("/", (req, res) => {
     res.send("API is running on Railway!");
 });
@@ -71,26 +66,21 @@ app.get("/", (req, res) => {
 app.post("/signin", async (req, res) => {
     try {
         const { email, password } = req.body;
-
         if (!email || !password) {
             return res.status(400).json({ message: "จำเป็นต้องมีอีเมลและรหัสผ่าน" });
         }
-
         const nutr = await myNutr.findOne({ email: email.toLowerCase() });
 
         if (!nutr) {
             return res.status(404).send("ไม่พบผู้ใช้");
         }
-
         const checkPass = await bcrypt.compare(password, nutr.password);
         if (!checkPass) {
             return res.status(401).send("อีเมลหรือรหัสผ่านไม่ถูกต้อง");
         }
-
         const token = jwt.sign({ _id: nutr._id }, "secretkey123", {
             expiresIn: "90d",
         });
-
         res.status(201).json({
             message: "เข้าสู่ระบบสำเร็จ",
             token,
