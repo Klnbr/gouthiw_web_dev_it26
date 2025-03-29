@@ -13,11 +13,10 @@ const nodemailer = require('nodemailer');
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const urimg = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const app = express();
-// const port = 5500;
 const port = process.env.PORT || 5500;
 
 app.use(cors({
-    origin: "https://gouthiw-web-dev-it26.onrender.com/",  // ระบุ URL ของ React App
+    origin: "https://gouthiw-web-dev-it26.onrender.com/", 
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
 }));
@@ -46,19 +45,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-
 mongoose.connect(urimg, { useNewUrlParser:  true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
-
-
-//     // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, "api")));
-
-// // The "catchall" handler: for any request that doesn't match an API route, send back React's index.html file.
-// app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "api", "index.html"));
-// });
 
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");

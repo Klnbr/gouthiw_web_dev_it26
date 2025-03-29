@@ -18,19 +18,12 @@ const AnswerTopic = () => {
     const location = useLocation();
     const { topicData } = location.state || {};
     const { nutrData } = useAuth();
-    const [setLoading] = useState(false);
     const { TextArea } = Input;
     const [answer, setAnswer] = useState('');
     const [image, setImage] = useState([]);
 
     const handleAnswer = async () => {
-        // if (!answer || image.length === 0) {
-        //     alert("กรุณาใส่คำตอบและเลือกรูปภาพ");
-        //     return;
-        // }
-
         try {
-            setLoading(true);
 
             // อัปโหลดรูปทั้งหมด
             const storage = getStorage();
@@ -62,8 +55,6 @@ const AnswerTopic = () => {
         } catch (error) {
             console.log("error creating topic", error);
             alert("ตอบกระทู้ไม่สำเร็จ");
-        } finally {
-            setLoading(false);
         }
     };
 
