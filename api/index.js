@@ -60,13 +60,6 @@ mongoose.connect(urimg, { useNewUrlParser:  true, useUnifiedTopology: true })
 //     res.sendFile(path.join(__dirname, "api", "index.html"));
 // });
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, "../build")));  // ชี้ไปที่โฟลเดอร์ build ของ React
-
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../build", "index.html"));  // ส่งกลับไฟล์ index.html จาก build
-});
-
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
 const myMenu = require("./models/menu");
@@ -1919,7 +1912,12 @@ app.put("/check-and-delete-expired-reports", async (req, res) => {
     }
 });
 
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "../build")));  // ชี้ไปที่โฟลเดอร์ build ของ React
 
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../build", "index.html"));  // ส่งกลับไฟล์ index.html จาก build
+});
 
 app.listen(port, "0.0.0.0", () => {
     console.log(`Server is running on port ${port}`);
