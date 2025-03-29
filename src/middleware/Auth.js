@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
 
      const handleSignin = async ({ email, password }) => {
           try {
-              const response = await axios.post("http://https://gouthiw-web-dev-it26.onrender.com/signin", { email, password });
+              const response = await axios.post("https://gouthiw-web-dev-it26.onrender.com/signin", { email, password });
               if (response.status === 201) {
                   login(response.data.token, response.data.nutr);
                   alert("เข้าสู่ระบบสำเร็จ");

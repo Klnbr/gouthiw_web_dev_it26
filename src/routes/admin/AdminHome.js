@@ -15,7 +15,7 @@ function AdminHome() {
      useEffect(() => {
           const fetchData = async () => {
                try {
-                    const resUser = await axios.get("http://https://gouthiw-web-dev-it26.onrender.com/users", { timeout: 1000 });
+                    const resUser = await axios.get("https://gouthiw-web-dev-it26.onrender.com/users", { timeout: 1000 });
                     setUser(resUser.data)
                     const usersData = resUser.data.map((user) => ({
                          id: user._id,
