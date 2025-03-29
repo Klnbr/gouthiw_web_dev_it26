@@ -16,7 +16,12 @@ const app = express();
 // const port = 5500;
 const port = process.env.PORT || 5500;
 
-app.use(cors());
+app.use(cors({
+    origin: "https://your-react-app-domain.com",  // ระบุ URL ของ React App
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+}));
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -58,7 +63,6 @@ mongoose.connect(urimg, { useNewUrlParser:  true, useUnifiedTopology: true })
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../build")));  // ชี้ไปที่โฟลเดอร์ build ของ React
 
-// The "catchall" handler: for any request that doesn't match an API route, send back React's index.html file.
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "../build", "index.html"));  // ส่งกลับไฟล์ index.html จาก build
 });
