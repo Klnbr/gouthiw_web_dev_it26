@@ -1896,7 +1896,6 @@ app.put("/check-and-delete-expired-reports", async (req, res) => {
 
 
 
-
 app.listen(port, "0.0.0.0", () => {
-    console.log("Server is running on port ${port}");
+    console.log(`Server is running on port ${port}`);
 });
