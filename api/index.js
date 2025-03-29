@@ -54,14 +54,12 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 //     res.sendFile(path.join(__dirname, "api", "index.html"));
 // });
 
-
-
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "..", "src", "build")));  // ให้เปลี่ยน `frontend` เป็นโฟลเดอร์ที่เก็บแอป React ของคุณ
+app.use(express.static(path.join(__dirname, "..",  "build")));  // ชี้ไปที่โฟลเดอร์ build ของ React
 
 // The "catchall" handler: for any request that doesn't match an API route, send back React's index.html file.
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "src", "build", "index.html"));  // ให้เปลี่ยน `frontend` เป็นโฟลเดอร์ที่เก็บแอป React ของคุณ
+    res.sendFile(path.join(__dirname, "..", "build", "index.html"));  // ส่งกลับไฟล์ index.html จาก build
 });
 
 const myIngr = require("./models/ingredient");
