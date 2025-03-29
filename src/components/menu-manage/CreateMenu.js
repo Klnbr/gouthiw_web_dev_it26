@@ -92,7 +92,7 @@ function CreateMenu() {
                console.log("Menu Data:", menuData);
 
                const response = await axios.post(
-                    `http://localhost:5500/menus/${nutrData._id}`, menuData
+                    `https://gouthiw-web-dev-it26.onrender.com/menus/${nutrData._id}`, menuData
                );
 
                if (response.status === 201) {

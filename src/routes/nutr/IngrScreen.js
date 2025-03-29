@@ -52,7 +52,7 @@ function IngrScreen() {
      useEffect(() => {
           const fetchIngrData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
+                    const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/ingrs", { timeout: 1000 });
                     setIngrs(response.data);
                } catch (error) {
                     console.log("Error fetching ingrs data", error.message);
@@ -60,7 +60,7 @@ function IngrScreen() {
           };
           const fetchIngrNutrData = async () => {
                try {
-                    const response = await axios.get(`http://localhost:5500/ingrs/${nutrData._id}`, { timeout: 1000 });
+                    const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/ingrs/${nutrData._id}`, { timeout: 1000 });
                     setIngrsNutr(response.data);
                } catch (error) {
                     console.log("Error fetching ingrs data", error.message);
@@ -104,10 +104,10 @@ function IngrScreen() {
 
           try {
                if (currentItemId) {
-                    await axios.put(`http://localhost:5500/ingr/${currentItemId}`, ingreData);
+                    await axios.put(`https://gouthiw-web-dev-it26.onrender.com/ingr/${currentItemId}`, ingreData);
                     alert("แก้ไขสำเร็จ");
                } else {
-                    await axios.post(`http://localhost:5500/ingr/${nutrData._id}`, ingreData);
+                    await axios.post(`https://gouthiw-web-dev-it26.onrender.com/ingr/${nutrData._id}`, ingreData);
                     alert("เพิ่มเข้าสำเร็จ");
                }
 
@@ -117,7 +117,7 @@ function IngrScreen() {
                setType("");
                setModal(false);
                setCurrentItemId(null);
-               const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
+               const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/ingrs", { timeout: 1000 });
                setIngrs(response.data);
           } catch (error) {
                alert("การบันทึกไม่สำเร็จ", error.response?.data?.message || "Unknown error");
@@ -127,7 +127,7 @@ function IngrScreen() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`http://localhost:5500/ingr/${itemId}`);
+               const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/ingr/${itemId}`);
                const ingrData = response.data;
                setName(ingrData.name);
                setPurine(ingrData.purine);
@@ -147,11 +147,11 @@ function IngrScreen() {
           }
 
           try {
-               const response = await axios.delete(`http://localhost:5500/ingr/${itemId}`);
+               const response = await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/ingr/${itemId}`);
 
                if (response.status === 200) {
                     alert("ลบสำเร็จ");
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
+                    const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/ingrs", { timeout: 1000 });
                     setIngrs(response.data);
                }
           } catch (error) {

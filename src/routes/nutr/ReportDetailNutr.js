@@ -40,7 +40,7 @@ function ReportDetailNutr() {
         if (!reportData) {
         const fetchReport = async () => {
             try {
-            const response = await axios.get("http://localhost:5500/report/trivias");
+            const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/trivias");
             const foundReport = response.data.find(r => r._id === location.state?.reportId) || null;
             setReportData(foundReport);
             } catch (error) {
@@ -100,7 +100,7 @@ function ReportDetailNutr() {
             isDeleted: false,
         };
         const response = await axios.put(
-            `http://localhost:5500/report/${reportData._id}/status`,
+            `https://gouthiw-web-dev-it26.onrender.com/report/${reportData._id}/status`,
             updatedReportData
         );
         if (response.status === 200) {
@@ -116,10 +116,10 @@ function ReportDetailNutr() {
     //     if (!confirmDelete) return;
 
     //     try {
-    //     const response = await axios.delete(`http://localhost:5500/report-detail/${reportId}`);
+    //     const response = await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/report-detail/${reportId}`);
     //     if (response.status === 200) {
     //         alert("ลบสำเร็จ");
-    //         const updatedResponse = await axios.get("http://localhost:5500/report/trivias" , reportData);
+    //         const updatedResponse = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/trivias" , reportData);
     //         setReports(updatedResponse.data);
     //         navigate("/admin/report");
     //     }

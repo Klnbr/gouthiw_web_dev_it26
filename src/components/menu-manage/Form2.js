@@ -43,7 +43,7 @@ function Form2({ formData, setFormData }) {
      useEffect(() => {
           const fetchIngrData = async () => {
                try {
-                    const response = await axios.get("http://localhost:5500/ingrs", { timeout: 1000 });
+                    const response = await axios.get("http://localhost:/ingrs", { timeout: 1000 });
                     setIngrs(response.data);
                } catch (error) {
                     console.log("Error fetching ingrs data", error.message);

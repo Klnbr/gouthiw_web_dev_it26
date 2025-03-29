@@ -30,7 +30,7 @@ function TriviaDetailScreen() {
 
     // const fetchDataReports = async () => {
     //     try {
-    //         const response = await axios.get(`http://localhost:5500/trivia/${triviaData._id}/reports`);
+    //         const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${triviaData._id}/reports`);
     //         setPendingReports(response.data.length);
     //     } catch (error) {
     //         console.error(error);
@@ -73,7 +73,7 @@ function TriviaDetailScreen() {
 
     const handleReport = async (itemId) => {
         try {
-            const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/report', { state: { triviaData } });
@@ -84,7 +84,7 @@ function TriviaDetailScreen() {
 
     const handleDelete = async (itemId) => {
         try {
-            await axios.delete(`http://localhost:5500/trivia/${itemId}`);
+            await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
             navigate('/trivia-list');  // หลังจากลบเสร็จแล้ว redirect ไปที่หน้ารายการ trivia
         } catch (error) {
             console.error("Error deleting trivia", error);
@@ -97,7 +97,7 @@ function TriviaDetailScreen() {
 
     const handleItemPress = async (itemId) => {
         try {
-             const response = await axios.get(`http://localhost:5500/trivia/${itemId}`);
+             const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
              const triviaData = response.data;
 
              navigate('/trivia', { state: { triviaData } });

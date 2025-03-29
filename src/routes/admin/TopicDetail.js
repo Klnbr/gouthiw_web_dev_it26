@@ -75,7 +75,7 @@ export default function TopicDetail() {
         }
 
         try {
-            const response = await axios.put(`http://localhost:5500/topic/answer/${topicData._id}`, ansData, {
+            const response = await axios.put(`https://gouthiw-web-dev-it26.onrender.com/topic/answer/${topicData._id}`, ansData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

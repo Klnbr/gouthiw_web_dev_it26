@@ -25,7 +25,7 @@ function Report() {
           
                console.log("Report Data:", reportData);
                
-               const response = await axios.post(`http://localhost:5500/report`, reportData);
+               const response = await axios.post(`https://gouthiw-web-dev-it26.onrender.com/report`, reportData);
                console.log("Response from server:", response);
                
                if (response.status === 201) {

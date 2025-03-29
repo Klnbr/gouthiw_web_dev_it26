@@ -80,7 +80,7 @@ function ReportTopicDetail() {
         };
 
         const response = await axios.put(
-          `http://localhost:5500/report/${reportData._id}/topic/status`,
+          `https://gouthiw-web-dev-it26.onrender.com/report/${reportData._id}/topic/status`,
           updateStatus
         );
 
@@ -107,7 +107,7 @@ function ReportTopicDetail() {
 
               console.log("notiData:", notiData);
   
-              const response = await axios.post("http://localhost:5500/report/topic/notification", notiData);
+              const response = await axios.post("https://gouthiw-web-dev-it26.onrender.com/report/topic/notification", notiData);
               
               if (response.status === 200) {
                   alert("ส่งแจ้งเตือนสําเร็จ!");
@@ -123,10 +123,10 @@ function ReportTopicDetail() {
     if (!confirmDelete) return;
 
     try {
-      const response = await axios.delete(`http://localhost:5500/report-detail/${reportId}`);
+      const response = await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/report-detail/${reportId}`);
       if (response.status === 200) {
         alert("ลบสำเร็จ");
-        const updatedResponse = await axios.get("http://localhost:5500/report/topics" , reportData);
+        const updatedResponse = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/topics" , reportData);
         setReports(updatedResponse.data);
         navigate("/admin/report");
       }
