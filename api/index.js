@@ -13,7 +13,8 @@ const nodemailer = require('nodemailer');
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const app = express();
-const port = process.env.PORT || 5500;
+// const port = 5500;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -41,7 +42,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(uri, { useNewUrlParser:  true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
@@ -53,7 +54,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
 // app.get("*", (req, res) => {
 //     res.sendFile(path.join(__dirname, "api", "index.html"));
 // });
-const path = require("path");
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../build")));  // ชี้ไปที่โฟลเดอร์ build ของ React
 
