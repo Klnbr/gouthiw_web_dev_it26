@@ -47,10 +47,17 @@ function MenuScreen() {
           }
      }, [nutrData])
 
-     const filteredMenus = menus.filter(menu =>
-          (selectedType === "ทั้งหมด" || menu.category === selectedType) &&
-          menu.menuName.includes(searchMenu)
-     );
+     // const filteredMenus = menus.filter(menu =>
+     //      (selectedType === "ทั้งหมด" || menu.category === selectedType) &&
+     //      menu.menuName.includes(searchMenu)
+     // );
+
+    const filteredMenus = menus.filter(menu =>
+    (selectedType === "ทั้งหมด" || menu.category === selectedType) &&
+    menu.menuName.toLowerCase().includes(searchMenu.trim().toLowerCase())
+);
+
+      
 
      // การกรองตามลำดับการแสดง
      const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"

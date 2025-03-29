@@ -44,7 +44,7 @@ function EditTrivia() {
                     isDeleted: false,
                };
 
-               const response = await axios.put(`http://localhost:5500/trivia/${triviaData._id}`, trivData);
+               const response = await axios.put(`https://gouthiw-web-dev-it26.onrender.com/trivia/${triviaData._id}`, trivData);
                console.log("Response from server:", response);
                if (response.status === 200 || response.status === 204) {
                     alert("อัพเดตสำเร็จ");
