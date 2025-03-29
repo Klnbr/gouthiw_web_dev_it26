@@ -45,6 +45,16 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
+
+    // Serve static files from the React app
+app.use(express.static(path.join(__dirname, "build")));
+
+// The "catchall" handler: for any request that doesn't match an API route, send back React's index.html file.
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
 const myMenu = require("./models/menu");
