@@ -46,14 +46,23 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
 
-    // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "build")));
+//     // Serve static files from the React app
+// app.use(express.static(path.join(__dirname, "api")));
+
+// // The "catchall" handler: for any request that doesn't match an API route, send back React's index.html file.
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "api", "index.html"));
+// });
+
+
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "..", "src", "build")));  // ให้เปลี่ยน `frontend` เป็นโฟลเดอร์ที่เก็บแอป React ของคุณ
 
 // The "catchall" handler: for any request that doesn't match an API route, send back React's index.html file.
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
+    res.sendFile(path.join(__dirname, "..", "src", "build", "index.html"));  // ให้เปลี่ยน `frontend` เป็นโฟลเดอร์ที่เก็บแอป React ของคุณ
 });
-
 
 const myIngr = require("./models/ingredient");
 const myTrivia = require("./models/trivia");
