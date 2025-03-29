@@ -17,7 +17,7 @@ const app = express();
 const port = process.env.PORT || 5500;
 
 app.use(cors({
-    origin: "https://your-react-app-domain.com",  // ระบุ URL ของ React App
+    origin: "https://gouthiw-web-dev-it26.onrender.com/",  // ระบุ URL ของ React App
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
 }));
