@@ -69,10 +69,6 @@ const myUser = require("./models/user");
 const myReport = require("./models/report");
 const myNoti = require("./models/noti");
 
-app.get("/", (req, res) => {
-    res.send("API is running on Railway!");
-});
-
 // signin
 app.post("/signin", async (req, res) => {
     try {
