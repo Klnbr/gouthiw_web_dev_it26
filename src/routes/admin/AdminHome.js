@@ -15,7 +15,7 @@ function AdminHome() {
      useEffect(() => {
           const fetchData = async () => {
                try {
-                    const resUser = await axios.get("http://localhost:5500/users", { timeout: 1000 });
+                    const resUser = await axios.get("http://https://gouthiw-web-dev-it26.onrender.com/users", { timeout: 1000 });
                     setUser(resUser.data)
                     const usersData = resUser.data.map((user) => ({
                          id: user._id,
@@ -25,7 +25,7 @@ function AdminHome() {
                          createdAt: user.createdAt
                     }))
                     
-                    const resNutr = await axios.get("http://localhost:5500/nutrs", { timeout: 1000 });
+                    const resNutr = await axios.get("http://https://gouthiw-web-dev-it26.onrender.com/nutrs", { timeout: 1000 });
                     setNutr(resNutr.data)
                     const nutrsData = resNutr.data.map((nutr) => ({
                          id: nutr._id,

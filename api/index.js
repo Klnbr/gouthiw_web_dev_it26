@@ -76,7 +76,7 @@ app.get("/", (req, res) => {
 });
 
 // signin
-app.post("https://gouthiw-web-dev-it26.onrender.com/signin", async (req, res) => {
+app.post("/signin", async (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
@@ -105,7 +105,7 @@ app.post("https://gouthiw-web-dev-it26.onrender.com/signin", async (req, res) =>
     }
 });
 
-app.post("https://gouthiw-web-dev-it26.onrender.com/register", async (req, res) => {
+app.post("/register", async (req, res) => {
     try {
         const { firstname, lastname, password, license_number, tel, email, image_profile, image_background, isDeleted } = req.body;
 
