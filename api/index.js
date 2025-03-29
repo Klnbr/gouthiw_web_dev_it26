@@ -11,10 +11,10 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
+const urimg = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const app = express();
 // const port = 5500;
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5500;
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -42,7 +42,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-mongoose.connect(uri, { useNewUrlParser:  true, useUnifiedTopology: true })
+mongoose.connect(urimg, { useNewUrlParser:  true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
@@ -395,6 +395,9 @@ app.get("/user/:userId", async (req, res) => {
 // ดึงเมนูมาแสดง
 app.get("/menus", async (req, res) => {
     try {
+        res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.set('Pragma', 'no-cache'); // For HTTP/1.0 compatibility
+        res.set('Expires', '0'); // Set expiration date to 0 to prevent caching
         const menus = await myMenu.find({ isDeleted: false });
         return res.json(menus);
     } catch (error) {
