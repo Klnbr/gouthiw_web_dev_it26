@@ -39,7 +39,7 @@ function ReportHistory() {
      useEffect(() => {
           const fetchReportData = async () => {
                try {
-                    const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/reports/${nutrData._id}`, { timeout: 1000 });
+                    const response = await axios.get(`https://gouthiw-health.onrender.com/reports/${nutrData._id}`, { timeout: 1000 });
                     setReports(response.data);
                     if (response.data.triv_id) {
                          setType("trivia");
@@ -57,7 +57,7 @@ function ReportHistory() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report-detail/trivia/${itemId}`);
+               const response = await axios.get(`https://gouthiw-health.onrender.com/report-detail/trivia/${itemId}`);
                const reportData = response.data;
                navigate('/report-history/detail', { state: { reportData } });
           } catch (error) {

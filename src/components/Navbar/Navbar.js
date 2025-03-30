@@ -17,7 +17,7 @@ function Navbar() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${nutrData._id}`);
+                const response = await axios.get(`https://gouthiw-health.onrender.com/report/notifications/${nutrData._id}`);
                 setNotifications(response.data);
 
                 const unreadCount = response.data.filter(noti => !noti.isRead).length;

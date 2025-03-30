@@ -93,7 +93,7 @@ function EditMenu() {
 
                console.log('Updated Menu Data:', updatemenuData);
 
-               const response = await axios.put(`https://gouthiw-web-dev-it26.onrender.com/menu/${menuData._id}`, updatemenuData);
+               const response = await axios.put(`https://gouthiw-health.onrender.com/menu/${menuData._id}`, updatemenuData);
 
                console.log('Menu updated', response.data);
 

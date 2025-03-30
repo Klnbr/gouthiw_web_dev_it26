@@ -28,15 +28,6 @@ function TriviaDetailScreen() {
         }
     }, [nutrData]);
 
-    // const fetchDataReports = async () => {
-    //     try {
-    //         const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${triviaData._id}/reports`);
-    //         setPendingReports(response.data.length);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
         const postTime = new Date(createdAt).toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
@@ -50,30 +41,10 @@ function TriviaDetailScreen() {
             return postTime.toLocaleString("th-TH", optionsDMY);
         }
     };
-    
-    // const calculateTimeRemaining = (reminderDate) => {
-    //     const currentTime = new Date();
-    //     const targetTime = new Date(reminderDate);
-    //     const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
-    
-    //     if (timeDiff <= 0) {
-    //         return "ถึงกำหนดแล้ว";
-    //     }
-    
-    //     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    //     const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    //     const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-    
-    //     if (days > 0) {
-    //         return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
-    //     } else {
-    //         return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
-    //     }
-    // };
 
     const handleReport = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/report', { state: { triviaData } });
@@ -84,7 +55,7 @@ function TriviaDetailScreen() {
 
     const handleDelete = async (itemId) => {
         try {
-            await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            await axios.delete(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             navigate('/trivia-list');  // หลังจากลบเสร็จแล้ว redirect ไปที่หน้ารายการ trivia
         } catch (error) {
             console.error("Error deleting trivia", error);
@@ -97,7 +68,7 @@ function TriviaDetailScreen() {
 
     const handleItemPress = async (itemId) => {
         try {
-             const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+             const response = await axios.get(`https://gouthiw-health.onrender.com//trivia/${itemId}`);
              const triviaData = response.data;
 
              navigate('/trivia', { state: { triviaData } });

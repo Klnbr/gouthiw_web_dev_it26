@@ -25,7 +25,7 @@ function MenuScreen() {
      useEffect(() => {
           const fetchMenuData = async () => {
                try {
-                    const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/menus", { timeout: 1000 });
+                    const response = await axios.get("https://gouthiw-health.onrender.com/menus", { timeout: 1000 });
                     setMenus(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message)
@@ -33,7 +33,7 @@ function MenuScreen() {
           }
           const fetchMenuDataUser = async () => {
                try {
-                    const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/menus/auth/${nutrData._id}`, { timeout: 1000 });
+                    const response = await axios.get(`https://gouthiw-health.onrender.com/menus/auth/${nutrData._id}`, { timeout: 1000 });
                     console.log(response.data)
                     setMenusUser(response.data);
 
@@ -47,18 +47,13 @@ function MenuScreen() {
           }
      }, [nutrData])
 
-     // const filteredMenus = menus.filter(menu =>
-     //      (selectedType === "ทั้งหมด" || menu.category === selectedType) &&
-     //      menu.menuName.includes(searchMenu)
-     // );
 
     const filteredMenus = menus.filter(menu =>
     (selectedType === "ทั้งหมด" || menu.category === selectedType) &&
     menu.menuName.toLowerCase().includes(searchMenu.trim().toLowerCase())
 );
 
-      
-
+     
      // การกรองตามลำดับการแสดง
      const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
           ? filteredMenus.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // เรียงตามวันที่ล่าสุด
@@ -69,7 +64,7 @@ function MenuScreen() {
      const handleItemPress = async (itemId) => {
           try {
                console.log("Item ID:", itemId);
-               const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/menu/${itemId}`);
+               const response = await axios.get(`https://gouthiw-health.onrender.com/menu/${itemId}`);
                const menuData = response.data;
 
                console.log("Fetched Menu Data:", menuData);

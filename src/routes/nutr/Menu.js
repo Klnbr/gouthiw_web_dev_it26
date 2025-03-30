@@ -17,7 +17,7 @@ function Menu() {
       useEffect(() => {
                const fetchMenu = async () => {
                     try {
-                         const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/menus/auth/${nutrData._id}`, { timeout: 1000 });
+                         const response = await axios.get(`https://gouthiw-health.onrender.com/menus/auth/${nutrData._id}`, { timeout: 1000 });
                          setMenu(response.data)
      
                          if (menuData && response.data.some((menuItem) => menuItem._id === menuData._id)) {

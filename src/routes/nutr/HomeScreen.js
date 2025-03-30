@@ -17,16 +17,16 @@ function HomeScreen() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res_menus = await axios.get("https://gouthiw-web-dev-it26.onrender.com/menus", {
+                const res_menus = await axios.get("https://gouthiw-health.onrender.com/menus", {
                     timeout: 1000,
                 });
-                const res_ingrs = await axios.get("https://gouthiw-web-dev-it26.onrender.com/ingrs", {
+                const res_ingrs = await axios.get("https://gouthiw-health.onrender.com/ingrs", {
                     timeout: 1000,
                 });
-                const res_trivs = await axios.get("https://gouthiw-web-dev-it26.onrender.com/trivias", {
+                const res_trivs = await axios.get("https://gouthiw-health.onrender.com/trivias", {
                     timeout: 1000,
                 });
-                const res_topics = await axios.get("https://gouthiw-web-dev-it26.onrender.com/topics", {
+                const res_topics = await axios.get("https://gouthiw-health.onrender.com/topics", {
                     timeout: 1000,
                 });
                 setMenus(res_menus.data);

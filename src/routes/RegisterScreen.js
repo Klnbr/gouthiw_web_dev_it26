@@ -93,7 +93,7 @@ function RegisterScreen() {
 
             console.log("User Data:", nutrData);
 
-            const response = await axios.post("https://gouthiw-web-dev-it26.onrender.com/register", nutrData);
+            const response = await axios.post("https://gouthiw-health.onrender.com/register", nutrData);
             console.log("Response from server:", response);
 
             if (response.status === 201) {

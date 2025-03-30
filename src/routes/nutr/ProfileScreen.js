@@ -46,7 +46,7 @@ function ProfileScreen() {
         };
         const fetchTriviaDataUser = async () => {
             try {
-                 const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivias/auth/${nutrData._id}`, { timeout: 10000 });
+                 const response = await axios.get(`https://gouthiw-health.onrender.com/trivias/auth/${nutrData._id}`, { timeout: 10000 });
                  setTriviaUser(response.data);
             } catch (error) {
                  console.log("Error fetching trivias data", error.message)
@@ -54,7 +54,7 @@ function ProfileScreen() {
        }
         const fetchMenuDataUser = async () => {
             try {
-                const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/menus/auth/${nutrData._id}`, { timeout: 10000 });
+                const response = await axios.get(`https://gouthiw-health.onrender.com/menus/auth/${nutrData._id}`, { timeout: 10000 });
                 console.log("menusUser: ", response.data)
                 setMenusUser(response.data);
 
@@ -64,7 +64,7 @@ function ProfileScreen() {
         }
         const fetchIngrNutrData = async () => {
             try {
-                const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/ingrs/auth/${nutrData._id}`, { timeout: 10000 });
+                const response = await axios.get(`https://gouthiw-health.onrender.com/ingrs/auth/${nutrData._id}`, { timeout: 10000 });
                 setIngrsNutr(response.data);  // เก็บข้อมูลที่ดึงมา
             } catch (error) {
                 console.log("Error fetching ingrs data", error.message);
@@ -73,7 +73,7 @@ function ProfileScreen() {
 
         const fetchRepliedTopics = async () => {
             try {
-                const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/topics/replied-by/${nutrData._id}`);
+                const response = await axios.get(`https://gouthiw-health.onrender.com/topics/replied-by/${nutrData._id}`);
                 setAns(response.data);  // ใช้ count จาก API ที่ตอบกลับมา
             } catch (error) {
                 console.log("Error fetching replied topics:", error.message);
@@ -107,7 +107,7 @@ function ProfileScreen() {
 
     const handleItemPress = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/menu/${itemId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/menu/${itemId}`);
             const menuData = response.data;
 
             navigate('/menu', { state: { menuData } });
@@ -118,7 +118,7 @@ function ProfileScreen() {
 
     const handleDelete = async (itemId) => {
         try {
-            const response = await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/menu/${itemId}`);
+            const response = await axios.delete(`https://gouthiw-health.onrender.com/menu/${itemId}`);
             if (response.status === 200) {
                 alert("ลบสำเร็จ");
                 navigate('/menus');

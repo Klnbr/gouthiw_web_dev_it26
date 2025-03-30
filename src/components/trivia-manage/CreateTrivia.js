@@ -47,7 +47,7 @@ function CreateTrivia() {
 
             console.log("Triv Data:", trivData);
 
-            const response = await axios.post(`https://gouthiw-web-dev-it26.onrender.com/trivia/${nutrData._id}`, trivData);
+            const response = await axios.post(`https://gouthiw-health.onrender.com/trivia/${nutrData._id}`, trivData);
             console.log("Response from server:", response);
 
             if (response.status === 201) {

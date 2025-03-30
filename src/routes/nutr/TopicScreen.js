@@ -30,7 +30,7 @@ function TopicScreen() {
      useEffect(() => {
         const fetchTopicData = async () => {
                try {
-                    const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/topics", { timeout: 1000 });
+                    const response = await axios.get("https://gouthiw-health.onrender.com/topics", { timeout: 1000 });
                     setTopics(response.data);
                     setLoading(false);  
                } catch (error) {
@@ -64,7 +64,7 @@ function TopicScreen() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/topic/${itemId}`);
+               const response = await axios.get(`https://gouthiw-health.onrender.com//topic/${itemId}`);
                const topicData = response.data;
                navigate('/topic-answer', { state: { topicData } });
           } catch (error) {

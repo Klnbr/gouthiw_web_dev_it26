@@ -20,7 +20,7 @@ function EditProfile() {
      useEffect(() => {
           const fetchUserData = async () => {
                try {
-                    const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/nutrs", { timeout: 1000 });
+                    const response = await axios.get("https://gouthiw-health.onrender.com/nutrs", { timeout: 1000 });
                     setUser(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message);
@@ -61,7 +61,7 @@ function EditProfile() {
                console.log("Updated User Data:", updateData);
      
                const response = await axios.put(
-                    `https://gouthiw-web-dev-it26.onrender.com/nutrs/${nutrData._id}`, updateData
+                    `https://gouthiw-health.onrender.com/nutrs/${nutrData._id}`, updateData
                );
      
                console.log("User updated", response.data);

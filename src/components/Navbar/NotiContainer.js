@@ -13,7 +13,7 @@ const NotiContainer = () => {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${nutrData._id}`);
+                const response = await axios.get(`https://gouthiw-health.onrender.com/report/notifications/${nutrData._id}`);
                 setNotifications(response.data);
             } catch (error) {
                 console.error("Error fetching notifications:", error);
@@ -34,13 +34,13 @@ const NotiContainer = () => {
 
     const adminItemPress = async (reportId, notiId) => {
         try {
-            const responseDetail = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report-detail/trivia/${reportId}`);
+            const responseDetail = await axios.get(`https://gouthiw-health.onrender.com/report-detail/trivia/${reportId}`);
             const reportData = responseDetail.data;
             
             if ( reportData.status === null ) {
                 const updateStatus = { status: 0 };
 
-                await axios.put(`https://gouthiw-web-dev-it26.onrender.com/report/${reportId}/status`, updateStatus);
+                await axios.put(`https://gouthiw-health.onrender.com/report/${reportId}/status`, updateStatus);
 
                 const notiData = {
                     report_id: reportData._id,
@@ -52,9 +52,9 @@ const NotiContainer = () => {
                     reminderDate: null,  
                 };
                 
-                await axios.post("https://gouthiw-web-dev-it26.onrender.com/report/trivia/notification", notiData);
+                await axios.post("https://gouthiw-health.onrender.com/report/trivia/notification", notiData);
 
-                await axios.put(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${notiId}/read`, { isRead: true, role: "admin" });
+                await axios.put(`https://gouthiw-health.onrender.com/report/notifications/${notiId}/read`, { isRead: true, role: "admin" });
             }
 
             if (!reportData || !reportData._id) {
@@ -74,10 +74,10 @@ const NotiContainer = () => {
 
     const handleItemPress = async (reportId, notiId) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report-detail/trivia/${reportId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/report-detail/trivia/${reportId}`);
             const reportData = response.data;
 
-            await axios.put(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${notiId}/read`, { isRead: true, role: "reporter" });
+            await axios.put(`https://gouthiw-health.onrender.com/report/notifications/${notiId}/read`, { isRead: true, role: "reporter" });
 
             if (!reportData || !reportData._id) {
                 alert("ข้อมูลรายงานไม่ถูกต้องหรือไม่พบ ID");
@@ -95,10 +95,10 @@ const NotiContainer = () => {
 
     const handleItemPressTrivia = async (trivId, notiId) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${trivId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${trivId}`);
             const triviaData = response.data;
 
-            await axios.put(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${notiId}/read`, { isRead: true, role: "reported" });
+            await axios.put(`https://gouthiw-health.onrender.com/report/notifications/${notiId}/read`, { isRead: true, role: "reported" });
 
             if (!triviaData || !triviaData._id) {
                 alert("ข้อมูลรายงานไม่ถูกต้องหรือไม่พบ ID");

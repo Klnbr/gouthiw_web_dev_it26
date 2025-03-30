@@ -16,7 +16,7 @@ export default function Noti() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/notifications");
+                const response = await axios.get("https://gouthiw-health.onrender.com/report/notifications");
                 console.log("Notifications from API:", response.data);
                 setNotifications(response.data);
             } catch (error) {
@@ -29,7 +29,7 @@ export default function Noti() {
 
     const handleItemPress = async (itemId, type) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report-detail/${type}/${itemId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/report-detail/${type}/${itemId}`);
             const reportData = response.data;
 
             if (!reportData || !reportData._id) {

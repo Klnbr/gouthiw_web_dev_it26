@@ -50,7 +50,7 @@ function ReportManage() {
     useEffect(() => {
         const fetchReportsTrivia = async () => {
             try {
-                const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/trivias");
+                const response = await axios.get("https://gouthiw-health.onrender.com/report/trivias");
                 if (Array.isArray(response.data)) setReportsTrivia(response.data);
             } catch (error) {
                 console.error("Error fetching trivia reports:", error);
@@ -59,7 +59,7 @@ function ReportManage() {
 
         const fetchReportsTopic = async () => {
             try {
-                const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/topics");
+                const response = await axios.get("https://gouthiw-health.onrender.com/report/topics");
                 if (Array.isArray(response.data)) setReportsTopic(response.data);
             } catch (error) {
                 console.error("Error fetching topic reports:", error);
@@ -126,7 +126,7 @@ function ReportManage() {
 
     const handleItemPress = async (itemId, type) => {
         try {
-            const responseDetail = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report-detail/${type}/${itemId}`);
+            const responseDetail = await axios.get(`https://gouthiw-health.onrender.com/report-detail/${type}/${itemId}`);
             const reportData = responseDetail.data;
             
             if ( reportData.status === null ) {
@@ -134,7 +134,7 @@ function ReportManage() {
                     status: 0
                 };
 
-                await axios.put(`https://gouthiw-web-dev-it26.onrender.com/report/${reportData._id}/status`,updateStatus);
+                await axios.put(`https://gouthiw-health.onrender.com/report/${reportData._id}/status`,updateStatus);
 
                 if (type === "trivia") {
                     const notiData = {
@@ -147,7 +147,7 @@ function ReportManage() {
                         reminderDate: null,  
                     };
 
-                    await axios.post("https://gouthiw-web-dev-it26.onrender.com/report/trivia/notification", notiData);
+                    await axios.post("https://gouthiw-health.onrender.com/report/trivia/notification", notiData);
                 } else if (type === "topic") {
                     const notiData = {
                         report_id: reportData._id,
@@ -159,7 +159,7 @@ function ReportManage() {
                         reminderDate: null,  
                     };
 
-                    await axios.post("https://gouthiw-web-dev-it26.onrender.com/report/topic/notification", notiData);
+                    await axios.post("https://gouthiw-health.onrender.com/report/topic/notification", notiData);
                 }
                 
             }

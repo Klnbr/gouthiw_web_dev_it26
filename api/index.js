@@ -11,12 +11,12 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
-const urimg = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
 const app = express();
 const port = process.env.PORT || 5500;
 
 app.use(cors({
-    origin: "https://gouthiw-web-dev-it26.onrender.com/", 
+    origin: "https://gouthiw-health.onrender.com/", 
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
 }));
@@ -45,7 +45,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-mongoose.connect(urimg, { useNewUrlParser:  true, useUnifiedTopology: true })
+mongoose.connect(uri, { useNewUrlParser:  true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB successfully'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
