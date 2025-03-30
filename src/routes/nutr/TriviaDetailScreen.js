@@ -20,22 +20,18 @@ function TriviaDetailScreen() {
     const [ setPendingReports] = useState(0);
 
     useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+            return;
+        }
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
             if (triviaData.edit_deadline) {
                 setHasDeadLine(triviaData.edit_deadline)
             }
         }
-    }, [nutrData]);
-
-    // const fetchDataReports = async () => {
-    //     try {
-    //         const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${triviaData._id}/reports`);
-    //         setPendingReports(response.data.length);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
+    }, [nutrData, navigate]);
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });

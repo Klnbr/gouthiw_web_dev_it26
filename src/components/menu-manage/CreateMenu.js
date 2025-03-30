@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Steps } from "antd";
 import Form1 from './Form1';
 import Form2 from './Form2';
@@ -62,6 +62,13 @@ function CreateMenu() {
           setCurrent(current - 1);
      };
 
+     useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
+     }, [navigate]);
 
      const handleSave = async () => {
           const { menuName, category, ingredients, method, image } = formData;

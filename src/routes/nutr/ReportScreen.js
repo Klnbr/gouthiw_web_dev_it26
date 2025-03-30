@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import TextArea from 'antd/es/input/TextArea';
@@ -13,6 +13,14 @@ function Report() {
      const { nutrData } = useAuth();
 
      const [note, setNote] = useState("")
+
+     useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
+     }, [navigate]);
 
      const handleReport = async () => {
           try {

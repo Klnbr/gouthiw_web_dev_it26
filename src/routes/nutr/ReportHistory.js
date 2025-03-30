@@ -37,6 +37,11 @@ function ReportHistory() {
      const getStatusText = (status) => statusMap[status] || "อยู่ระหว่างการรอตรวจสอบ";
 
      useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
           const fetchReportData = async () => {
                try {
                     const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/reports/${nutrData._id}`, { timeout: 1000 });
@@ -53,7 +58,7 @@ function ReportHistory() {
                }
           }
           fetchReportData();
-     }, [nutrData]);
+     }, [nutrData,navigate]);
 
      const handleItemPress = async (itemId) => {
           try {

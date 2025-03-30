@@ -57,6 +57,12 @@ function ReportDetail() {
     const [status, setStatus] = useState(reportData?.status || 0);
 
     useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+            return;
+        }
+
         if (!reportData) {
             const fetchReport = async () => {
                 try {
@@ -69,7 +75,7 @@ function ReportDetail() {
             };
             fetchReport();
         }
-    }, [reportData, location.state?.reportId, status]);
+    }, [reportData, location.state?.reportId, status, navigate]);
 
     const timeNow = new Date();
     const timeOneDay = new Date(timeNow);

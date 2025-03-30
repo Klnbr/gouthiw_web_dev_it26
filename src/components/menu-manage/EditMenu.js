@@ -68,6 +68,14 @@ function EditMenu() {
           setCurrent(current - 1);
      };
 
+     useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
+     }, [navigate]);
+
      const handleSave = async () => {
           try {
                let imageUrl = formData.image;

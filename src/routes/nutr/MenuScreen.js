@@ -23,6 +23,11 @@ function MenuScreen() {
 
 
      useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
           const fetchMenuData = async () => {
                try {
                     const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/menus", { timeout: 1000 });
@@ -45,7 +50,7 @@ function MenuScreen() {
           if (nutrData) {
                fetchMenuDataUser();
           }
-     }, [nutrData])
+     }, [nutrData, navigate]);
 
      // const filteredMenus = menus.filter(menu =>
      //      (selectedType === "ทั้งหมด" || menu.category === selectedType) &&

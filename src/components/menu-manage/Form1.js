@@ -1,16 +1,24 @@
 import React, { useEffect } from 'react'
 import { Input, Select } from "antd";
 import './CreateMenu.css';
+import { useNavigate } from 'react-router-dom';
 
 function Form1({ formData, setFormData }) {
+       const navigate = useNavigate();
      useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
+
           return () => {
                if (formData.image && typeof formData.image !== 'string') {
                     URL.revokeObjectURL(formData.image);
                }
           };
           // ลบ URL ที่สร้างขึ้นจาก URL.revokeObjectURL หลังจากไม่ใช้งานแล้ว เพื่อป้องกันการใช้หน่วยความจำเกินความจำเป็น
-     }, [formData.image]);
+     }, [formData.image, navigate]);
 
      const handleInputChange = (e) => {
           const { name, value } = e.target;

@@ -17,6 +17,11 @@ function SideBar() {
     };
 
     useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+            return;
+        }
         const handleClickOutside = (event) => {
             if (!document.querySelector('.side-bar--container').contains(event.target)) {
                 setIsMobileOpen(false);
@@ -26,7 +31,7 @@ function SideBar() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [navigate]);
 
     const menuRender = nutrData.role === '1' ? MenuAdmin : MenuItems;
 

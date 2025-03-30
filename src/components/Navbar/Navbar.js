@@ -15,6 +15,11 @@ function Navbar() {
     const [notiCount, setNotiCount] = useState(0);
 
     useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+            return;
+        }
         const fetchNotifications = async () => {
             try {
                 const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${nutrData._id}`);
@@ -28,7 +33,7 @@ function Navbar() {
         };
       
         fetchNotifications();
-    }, [nutrData, setNotiCount]);
+    }, [nutrData, setNotiCount, navigate]);
     
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);

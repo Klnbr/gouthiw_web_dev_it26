@@ -32,6 +32,11 @@ export default function TriviaAdmin() {
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
      useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
           const fetchTriviaData = async () => {
                try {
                     const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/trivias", { timeout: 1000 });
@@ -52,7 +57,7 @@ export default function TriviaAdmin() {
           if (nutrData) {
                fetchTriviaDataUser();
           }
-     }, [nutrData])
+     }, [nutrData,navigate])
 
      const filteredTrivs = trivs.filter(triv => 
           (selectedType === "ทั้งหมด" || triv.trivia_type === selectedType) &&

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
 import { Input } from "antd";
 import './CreateMenu.css';
+import { useNavigate } from 'react-router-dom';
 
 function Form3({ formData, setFormData }) {
+      const navigate = useNavigate();
     const { TextArea } = Input;
 
     const handleMethodChange = (index, value) => {
@@ -29,6 +31,14 @@ function Form3({ formData, setFormData }) {
             method: newMethods
         });
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+            return;
+        }
+    }, [navigate]);
 
     return (
         <div className='form3-containner'>

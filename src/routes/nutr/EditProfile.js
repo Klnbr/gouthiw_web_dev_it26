@@ -18,6 +18,11 @@ function EditProfile() {
      const [password, setPassword] = useState("");
 
      useEffect(() => {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+              return;
+          }
           const fetchUserData = async () => {
                try {
                     const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/nutrs", { timeout: 1000 });
@@ -38,7 +43,7 @@ function EditProfile() {
           }
 
           fetchUserData();
-     }, [nutrData]);
+     }, [nutrData, navigate]);
 
    
 

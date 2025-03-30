@@ -26,7 +26,7 @@ function SideBar () {
                          {/* <button className='button' to='/signup'>Sign up</button> */}
                     </div>
                </div>
-               <img className='side-bar--btm' alt='SidebarBottom' src={SidebarBottom} loading="lazy"/>
+               <img className='side-bar--btm' alt='SidebarBottom' src={SidebarBottom}/>
           </div>
      )
 }

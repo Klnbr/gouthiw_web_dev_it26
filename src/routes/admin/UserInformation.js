@@ -17,15 +17,13 @@ function UserInformation() {
              setDropdownVisible(dropdownVisible === menuId ? null : menuId);
          };
          const [ setUser] = useState("");
-     
-        //  const [firstname, setFirstname] = useState("");
-        //  const [lastname, setLastname] = useState("");
-        //  const [license_number, setLicense_number] = useState("");
-        //  const [tel, setTel] = useState("");
-        //  const [email, setEmail] = useState("");
-        //  const [password, setPassword] = useState("");
-     
+
          useEffect(() => {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
+                return;
+            }
              const fetchUserData = async () => {
                  try {
                       const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/users", { timeout: 1000 });
@@ -47,7 +45,7 @@ function UserInformation() {
              }
              fetchMenuDataUser();
              fetchUserData();
-         }, [nutrData])
+         }, [nutrData, navigate]);
      
          const renderItem = (item) => (
              <div className='menu-card' key={item._id}>
