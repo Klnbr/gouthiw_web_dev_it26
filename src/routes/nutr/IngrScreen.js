@@ -359,13 +359,21 @@ if (!currentItems || currentItems.length === 0) {
         </tr>
     </thead>
     <tbody>
-        {filteredIngrs.length > 0
-            ? currentItems.length > 0
-                ? currentItems.map(item => renderItem(item))
-                : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-            : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-        }
-    </tbody>
+    {activeButton === 'ทั้งหมด' ? (
+        filteredIngrs.length > 0 ? (
+            currentItems.length > 0 ? (
+                currentItems.map(item => renderItem(item))
+            ) : (
+                <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+            )
+        ) : (
+            <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+        )
+    ) : (
+        <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+    )}
+</tbody>
+
 </table>
 
 

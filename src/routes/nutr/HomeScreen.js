@@ -12,7 +12,6 @@ function HomeScreen() {
     const [trivs, setTrivs] = useState([]);
     const [topics, setTopics] = useState([]);
 
-    console.log("menus: ", menus);
 
     useEffect(() => {
         const fetchData = async () => {
