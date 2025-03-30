@@ -18,17 +18,12 @@ function EditTrivia() {
      const [content, setContent] = useState("");
 
      useEffect(() => {
-          const token = localStorage.getItem("authToken");
-          if (!token) {
-              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-              return;
-          }
           if (triviaData) {
                setHead(triviaData.head);
                setImage(triviaData.image);
                setContent(triviaData.content);
           }
-     }, [triviaData,navigate]);
+     }, [triviaData]);
 
      const handleUpdateTriv = async () => {
           try {

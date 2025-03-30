@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import { useAuth } from '../../middleware/Auth';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -31,6 +31,7 @@ export default function TopicDetail() {
         }
     };
 
+
     const renderItem = (item) => (
         <div className='topic-answer-card' key={item._id}>
             <div className='topic-content'>
@@ -58,13 +59,6 @@ export default function TopicDetail() {
         </div>
     );
 
-    useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
-    }, [navigate]);
 
     const handleAnswer = async () => {
         if (!answer) {

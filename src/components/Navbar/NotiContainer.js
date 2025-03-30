@@ -11,11 +11,6 @@ const NotiContainer = () => {
     const [loading, setLoading] = useState(true); // ตัวอย่าง ID ของ nutr
       
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
         const fetchNotifications = async () => {
             try {
                 const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/report/notifications/${nutrData._id}`);
@@ -28,7 +23,7 @@ const NotiContainer = () => {
         };
       
         fetchNotifications();
-    }, [nutrData,navigate]);
+    }, [nutrData]);
 
     const sortedNotifications = [...notifications].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt) // เรียงจากใหม่ไปเก่า

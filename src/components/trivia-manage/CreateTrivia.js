@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import './CreateTrivia.css';
 import { Input, Select } from "antd";
 import { useNavigate } from 'react-router-dom';
@@ -17,14 +17,6 @@ function CreateTrivia() {
     const [image, setImage] = useState(null)
     const [content, setContent] = useState("")
     const [type, setType] = useState("")
-
-    useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
-    }, [navigate]);
 
     const handleAddTrivId = async () => {
         try {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import { useAuth } from '../../middleware/Auth';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -22,13 +22,6 @@ const AnswerTopic = () => {
     const [answer, setAnswer] = useState('');
     const [image, setImage] = useState([]);
 
-    useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
-    }, [navigate]);
     const handleAnswer = async () => {
         try {
 

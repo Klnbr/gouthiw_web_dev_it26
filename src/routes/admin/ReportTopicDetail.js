@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import SideBar from "../../components/SideBar/SideBar";
 import "../../App.css";
@@ -35,15 +35,7 @@ function ReportTopicDetail() {
   const { reportData } = location.state || {}; // ดึงค่าจาก state
   const [status, setStatus] = useState(reportData?.status || 0);
 
-  
-  useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-        navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-        return;
-    }
-
-  }, [navigate]);
+  console.log("reportData:", reportData);
 
   const statusMap = {
     0: "รอตรวจสอบ",

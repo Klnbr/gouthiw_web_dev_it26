@@ -18,16 +18,11 @@ export default function TriviaDetailAdmin() {
     const [dropdownVisible, setDropdownVisible] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
         // Show edit button if the logged-in user is the creator
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
         }
-    }, [nutrData, triviaData, navigate]);
+    }, [nutrData, triviaData]);
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date();

@@ -82,7 +82,6 @@ app.post("/signin", async (req, res) => {
             token,
             nutr,
         });
-        localStorage.setItem("authToken", response.data.token);
     } catch (error) {
         console.error("Sign up Error: ", error);
         res.status(500).json({ message: "เข้าสู่ระบบไม่สำเร็จ" });

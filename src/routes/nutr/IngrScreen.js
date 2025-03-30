@@ -7,10 +7,8 @@ import SideBar from '../../components/SideBar/SideBar';
 import { Select } from "antd";
 import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
-import { useNavigate } from 'react-router-dom';
 
 function IngrScreen() {
-       const navigate = useNavigate();
      const [ingrs, setIngrs] = useState([]);
      const [setIngrsNutr] = useState([]);
      const { nutrData } = useAuth();
@@ -52,11 +50,6 @@ function IngrScreen() {
      }
 
      useEffect(() => {
-          const token = localStorage.getItem("authToken");
-          if (!token) {
-              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-              return;
-          }
           const fetchIngrData = async () => {
                try {
                     const response = await axios.get("https://gouthiw-web-dev-it26.onrender.com/ingrs", { timeout: 1000 });
@@ -75,7 +68,7 @@ function IngrScreen() {
           };
           fetchIngrData();
           fetchIngrNutrData();
-     }, [nutrData, navigate]);
+     }, [nutrData]);
 
      const filterIngrs = ingrs.filter(ingr =>
           (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&

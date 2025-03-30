@@ -15,11 +15,6 @@ function HomeScreen() {
     console.log("menus: ", menus);
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
         const fetchData = async () => {
             try {
                 const res_menus = await axios.get("https://gouthiw-web-dev-it26.onrender.com/menus", {
@@ -43,7 +38,7 @@ function HomeScreen() {
             }
         };
         fetchData();
-    }, [navigate]);
+    });
 
     return (
         <>

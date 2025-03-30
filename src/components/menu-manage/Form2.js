@@ -2,10 +2,8 @@ import React, { useState, useEffect} from 'react';
 import { Input, Select } from "antd";
 import './CreateMenu.css';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
 function Form2({ formData, setFormData }) {
-       const navigate = useNavigate();
      const [ingrs, setIngrs] = useState([]);
      const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -80,12 +78,6 @@ function Form2({ formData, setFormData }) {
      // };
 
      useEffect(() => {
-          const token = localStorage.getItem("authToken");
-          if (!token) {
-              navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-              return;
-          }
-
           const newTotalPurine = ingredients.reduce((total, ingredient) => {
                const quantity = parseFloat(ingredient.qty) || 0;
                const unit = ingredient.unit;
@@ -104,7 +96,7 @@ function Form2({ formData, setFormData }) {
                // uric_total: newTotalUric
           }));
 
-     }, [setFormData, ingredients, navigate]);
+     }, [setFormData, ingredients]);
 
 
      const handleIngredientChange = (index, field, value) => {

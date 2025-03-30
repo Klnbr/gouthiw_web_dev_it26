@@ -37,11 +37,6 @@ function ReportDetailNutr() {
 
     // โหลดข้อมูลใหม่ถ้า reportData หายไป
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
         if (!reportData) {
         const fetchReport = async () => {
             try {
@@ -54,7 +49,7 @@ function ReportDetailNutr() {
         };
         fetchReport();
         }
-    }, [reportData, location.state?.reportId, navigate]);
+    }, [reportData, location.state?.reportId]);
 
 
     const statusMap = {
@@ -81,6 +76,20 @@ function ReportDetailNutr() {
                 return "#dc3545";
         }
     };
+
+    // const handleStatusChange = (newStatusNumber) => {
+    //     if (Number(newStatusNumber) === status) return;
+    
+    //     // การยืนยันก่อนเปลี่ยนสถานะ
+    //     const confirmChange = window.confirm("คุณต้องการเปลี่ยนสถานะใช่หรือไม่?");
+    //     if (confirmChange) {
+    //     setStatus(Number(newStatusNumber));  // เปลี่ยนสถานะใน UI
+    //     updateStatus(Number(newStatusNumber));  // อัพเดตสถานะในฐานข้อมูล
+    //     } else {
+    //     // ถ้าไม่ยืนยันให้กลับไปสถานะเดิม
+    //     setStatus(status); 
+    //     }
+    // };
     
 
     const updateStatus = async (newStatus) => {
@@ -101,6 +110,23 @@ function ReportDetailNutr() {
         alert("อัพเดตสถานะไม่สำเร็จ");
         }
     };
+
+    // const handleItemDelete = async (reportId) => {
+    //     const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
+    //     if (!confirmDelete) return;
+
+    //     try {
+    //     const response = await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/report-detail/${reportId}`);
+    //     if (response.status === 200) {
+    //         alert("ลบสำเร็จ");
+    //         const updatedResponse = await axios.get("https://gouthiw-web-dev-it26.onrender.com/report/trivias" , reportData);
+    //         setReports(updatedResponse.data);
+    //         navigate("/admin/report");
+    //     }
+    //     } catch (error) {
+    //     alert("เกิดข้อผิดพลาดในการลบ");
+    //     }
+    // };
 
     return (
         <div className="container">

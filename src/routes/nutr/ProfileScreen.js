@@ -25,11 +25,6 @@ function ProfileScreen() {
     const [ans, setAns] = useState([]);
 
     useEffect(() => {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-            navigate("/"); // ถ้าไม่มี token ให้กลับไปหน้า login
-            return;
-        }
         const fetchUsers = async () => {
             try {
                 const token = localStorage.getItem("authToken");
@@ -91,7 +86,7 @@ function ProfileScreen() {
         fetchMenuDataUser();
         fetchUsers();
         fetchTriviaDataUser();
-    }, [nutrData, user, navigate])
+    }, [nutrData, user])
 
     const renderItem = (item) => (
         <div className='menu-card' key={item._id}>
