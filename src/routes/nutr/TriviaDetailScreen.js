@@ -55,7 +55,7 @@ function TriviaDetailScreen() {
     const handleDelete = async (itemId) => {
         try {
             await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
-            navigate('/trivia-list');  // หลังจากลบเสร็จแล้ว redirect ไปที่หน้ารายการ trivia
+            navigate('/trivia'); 
         } catch (error) {
             console.error("Error deleting trivia", error);
         }
@@ -65,12 +65,12 @@ function TriviaDetailScreen() {
         setDropdownVisible(!dropdownVisible);
     };
 
-    const handleItemPress = async (itemId) => {
+    const handleEdit = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            const response = await axios.put(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
-            navigate('/trivia', { state: { triviaData } });
+            navigate('/edit-trivia', { state: { triviaData } });
         } catch (error) {
             console.log('Error fetching menu data', error.message);
         }
@@ -86,7 +86,7 @@ function TriviaDetailScreen() {
                     </button>
                     {editButton &&
                         <>
-                            <button className="btn-edit" onClick={() => handleItemPress(triviaData._id)}>
+                            <button className="btn-edit" onClick={() => handleEdit(triviaData._id)}>
                                 แก้ไข
                             </button>
                             <button className="btn-delete" onClick={() => handleDelete(triviaData._id)}>
@@ -97,6 +97,7 @@ function TriviaDetailScreen() {
 
                     <div className='triv-detail-content'>
                         <div className='dropdown-container-tv'>
+
                             <i
                                 className="fa-solid fa-ellipsis-vertical dropdown-icon"
                                 onClick={toggleDropdown}
