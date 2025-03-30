@@ -26,6 +26,7 @@ function IngrScreen() {
      const [currentPage, setCurrentPage] = useState(1);
      const itemsPerPage = 13;
 
+ const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
      // Set modal
      const [modal, setModal] = useState(false);

@@ -18,9 +18,7 @@ function MenuScreen() {
      const [selectedType, setSelectedType] = useState('ทั้งหมด');
      const [selectedDisplay, setSelectedDisplay] = useState("เพิ่มเข้าล่าสุด");
 
-
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
-
 
      useEffect(() => {
           const fetchMenuData = async () => {
