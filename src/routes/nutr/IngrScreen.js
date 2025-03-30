@@ -27,8 +27,7 @@ function IngrScreen() {
      const itemsPerPage = 13;
 
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
-     const filteredIngrs = activeButton === 'ทั้งหมด' ? ingrs : ingrsNutr;
-
+   
      // Set modal
      const [modal, setModal] = useState(false);
      const toggleModal = () => {
@@ -69,7 +68,7 @@ function IngrScreen() {
           fetchData();
       }, [nutrData]);  
 
-     const filterIngrs = filteredIngrs.filter(ingr =>
+     const filterIngrs = ingrs.filter(ingr =>
           (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
           ingr.name.includes(searchIngr)
      );
@@ -313,24 +312,20 @@ function IngrScreen() {
 
                                    {/* switch role */}
                                    <div className='above-table'>
-                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} เมนูอาหาร</p>
+                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} ;วัตถุดิบ</p>
                                         <div className='switch-btn'>
                                              <button
                                                   onClick={() => setActiveButton('ทั้งหมด')}
                                                   style={{
                                                        backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
                                                        color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
-                                                  }}>
-                                                  ทั้งหมด
-                                             </button>
+                                                  }}>ทั้งหมด </button>
                                              <button
                                                   onClick={() => setActiveButton('ของฉัน')}
                                                   style={{
                                                        backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
                                                        color: activeButton === 'ของฉัน' ? 'white' : 'black'
-                                                  }}>
-                                                  ของฉัน
-                                             </button>
+                                                  }}> ของฉัน </button>
                                         </div>
 
                                    </div>
@@ -361,6 +356,7 @@ function IngrScreen() {
                                         )}
                                         </tbody>
                                    </table>
+                                   
                                    {/* Pagination controls */}
                                    <div className="pagination">
                                         <button

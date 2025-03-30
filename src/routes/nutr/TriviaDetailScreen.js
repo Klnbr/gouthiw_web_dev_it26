@@ -43,7 +43,7 @@ function TriviaDetailScreen() {
 
     const handleReport = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/report', { state: { triviaData } });
@@ -54,7 +54,7 @@ function TriviaDetailScreen() {
 
     const handleDelete = async (itemId) => {
         try {
-            await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            await axios.delete(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             navigate('/trivia'); 
         } catch (error) {
             console.error("Error deleting trivia", error);
@@ -67,7 +67,7 @@ function TriviaDetailScreen() {
 
     const handleEdit = async (itemId) => {
         try {
-            const response = await axios.put(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            const response = await axios.put(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/edit-trivia', { state: { triviaData } });

@@ -18,8 +18,7 @@ function Navbar() {
         const fetchNotifications = async () => {
             try {
                 const response = await axios.get(`https://gouthiw-health.onrender.com/report/notifications/${nutrData._id}`);
-                setNotifications(response.data);
-
+                setNotifications(response.data)
                 const unreadCount = response.data.filter(noti => !noti.isRead).length;
                 setNotiCount(unreadCount);
             } catch (error) {
