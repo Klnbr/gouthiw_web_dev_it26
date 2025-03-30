@@ -313,11 +313,6 @@ function IngrScreen() {
                                         </div>
                                    )}
 
-                                   {/* Table section */}
-                                   <div className='above-table'>
-                                        <p>รวมทั้งหมด {ingrs.length} วัตถุดิบ</p>
-                                   </div>
-
                                    {/* switch role */}
                                    <div className='above-table'>
                                         <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} เมนูอาหาร</p>
@@ -353,7 +348,7 @@ function IngrScreen() {
                                                       renderItem(item)
                                                   ))
                                                   : ingrsNutr.map(item => (
-                                                     ingrsNutr.map(item => renderItem(item))   
+                                                  ingrsNutr.map(item => renderItem(item))  
                                                   ))}
                                         </tbody>
                                    </table>
