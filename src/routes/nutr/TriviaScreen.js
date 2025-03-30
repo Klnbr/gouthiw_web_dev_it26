@@ -78,25 +78,6 @@ function TriviaScreen() {
           }
      };
 
-     // const calculateTimeRemaining = (reminderDate) => {
-     //      const currentTime = new Date();
-     //      const targetTime = new Date(reminderDate);
-     //      const timeDiff = targetTime - currentTime; // หาจำนวนมิลลิวินาทีที่เหลือ
-      
-     //      if (timeDiff <= 0) {
-     //          return "ถึงกำหนดแล้ว";
-     //      }
-      
-     //      const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-     //      const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-     //      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-      
-     //      if (days > 0) {
-     //          return `เหลือเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที`;
-     //      } else {
-     //          return `เหลือเวลาแก้ไขอีก ${hours} ชั่วโมง ${minutes} นาที`;
-     //      }
-     // };
 
      const stripHTML = (html) => {
           const div = document.createElement('div');

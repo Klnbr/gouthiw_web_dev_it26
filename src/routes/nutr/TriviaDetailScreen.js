@@ -69,7 +69,7 @@ function TriviaDetailScreen() {
 
     const handleItemPress = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-health.onrender.com//trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/trivia', { state: { triviaData } });

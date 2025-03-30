@@ -64,7 +64,7 @@ function TopicScreen() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`https://gouthiw-health.onrender.com//topic/${itemId}`);
+               const response = await axios.get(`https://gouthiw-health.onrender.com/topic/${itemId}`);
                const topicData = response.data;
                navigate('/topic-answer', { state: { topicData } });
           } catch (error) {

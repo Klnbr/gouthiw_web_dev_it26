@@ -52,25 +52,31 @@ function IngrScreen() {
      }
 
      useEffect(() => {
-          const fetchIngrData = async () => {
-               try {
-                    const response = await axios.get("https://gouthiw-health.onrender.com/ingrs", { timeout: 1000 });
-                    setIngrs(response.data);
-               } catch (error) {
-                    console.log("Error fetching ingrs data", error.message);
-               }
-          };
+     if (nutrData && nutrData._id) {
           const fetchIngrNutrData = async () => {
                try {
                     const response = await axios.get(`https://gouthiw-health.onrender.com/ingrs/${nutrData._id}`, { timeout: 1000 });
                     setIngrsNutr(response.data);
                } catch (error) {
-                    console.log("Error fetching ingrs data", error.message);
+                    console.log("Error fetching ingrsNutr data", error.message);
                }
           };
-          fetchIngrData();
           fetchIngrNutrData();
-     }, [nutrData]);
+     } else {
+          console.log("nutrData._id is not available yet");
+     }
+
+     const fetchIngrData = async () => {
+          try {
+               const response = await axios.get("https://gouthiw-health.onrender.com/ingrs", { timeout: 1000 });
+               setIngrs(response.data);
+          } catch (error) {
+               console.log("Error fetching ingrs data", error.message);
+          }
+     };
+     fetchIngrData();
+}, [nutrData]);
+
 
      const filterIngrs = filteredIngrs.filter(ingr =>
           (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
@@ -187,6 +193,9 @@ function IngrScreen() {
      const indexOfLastItem = currentPage * itemsPerPage;
      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
      const currentItems = filterDisplay.slice(indexOfFirstItem, indexOfLastItem);
+if (!currentItems || currentItems.length === 0) {
+    console.log("No items to display");
+}
 
      const totalPages = Math.ceil(filterDisplay.length / itemsPerPage);
 
