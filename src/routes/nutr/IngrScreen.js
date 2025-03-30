@@ -27,6 +27,7 @@ function IngrScreen() {
      const itemsPerPage = 13;
 
      const [activeButton, setActiveButton] = useState('ทั้งหมด');
+     const filteredIngrs = activeButton === 'ทั้งหมด' ? ingrs : ingrsNutr;
 
      // Set modal
      const [modal, setModal] = useState(false);
@@ -71,10 +72,11 @@ function IngrScreen() {
           fetchIngrNutrData();
      }, [nutrData]);
 
-     const filterIngrs = ingrs.filter(ingr =>
+     const filterIngrs = filteredIngrs.filter(ingr =>
           (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
           ingr.name.includes(searchIngr)
-     );
+      );
+      
 
      // การกรองตามลำดับการแสดง
      const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
@@ -317,42 +319,46 @@ function IngrScreen() {
                               <div className='above-table'>
                                    <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} เมนูอาหาร</p>
                                    <div className='switch-btn'>
-                                        <button
-                                             onClick={() => setActiveButton('ทั้งหมด')}
-                                             style={{
-                                                  backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
-                                                  color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
-                                             }}>ทั้งหมด</button>
-                                        <button
-                                             onClick={() => { setActiveButton('ของฉัน') }}
-                                             style={{
-                                                  backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
-                                                  color: activeButton === 'ของฉัน' ? 'white' : 'black'
-                                             }}>ของฉัน</button>
-                                   </div>
+    <button
+        onClick={() => setActiveButton('ทั้งหมด')}
+        style={{
+            backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
+            color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
+        }}>
+        ทั้งหมด
+    </button>
+    <button
+        onClick={() => setActiveButton('ของฉัน')}
+        style={{
+            backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
+            color: activeButton === 'ของฉัน' ? 'white' : 'black'
+        }}>
+        ของฉัน
+    </button>
+</div>
+
                               </div>
 
                               <table className='table-ingr'>
-                                   <thead>
-                                        <tr>
-                                             <th>ชื่อวัตถุดิบ</th>
-                                             <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
-                                             <th>ประเภท</th>
-                                             <th>เพิ่มโดย</th>
-                                             <th></th>
-                                        </tr>
-                                   </thead>
-                                   <tbody>
-                                        {activeButton === 'ทั้งหมด'
-                                             ? currentItems.length > 0
-                                                  ? currentItems.map(item => renderItem(item))
-                                                  : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                             : ingrsNutr.length > 0
-                                                  ? ingrsNutr.map(item => renderItem(item))
-                                                  : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                        }
-                                   </tbody>
-                              </table>
+    <thead>
+        <tr>
+            <th>ชื่อวัตถุดิบ</th>
+            <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
+            <th>ประเภท</th>
+            <th>เพิ่มโดย</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {filteredIngrs.length > 0
+            ? currentItems.length > 0
+                ? currentItems.map(item => renderItem(item))
+                : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+            : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+        }
+    </tbody>
+</table>
+
 
                                    {/* Pagination controls */}
                                    <div className="pagination">
