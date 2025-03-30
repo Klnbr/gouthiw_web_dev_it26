@@ -26,7 +26,7 @@ function IngrScreen() {
      const [currentPage, setCurrentPage] = useState(1);
      const itemsPerPage = 13;
 
- const [activeButton, setActiveButton] = useState('ทั้งหมด');
+     const [activeButton, setActiveButton] = useState('ทั้งหมด');
 
      // Set modal
      const [modal, setModal] = useState(false);
@@ -344,13 +344,15 @@ function IngrScreen() {
                                         </thead>
                                         <tbody>
                                              {activeButton === 'ทั้งหมด'
-                                                  ? currentItems.map(item => (
-                                                      renderItem(item)
-                                                  ))
-                                                  : ingrsNutr.map(item => (
-                                                  ingrsNutr.map(item => renderItem(item))  
-                                                  ))}
+                                                  ? currentItems.length > 0
+                                                       ? currentItems.map(item => renderItem(item))
+                                                       : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+                                                  : ingrsNutr.length > 0
+                                                       ? ingrsNutr.map(item => renderItem(item))
+                                                       : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+                                             }
                                         </tbody>
+
                                    </table>
 
                                    {/* Pagination controls */}
