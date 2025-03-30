@@ -186,9 +186,6 @@ function IngrScreen() {
      const indexOfLastItem = currentPage * itemsPerPage;
      const indexOfFirstItem = indexOfLastItem - itemsPerPage;
      const currentItems = filterDisplay.slice(indexOfFirstItem, indexOfLastItem);
-     if (!currentItems || currentItems.length === 0) {
-          console.log("No items to display");
-     }
 
      const totalPages = Math.ceil(filterDisplay.length / itemsPerPage);
 
@@ -352,19 +349,19 @@ function IngrScreen() {
                                              </tr>
                                         </thead>
                                         <tbody>
-                                             {activeButton === 'ทั้งหมด' ? (
-                                                  filteredIngrs.length > 0 ? (
-                                                       currentItems.length > 0 ? (
-                                                            currentItems.map(item => renderItem(item))
-                                                       ) : (
-                                                            <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                                       )
-                                                  ) : (
-                                                       <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                                  )
+                                        {activeButton === 'ทั้งหมด' ? (
+                                             currentItems.length > 0 ? (
+                                                  currentItems.map(item => renderItem(item))
                                              ) : (
-                                                  <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                             )}
+                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                             )
+                                        ) : (
+                                             ingrsNutr.length > 0 ? (
+                                                  ingrsNutr.map(item => renderItem(item))
+                                             ) : (
+                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                             )
+                                        )}
                                         </tbody>
                                    </table>
                                    {/* Pagination controls */}
