@@ -8,26 +8,24 @@ import axios from 'axios';
 const optionsDMY = {
     timeZone: "Asia/Bangkok", year: 'numeric', month: 'long', day: 'numeric',
 };
-
 function TriviaDetailScreen() {
     const navigate = useNavigate();
     const location = useLocation();
     const { triviaData } = location.state || {};
     const { nutrData } = useAuth();
     const [editButton, setEditButton] = useState(false);
-    const [deleteButton, setDeleteButton] = useState(false);
-    const [setHasDeadLine] = useState(null);
+    const [hasDeadline, setHasDeadline] = useState(null);  // corrected state usage
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [setPendingReports] = useState(0);
+    const [pendingReports, setPendingReports] = useState(0);  // corrected state usage
 
     useEffect(() => {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
             if (triviaData.edit_deadline) {
-                setHasDeadLine(triviaData.edit_deadline)
+                setHasDeadline(triviaData.edit_deadline);
             }
         }
-    }, [nutrData]);
+    }, [nutrData, triviaData]);  // added triviaData to the dependency array
 
     const calculateTimeAgo = (createdAt) => {
         const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
@@ -45,7 +43,7 @@ function TriviaDetailScreen() {
 
     const handleReport = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/report', { state: { triviaData } });
@@ -56,8 +54,8 @@ function TriviaDetailScreen() {
 
     const handleDelete = async (itemId) => {
         try {
-            await axios.delete(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
-            navigate('/trivias');
+            await axios.delete(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
+            navigate('/trivia-list');  // หลังจากลบเสร็จแล้ว redirect ไปที่หน้ารายการ trivia
         } catch (error) {
             console.error("Error deleting trivia", error);
         }
@@ -69,7 +67,7 @@ function TriviaDetailScreen() {
 
     const handleItemPress = async (itemId) => {
         try {
-            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-web-dev-it26.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
             navigate('/trivia', { state: { triviaData } });
@@ -87,14 +85,15 @@ function TriviaDetailScreen() {
                         <i className="fa-solid fa-angle-left"></i>
                     </button>
                     {editButton &&
-                        <button className="btn-edit"
-                            onClick={() => handleItemPress(triviaData._id)}>
-                            แก้ไข</button>}
-                    {deleteButton &&
-                        <button className="btn-delete"
-                            onClick={() => handleDelete(triviaData._id)}>ลบ</button>
+                        <>
+                            <button className="btn-edit" onClick={() => handleItemPress(triviaData._id)}>
+                                แก้ไข
+                            </button>
+                            <button className="btn-delete" onClick={() => handleDelete(triviaData._id)}>
+                                ลบ
+                            </button>
+                        </>
                     }
-
 
                     <div className='triv-detail-content'>
                         <div className='dropdown-container-tv'>
@@ -110,13 +109,6 @@ function TriviaDetailScreen() {
                             )}
                         </div>
                         <div className='triv-detail'>
-                            <div>
-                                {/* {hasDeadLine && (
-                                <div>
-                                    <p>{calculateTimeRemaining(triviaData.edit_deadline)}</p>
-                                </div>
-                            )} */}
-                            </div>
                             <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} loading="lazy" />
                             <h1>{triviaData.head}</h1>
                             <div className='triv-detail-flex'>

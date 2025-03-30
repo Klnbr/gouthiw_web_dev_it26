@@ -67,15 +67,12 @@ function IngrScreen() {
           };
       
           fetchData();
-      }, [nutrData]);
-      
-
+      }, [nutrData]);  
 
      const filterIngrs = filteredIngrs.filter(ingr =>
           (selectedType === "ทั้งหมด" || ingr.ingr_type === selectedType) &&
           ingr.name.includes(searchIngr)
      );
-
 
      // การกรองตามลำดับการแสดง
      const filterDisplay = selectedDisplay === "เพิ่มเข้าล่าสุด"
@@ -353,13 +350,13 @@ function IngrScreen() {
                                              currentItems.length > 0 ? (
                                                   currentItems.map(item => renderItem(item))
                                              ) : (
-                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                                  <h2>ยังไม่มีข้อมูลวัตถุดิบ</h2>
                                              )
                                         ) : (
                                              ingrsNutr.length > 0 ? (
                                                   ingrsNutr.map(item => renderItem(item))
                                              ) : (
-                                                  <h2>ยังไม่มีข้อมูลเกร็ดความรู้</h2>
+                                                  <h2>ยังไม่มีข้อมูลวัตถุดิบ</h2>
                                              )
                                         )}
                                         </tbody>

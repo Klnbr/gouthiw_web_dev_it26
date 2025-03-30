@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
 import Navbar from '../../components/Navbar/Navbar'
 import SideBar from '../../components/SideBar/SideBar'
 import { Select } from "antd";
 import '../../App.css'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../middleware/Auth';
 import axios from 'axios';
 import '../../components/trivia.css'
-
 const optionsDMY = {
      timeZone: "Asia/Bangkok",
      year: 'numeric',
@@ -18,6 +17,9 @@ const optionsDMY = {
 function TriviaScreen() {
      const navigate = useNavigate();
      const { nutrData } = useAuth();
+
+     const location = useLocation();
+const { triviaData } = location.state || {};
 
      const [trivs, setTrivia] = useState([]);
      const [trivsUser, setTriviaUser] = useState([]);
@@ -66,19 +68,6 @@ function TriviaScreen() {
           ? filteredTrivs.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // เรียงตามวันที่อัปเดตล่าสุด
           : filteredTrivs;
 
-     const handleItemPress = async (itemId) => {
-          try {
-               const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
-               const triviaData = response.data;
-
-               console.log("triviaData: ", triviaData)
-               navigate('/trivia-detail', { state: { triviaData } });
-          } catch (error) {
-               console.log('Error fetching trivia data', error.message);
-          }
-     };
-
-
      const stripHTML = (html) => {
           const div = document.createElement('div');
           div.innerHTML = html;
@@ -99,6 +88,18 @@ function TriviaScreen() {
                </div>
           </div>
      );
+     
+     const handleItemPress = async (itemId) => {
+          try {
+               const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
+               const triviaData = response.data;
+
+               console.log("triviaData: ", triviaData)
+               navigate('/trivia-detail', { state: { triviaData } });
+          } catch (error) {
+               console.log('Error fetching trivia data', error.message);
+          }
+     };
 
      const calculateTimeAgo = (createdAt) => {
           const currentTime = new Date();
