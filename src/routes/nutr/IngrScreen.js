@@ -167,7 +167,7 @@ function IngrScreen() {
                <td>{item.name}</td>
                <td>{item.purine}</td>
                <td>{item.ingr_type}</td>
-               <td>{item.owner_name || nutrData.firstname + ' ' + nutrData.lastname}</td>
+               <td>{item.owner_name || (nutrData ? `${nutrData.firstname} ${nutrData.lastname}` : "ไม่ระบุ")}</td>
                <td>
                     <div className='ingr-btn--layout'>
                          <div className='ingr-btn' onClick={() => handleItemPress(item._id)}>
@@ -313,47 +313,46 @@ function IngrScreen() {
                                         </div>
                                    )}
 
-                                   {/* switch role */}
-                                   <div className='above-table'>
-                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} เมนูอาหาร</p>
-                                        <div className='switch-btn'>
-                                             <button
-                                                  onClick={() => setActiveButton('ทั้งหมด')}
-                                                  style={{
-                                                       backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
-                                                       color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
-                                                  }}>ทั้งหมด</button>
-                                             <button
-                                                  onClick={() => { setActiveButton('ของฉัน') }}
-                                                  style={{
-                                                       backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
-                                                       color: activeButton === 'ของฉัน' ? 'white' : 'black'
-                                                  }}>ของฉัน</button>
-                                        </div>
+                                       {/* switch role */}
+                              <div className='above-table'>
+                                   <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} เมนูอาหาร</p>
+                                   <div className='switch-btn'>
+                                        <button
+                                             onClick={() => setActiveButton('ทั้งหมด')}
+                                             style={{
+                                                  backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
+                                                  color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
+                                             }}>ทั้งหมด</button>
+                                        <button
+                                             onClick={() => { setActiveButton('ของฉัน') }}
+                                             style={{
+                                                  backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
+                                                  color: activeButton === 'ของฉัน' ? 'white' : 'black'
+                                             }}>ของฉัน</button>
                                    </div>
+                              </div>
 
-                                   <table className='table-ingr'>
-                                        <thead>
-                                             <tr>
-                                                  <th>ชื่อวัตถุดิบ</th>
-                                                  <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
-                                                  <th>ประเภท</th>
-                                                  <th>เพิ่มโดย</th>
-                                                  <th></th>
-                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                             {activeButton === 'ทั้งหมด'
-                                                  ? currentItems.length > 0
-                                                       ? currentItems.map(item => renderItem(item))
-                                                       : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                                  : ingrsNutr.length > 0
-                                                       ? ingrsNutr.map(item => renderItem(item))
-                                                       : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
-                                             }
-                                        </tbody>
-
-                                   </table>
+                              <table className='table-ingr'>
+                                   <thead>
+                                        <tr>
+                                             <th>ชื่อวัตถุดิบ</th>
+                                             <th>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</th>
+                                             <th>ประเภท</th>
+                                             <th>เพิ่มโดย</th>
+                                             <th></th>
+                                        </tr>
+                                   </thead>
+                                   <tbody>
+                                        {activeButton === 'ทั้งหมด'
+                                             ? currentItems.length > 0
+                                                  ? currentItems.map(item => renderItem(item))
+                                                  : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+                                             : ingrsNutr.length > 0
+                                                  ? ingrsNutr.map(item => renderItem(item))
+                                                  : <tr><td colSpan="5">ไม่มีข้อมูล</td></tr>
+                                        }
+                                   </tbody>
+                              </table>
 
                                    {/* Pagination controls */}
                                    <div className="pagination">
