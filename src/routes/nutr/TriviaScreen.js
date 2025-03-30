@@ -34,7 +34,7 @@ function TriviaScreen() {
      useEffect(() => {
           const fetchTriviaData = async () => {
                try {
-                    const response = await axios.get("https://gouthiw-health.onrender.com//trivias", { timeout: 1000 });
+                    const response = await axios.get("https://gouthiw-health.onrender.com/trivias", { timeout: 1000 });
                     setTrivia(response.data);
                } catch (error) {
                     console.log("Error fetching trivias data", error.message)
@@ -68,7 +68,7 @@ function TriviaScreen() {
 
      const handleItemPress = async (itemId) => {
           try {
-               const response = await axios.get(`https://gouthiw-health.onrender.com//trivia/${itemId}`);
+               const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
                const triviaData = response.data;
 
                console.log("triviaData: ", triviaData)

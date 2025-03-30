@@ -10,7 +10,7 @@ import { useAuth } from '../../middleware/Auth';
 
 function IngrScreen() {
      const [ingrs, setIngrs] = useState([]);
-     const [setIngrsNutr] = useState([]);
+     const [ingrsNutr, setIngrsNutr] = useState([]);
      const { nutrData } = useAuth();
 
      const [name, setName] = useState("");
@@ -26,7 +26,7 @@ function IngrScreen() {
      const [currentPage, setCurrentPage] = useState(1);
      const itemsPerPage = 13;
 
-    
+
      // Set modal
      const [modal, setModal] = useState(false);
      const toggleModal = () => {
@@ -90,8 +90,8 @@ function IngrScreen() {
 
           const thaiRegex = /^[ก-๙\s]+$/;
           if (!thaiRegex.test(name)) {
-              alert("สามารถกรอกได้เฉพาะตัวอักษรภาษาไทยเท่านั้น");
-              return;
+               alert("สามารถกรอกได้เฉพาะตัวอักษรภาษาไทยเท่านั้น");
+               return;
           }
 
           const ingreData = {
@@ -190,17 +190,17 @@ function IngrScreen() {
      const handleNameChange = (e) => {
           const regex = /^[A-Za-zก-ฮะ-์\s]+$/;  // Allows only Thai and English letters
           if (regex.test(e.target.value) || e.target.value === '') {
-              setName(e.target.value);
-     
+               setName(e.target.value);
+
           }
-      };
-    
-      const handlePurineChange = (e) => {
+     };
+
+     const handlePurineChange = (e) => {
           const regex = /^[0-9]*$/;  // Allows only numbers
           if (regex.test(e.target.value) || e.target.value === '') {
-              setPurine(e.target.value);
+               setPurine(e.target.value);
           }
-      };
+     };
      return (
           <>
                <div className='container'>
@@ -271,26 +271,26 @@ function IngrScreen() {
                                         <div className="modal">
                                              <div className="modal-content">
                                                   <button className="ingr-cancel--btn" onClick={toggleModal}>
-                                                  <i class="fa-solid fa-xmark"></i>
+                                                       <i class="fa-solid fa-xmark"></i>
                                                   </button>
                                                   <h1>เพิ่มวัตถุดิบ</h1>
-                                                  
+
                                                   <label>ชื่อวัตถุดิบ</label>
                                                   <input
-                                            type="text"
-                                            className="modal--input"
+                                                       type="text"
+                                                       className="modal--input"
 
-                                            value={name}
-                                            onChange={handleNameChange}
-                                        />
+                                                       value={name}
+                                                       onChange={handleNameChange}
+                                                  />
 
                                                   <label>ค่าพิวรีน (มิลลิกรัม / 100 กรัม)</label>
                                                   <input
-                                            type="text"
-                                            className="modal--input"
-                                            value={purine}
-                                            onChange={handlePurineChange}
-                                        />
+                                                       type="text"
+                                                       className="modal--input"
+                                                       value={purine}
+                                                       onChange={handlePurineChange}
+                                                  />
 
                                                   <label>ประเภท</label>
                                                   <select
@@ -317,6 +317,25 @@ function IngrScreen() {
                                         <p>รวมทั้งหมด {ingrs.length} วัตถุดิบ</p>
                                    </div>
 
+                                   {/* switch role */}
+                                   <div className='above-table'>
+                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} เมนูอาหาร</p>
+                                        <div className='switch-btn'>
+                                             <button
+                                                  onClick={() => setActiveButton('ทั้งหมด')}
+                                                  style={{
+                                                       backgroundColor: activeButton === 'ทั้งหมด' ? '#FFA13F' : 'white',
+                                                       color: activeButton === 'ทั้งหมด' ? 'white' : 'black'
+                                                  }}>ทั้งหมด</button>
+                                             <button
+                                                  onClick={() => { setActiveButton('ของฉัน') }}
+                                                  style={{
+                                                       backgroundColor: activeButton === 'ของฉัน' ? '#FFA13F' : 'white',
+                                                       color: activeButton === 'ของฉัน' ? 'white' : 'black'
+                                                  }}>ของฉัน</button>
+                                        </div>
+                                   </div>
+
                                    <table className='table-ingr'>
                                         <thead>
                                              <tr>
@@ -328,13 +347,13 @@ function IngrScreen() {
                                              </tr>
                                         </thead>
                                         <tbody>
-                                             {currentItems.length > 0 ? (
-                                                  currentItems.map(item => renderItem(item))
-                                             ) : (
-                                                  <tr>
-                                                       <td colSpan="5">ยังไม่มีข้อมูลวัตถุดิบ</td>
-                                                  </tr>
-                                             )}
+                                             {activeButton === 'ทั้งหมด'
+                                                  ? currentItems.map(item => (
+                                                      renderItem(item)
+                                                  ))
+                                                  : ingrsNutr.map(item => (
+                                                     ingrsNutr.map(item => renderItem(item))   
+                                                  ))}
                                         </tbody>
                                    </table>
 
