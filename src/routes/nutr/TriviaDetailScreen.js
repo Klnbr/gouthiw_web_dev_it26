@@ -14,9 +14,9 @@ function TriviaDetailScreen() {
     const { triviaData } = location.state || {};
     const { nutrData } = useAuth();
     const [editButton, setEditButton] = useState(false);
-    const [hasDeadline, setHasDeadline] = useState(null);  // corrected state usage
+    const [hasDeadline, setHasDeadline] = useState(null);  
     const [dropdownVisible, setDropdownVisible] = useState(false);
-    const [pendingReports, setPendingReports] = useState(0);  // corrected state usage
+    const [pendingReports, setPendingReports] = useState(0); 
 
     useEffect(() => {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
@@ -53,9 +53,19 @@ function TriviaDetailScreen() {
     };
 
     const handleDelete = async (itemId) => {
+        const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
+        if (!confirmDelete) {
+             return; // ถ้าไม่ยืนยัน จะไม่ทำการลบ
+        }
+
         try {
-            await axios.delete(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
-            navigate('/trivia'); 
+           const response = await axios.delete(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
+
+               if (response.status === 200) {
+                    alert("ลบสำเร็จ");
+                    const response = await axios.get("https://gouthiw-health.onrender.com/trivias", { timeout: 1000 });
+                    setIngrs(response.data);
+               }
         } catch (error) {
             console.error("Error deleting trivia", error);
         }
@@ -97,7 +107,6 @@ function TriviaDetailScreen() {
 
                     <div className='triv-detail-content'>
                         <div className='dropdown-container-tv'>
-
                             <i
                                 className="fa-solid fa-ellipsis-vertical dropdown-icon"
                                 onClick={toggleDropdown}
@@ -110,7 +119,7 @@ function TriviaDetailScreen() {
                             )}
                         </div>
                         <div className='triv-detail'>
-                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} loading="lazy" />
+                            <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
                             <h1>{triviaData.head}</h1>
                             <div className='triv-detail-flex'>
                                 <p>เขียนโดย: {triviaData.creator.firstname} {triviaData.creator.lastname}</p>

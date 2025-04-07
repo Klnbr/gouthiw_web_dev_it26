@@ -312,7 +312,7 @@ function IngrScreen() {
 
                                    {/* switch role */}
                                    <div className='above-table'>
-                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} ;วัตถุดิบ</p>
+                                        <p>รวมทั้งหมด {activeButton === 'ทั้งหมด' ? ingrs.length : ingrsNutr.length} วัตถุดิบ</p>
                                         <div className='switch-btn'>
                                              <button
                                                   onClick={() => setActiveButton('ทั้งหมด')}
@@ -356,7 +356,7 @@ function IngrScreen() {
                                         )}
                                         </tbody>
                                    </table>
-                                   
+
                                    {/* Pagination controls */}
                                    <div className="pagination">
                                         <button

@@ -25,7 +25,7 @@ function AdminHome() {
                          createdAt: user.createdAt
                     }))
                     
-                    const resNutr = await axios.get("http://https://gouthiw-health.onrender.com/nutrs", { timeout: 1000 });
+                    const resNutr = await axios.get("https://gouthiw-health.onrender.com/nutrs", { timeout: 1000 });
                     setNutr(resNutr.data)
                     const nutrsData = resNutr.data.map((nutr) => ({
                          id: nutr._id,

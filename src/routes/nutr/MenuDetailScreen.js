@@ -38,7 +38,7 @@ function MenuDetailScreen() {
      const handleItemDelete = async (itemId) => {
           const confirmDelete = window.confirm("คุณต้องการลบรายการนี้ใช่หรือไม่?");
           if (!confirmDelete) {
-               return; // ถ้าไม่ยืนยัน จะไม่ทำการลบ
+               return; 
           }
 
           try {
