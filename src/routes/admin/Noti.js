@@ -6,6 +6,7 @@ import SideBar from '../../components/SideBar/SideBar';
 import axios from 'axios';
 import { useAuth } from '../../middleware/Auth';
 import { useNavigate } from 'react-router-dom';
+import apiAddress from '../IP';
 
 export default function Noti() {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ export default function Noti() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get("https://gouthiw-health.onrender.com/report/notifications");
+                const response = await axios.get(`${apiAddress}/report/notifications`);
                 console.log("Notifications from API:", response.data);
                 setNotifications(response.data);
             } catch (error) {
@@ -29,7 +30,7 @@ export default function Noti() {
 
     const handleItemPress = async (itemId, type) => {
         try {
-            const response = await axios.get(`https://gouthiw-health.onrender.com/report-detail/${type}/${itemId}`);
+            const response = await axios.get(`${apiAddress}/report-detail/${type}/${itemId}`);
             const reportData = response.data;
 
             if (!reportData || !reportData._id) {

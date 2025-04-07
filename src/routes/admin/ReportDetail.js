@@ -6,6 +6,7 @@ import "../../components/report.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReadMore from "../../components/Readmore";
 import axios from "axios";
+import apiAddress from "../IP";
 
 const optionsDMY = {
     timeZone: "Asia/Bangkok",
@@ -60,7 +61,7 @@ function ReportDetail() {
         if (!reportData) {
             const fetchReport = async () => {
                 try {
-                    const response = await axios.get("https://gouthiw-health.onrender.com/report/trivias");
+                    const response = await axios.get(`${apiAddress}/report/trivias`);
                     const foundReport = response.data.find(r => r._id === location.state?.reportId) || null;
                     setReportData(foundReport);
                 } catch (error) {
@@ -135,7 +136,7 @@ function ReportDetail() {
                 };
                 
                 const response = await axios.put(
-                    `https://gouthiw-health.onrender.com/report/${reportData._id}/trivia/status`,
+                    `${apiAddress}/report/${reportData._id}/trivia/status`,
                     updateStatus
                 );
 
@@ -163,7 +164,7 @@ function ReportDetail() {
                 reminderDate: status === 1 ? reminderDateObj : null
             };
 
-            const response = await axios.post("https://gouthiw-health.onrender.com/report/trivia/notification", notiData);
+            const response = await axios.post(`${apiAddress}/report/trivia/notification`, notiData);
             
             if (response.status === 200) {
                 alert("ส่งแจ้งเตือนสําเร็จ!");
@@ -179,10 +180,10 @@ function ReportDetail() {
         if (!confirmDelete) return;
 
         try {
-        const response = await axios.delete(`https://gouthiw-health.onrender.com/report-detail/${reportId}`);
+        const response = await axios.delete(`${apiAddress}/report-detail/${reportId}`);
         if (response.status === 200) {
             alert("ลบสำเร็จ");
-            const updatedResponse = await axios.get("https://gouthiw-health.onrender.com/report/trivias" , reportData);
+            const updatedResponse = await axios.get(`${apiAddress}/report/trivias` , reportData);
             setReports(updatedResponse.data);
             navigate("/admin/report");
         }

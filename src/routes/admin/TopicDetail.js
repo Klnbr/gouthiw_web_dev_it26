@@ -4,6 +4,7 @@ import { useAuth } from '../../middleware/Auth';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Input } from "antd";
 import axios from 'axios';
+import apiAddress from '../IP';
 
 const optionsDMY = {
     timeZone: "Asia/Bangkok",
@@ -75,7 +76,7 @@ export default function TopicDetail() {
         }
 
         try {
-            const response = await axios.put(`https://gouthiw-health.onrender.com/topic/answer/${topicData._id}`, ansData, {
+            const response = await axios.put(`${apiAddress}/topic/answer/${topicData._id}`, ansData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

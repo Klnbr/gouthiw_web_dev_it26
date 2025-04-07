@@ -6,6 +6,7 @@ import { useAuth } from '../../middleware/Auth';
 import { Input, Select } from "antd";
 import axios from 'axios';
 import '../../../src/components/menu.css'
+import apiAddress from '../IP';
 
 function MenuScreenAdmin() {
      const navigate = useNavigate();
@@ -25,7 +26,7 @@ function MenuScreenAdmin() {
      useEffect(() => {
           const fetchMenuData = async () => {
                try {
-                    const response = await axios.get("https://gouthiw-health.onrender.com/menus", { timeout: 1000 });
+                    const response = await axios.get(`${apiAddress}/menus`, { timeout: 1000 });
                     setMenus(response.data);
                } catch (error) {
                     console.log("Error fetching menus data", error.message)
@@ -33,7 +34,7 @@ function MenuScreenAdmin() {
           }
           const fetchMenuDataUser = async () => {
                try {
-                    const response = await axios.get(`https://gouthiw-health.onrender.com/menus/auth/${nutrData._id}`, { timeout: 1000 });
+                    const response = await axios.get(`${apiAddress}/menus/auth/${nutrData._id}`, { timeout: 1000 });
                     console.log(response.data)
                     setMenusUser(response.data);
 
@@ -62,7 +63,7 @@ function MenuScreenAdmin() {
      const handleItemPress = async (itemId) => {
           try {
                console.log("Item ID:", itemId);
-               const response = await axios.get(`https://gouthiw-health.onrender.com/menu/${itemId}`);
+               const response = await axios.get(`${apiAddress}/menu/${itemId}`);
                const menuData = response.data;
 
                console.log("Fetched Menu Data:", menuData);

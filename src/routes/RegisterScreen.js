@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { firebase } from '.././firebase';
 import axios from 'axios';
 import { useAuth } from '../middleware/Auth';
+import apiAddress from './IP';
 
 function RegisterScreen() {
     const navigate = useNavigate();
@@ -93,7 +94,7 @@ function RegisterScreen() {
 
             console.log("User Data:", nutrData);
 
-            const response = await axios.post("https://gouthiw-health.onrender.com/register", nutrData);
+            const response = await axios.post(`${apiAddress}/register`, nutrData);
             console.log("Response from server:", response);
 
             if (response.status === 201) {

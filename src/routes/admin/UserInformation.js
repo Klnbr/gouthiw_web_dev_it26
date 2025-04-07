@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import axios from "axios";
 import '../../components/profile.css'
+import apiAddress from "../IP";
 
 function UserInformation() {
        const navigate = useNavigate();
@@ -28,7 +29,7 @@ function UserInformation() {
          useEffect(() => {
              const fetchUserData = async () => {
                  try {
-                      const response = await axios.get("https://gouthiw-health.onrender.com/users", { timeout: 1000 });
+                      const response = await axios.get(`${apiAddress}/users`, { timeout: 1000 });
                       setUser(response.data);
                  } catch (error) {
                       console.log("Error fetching menus data", error.message)
@@ -37,7 +38,7 @@ function UserInformation() {
      
              const fetchMenuDataUser = async () => {
                   try {
-                       const response = await axios.get(`https://gouthiw-health.onrender.com/menus/auth/${nutrData._id}`, { timeout: 1000 });
+                       const response = await axios.get(`${apiAddress}/menus/auth/${nutrData._id}`, { timeout: 1000 });
                        console.log(response.data)
                        setMenusUser(response.data);
      
@@ -69,7 +70,7 @@ function UserInformation() {
      
          const handleItemPress = async (itemId) => {
              try {
-                  const response = await axios.get(`https://gouthiw-health.onrender.com/menu/${itemId}`);
+                  const response = await axios.get(`${apiAddress}/menu/${itemId}`);
                   const menuData = response.data;
      
                   navigate('/menu', { state: { menuData } });
@@ -80,7 +81,7 @@ function UserInformation() {
      
          const handleDelete = async (itemId) => {
              try {
-                  const response = await axios.delete(`https://gouthiw-health.onrender.com/menu/${itemId}`);
+                  const response = await axios.delete(`${apiAddress}/menu/${itemId}`);
                   if (response.status === 200) {
                        alert("ลบสำเร็จ");
                        navigate('/menus');

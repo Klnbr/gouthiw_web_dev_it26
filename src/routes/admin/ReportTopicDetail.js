@@ -6,6 +6,7 @@ import "../../components/report.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import ReadMore from "../../components/Readmore";
 import axios from "axios";
+import apiAddress from "../IP";
 
 const optionsDMY = {
   timeZone: "Asia/Bangkok",
@@ -80,7 +81,7 @@ function ReportTopicDetail() {
         };
 
         const response = await axios.put(
-          `https://gouthiw-health.onrender.com/report/${reportData._id}/topic/status`,
+          `${apiAddress}/report/${reportData._id}/topic/status`,
           updateStatus
         );
 
@@ -107,7 +108,7 @@ function ReportTopicDetail() {
 
               console.log("notiData:", notiData);
   
-              const response = await axios.post("https://gouthiw-health.onrender.com/report/topic/notification", notiData);
+              const response = await axios.post(`${apiAddress}/report/topic/notification`, notiData);
               
               if (response.status === 200) {
                   alert("ส่งแจ้งเตือนสําเร็จ!");
@@ -123,10 +124,10 @@ function ReportTopicDetail() {
     if (!confirmDelete) return;
 
     try {
-      const response = await axios.delete(`https://gouthiw-health.onrender.com/report-detail/${reportId}`);
+      const response = await axios.delete(`${apiAddress}/report-detail/${reportId}`);
       if (response.status === 200) {
         alert("ลบสำเร็จ");
-        const updatedResponse = await axios.get("https://gouthiw-health.onrender.com/report/topics" , reportData);
+        const updatedResponse = await axios.get(`${apiAddress}/report/topics` , reportData);
         setReports(updatedResponse.data);
         navigate("/admin/report");
       }

@@ -4,6 +4,7 @@ import { useAuth } from '../../middleware/Auth';
 import {  useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import NotiContainer from './NotiContainer';
+import apiAddress from '../../routes/IP';
 
 
 function Navbar() {
@@ -17,7 +18,7 @@ function Navbar() {
     useEffect(() => {
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get(`https://gouthiw-health.onrender.com/report/notifications/${nutrData._id}`);
+                const response = await axios.get(`${apiAddress}/report/notifications/${nutrData._id}`);
                 setNotifications(response.data)
                 const unreadCount = response.data.filter(noti => !noti.isRead).length;
                 setNotiCount(unreadCount);

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import apiAddress from '../routes/IP';
 
 const AuthContext = createContext();
 
@@ -26,7 +27,7 @@ function AuthProvider({ children }) {
 
      const handleSignin = async ({ email, password }) => {
           try {
-              const response = await axios.post("https://gouthiw-health.onrender.com/signin", { email, password });
+              const response = await axios.post(`${apiAddress}/signin`, { email, password });
               if (response.status === 201) {
                   login(response.data.token, response.data.nutr);
                   alert("เข้าสู่ระบบสำเร็จ");
