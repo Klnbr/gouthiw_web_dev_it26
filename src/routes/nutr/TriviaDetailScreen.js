@@ -17,7 +17,7 @@ function TriviaDetailScreen() {
     const [hasDeadline, setHasDeadline] = useState(null);  
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [pendingReports, setPendingReports] = useState(0); 
-
+    const [Ingrs, setIngrs] = useState([]);
     useEffect(() => {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
