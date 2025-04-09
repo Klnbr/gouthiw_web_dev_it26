@@ -325,6 +325,10 @@
      margin-left: 5px;
 }
 
+.triv-deadline {
+     text-align: center;
+}
+
 @media screen and (max-width: 850px) {
      .trivia-search-wrapper {
           width: 56%;

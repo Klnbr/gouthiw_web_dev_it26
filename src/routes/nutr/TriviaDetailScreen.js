@@ -18,28 +18,82 @@ function TriviaDetailScreen() {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [pendingReports, setPendingReports] = useState(0); 
     const [Ingrs, setIngrs] = useState([]);
+    const [timeLeftText, setTimeLeftText] = useState('');
+
     useEffect(() => {
         if (nutrData && triviaData && nutrData._id === triviaData.creator._id) {
             setEditButton(true);
             if (triviaData.edit_deadline) {
                 setHasDeadline(triviaData.edit_deadline);
+                calculateTimeRemain(triviaData.edit_deadline);
+
+                const interval = setInterval(() => {
+                    autoDeleteIfExpired(triviaData._id, triviaData.edit_deadline);
+                }, 60000)
+
+                return () => clearInterval(interval);
             }
         }
-    }, [nutrData, triviaData]);  // added triviaData to the dependency array
+    }, [nutrData, triviaData]);
 
-    const calculateTimeAgo = (createdAt) => {
-        const currentTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
-        const postTime = new Date(createdAt).toLocaleString("en-US", { timeZone: "Asia/Bangkok" });
-        const timeDiff = Math.abs(currentTime - postTime) / 36e5;
+    const calculateTimeAgo = (deadlineString) => {
+        const now = new Date();
+        const deadline = new Date(deadlineString);
+        const diff = deadline - now;
 
-        if (timeDiff < 1) {
-            return `${Math.floor(timeDiff * 60)} นาทีที่แล้ว`;
-        } else if (timeDiff < 24) {
-            return `${Math.floor(timeDiff)} ชั่วโมงที่แล้ว`;
+        if (diff > 0) {
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            setTimeLeftText(`คุณมีเวลาแก้ไขอีก ${days} วัน ${hours} ชั่วโมง ${minutes} นาที ก่อนจะถูกลบ`);
         } else {
-            return postTime.toLocaleString("th-TH", optionsDMY);
+            setTimeLeftText('ครบกำหนดแก้ไข');
         }
     };
+
+    const autoDeleteIfExpired = async (itemId, deadlineString) => {
+        const now = new Date();
+        const deadline = new Date(deadlineString);
+    
+        if (now >= deadline) {
+            try {
+                const response = await axios.put(`https://gouthiw-health.onrender.com/trivia/${itemId}`, {
+                    head: triviaData.head,
+                    image: triviaData.image,
+                    content: triviaData.content,
+                    isVisible: false,
+                    isDeleted: true,
+                });
+    
+                if (response.status === 200) {
+                    console.log('เปลี่ยนเป็น isDeleted: true แล้ว');
+                    setTimeLeftText('ครบกำหนดแล้วแบ้ส');
+    
+                    // ถ้าอยากซ่อน UI เลยด้วย:
+                    setEditButton(false);
+                }
+            } catch (error) {
+                console.error('ไม่สามารถอัปเดต isDeleted:', error);
+            }
+        }
+    };
+    
+
+    const calculateTimeRemain = () => {
+        const now = new Date();
+        const deadline = new Date(hasDeadline);
+        const diff = deadline - now;
+  
+        if (diff > 0) {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  
+          setTimeLeft({ days, hours, minutes });
+        } else {
+          setTimeLeft('หมดเวลาแก้ไข');
+        }
+      }
 
     const handleReport = async (itemId) => {
         try {
@@ -77,10 +131,10 @@ function TriviaDetailScreen() {
 
     const handleEdit = async (itemId) => {
         try {
-            const response = await axios.put(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
+            const response = await axios.get(`https://gouthiw-health.onrender.com/trivia/${itemId}`);
             const triviaData = response.data;
 
-            navigate('/edit-trivia', { state: { triviaData } });
+            navigate('/edit-trivia', { state: { triviaData }  });
         } catch (error) {
             console.log('Error fetching menu data', error.message);
         }
@@ -119,6 +173,11 @@ function TriviaDetailScreen() {
                             )}
                         </div>
                         <div className='triv-detail'>
+                            {hasDeadline && (
+                                <div className='triv-deadline'>
+                                    <p>{timeLeftText}</p>
+                                </div>
+                            )}
                             <img className='triv-pic' alt={`รูปภาพของ ${triviaData.head}`} src={triviaData.image} />
                             <h1>{triviaData.head}</h1>
                             <div className='triv-detail-flex'>

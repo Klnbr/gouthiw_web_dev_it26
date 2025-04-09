@@ -41,6 +41,7 @@ function EditTrivia() {
                     head,
                     image: imageUrl,
                     content,
+                    isVisible: true,
                     isDeleted: false,
                };
 

@@ -144,7 +144,7 @@ const AnswerTopic = () => {
                         </div>
 
                         <div className='width-80'>
-                            <p>การตอบกลับทั้งหมด ({topicData.answer?.length})</p>
+                            <p>การตอบกลับทั้งหมด ({Array.isArray(topicData.answer) && topicData.answer.filter(item => item && item.answer_detail).length})</p>
                         </div>
                         {Array.isArray(topicData.answer) && topicData.answer.filter(item => item && item.answer_detail).length > 0 ? (
                             topicData.answer.map(item => renderItem(item))

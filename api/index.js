@@ -877,9 +877,21 @@ app.get("/trivia/:id", async (req, res) => {
 app.put("/trivia/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const { head, image, content } = req.body;
+        const { head, image, content, isVisible, isDeleted } = req.body;
 
-        await myTrivia.findByIdAndUpdate(id, { head, image, content });
+        const updateData = {
+            head,
+            image,
+            content,
+            isVisible,
+            isDeleted,
+        };
+
+        if (isVisible === "true" || isVisible === true) {
+            updateData.edit_deadline = null;
+        }
+
+        await myTrivia.findByIdAndUpdate(id, updateData);
 
         res.status(200).json({ message: "Update Trivia successfully" });
     } catch (error) {
